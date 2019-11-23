@@ -10,18 +10,12 @@ aria-hidden="true">
             <h4 class="modal-title w-100 font-weight-bold" style="margin-top: 10px;">Add Thumbnail Video</h4>
         </div>
         <div class="modal-body mx-3">
-          <form method="post"  action="{{url('admin/thumb') }}" enctype="multipart/form-data">
+          <form method="post"  action="{{url('admin/thumb') }}">
             @csrf
-            <div class="md-form mb-4" style="margin-bottom: 10px;">
-                <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Video Style</label>
-                <input type="file" name="video" class="form-control showvideo vdosss" id="ThumnailIdVideo" accept="video/*">
-                <div style="display: none;" class='video-prev' class="pull-right">
-                 <video height="200" width="300" class="video-preview" controls="controls"/>
-             </div>
-         <!-- <div class="md-form mb-4" style="margin-bottom: 10px;">
-                <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Thumbnail Video</label>
-                <input type="file" name="video" id="ThumnailIdVideo" class="form-control">
-           </div> -->
+         <div class="md-form mb-4" style="margin-bottom: 10px;">
+                <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Video URL</label>
+                <input type="text" name="video" id="ThumnailIdVideo" class="form-control">
+           </div>
            <span id="videoShowMessages"></span>
        </div>
        <div class="modal-footer d-flex justify-content-center" style="text-align: center">

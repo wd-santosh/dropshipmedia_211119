@@ -102,31 +102,31 @@ $(document).on('click', '.proceedOrder', function () {
 
   });
 $(document).on('click','.comment',function(){
-    $('#commentPopUp').modal('show');
-  });
+  $('#commentPopUp').modal('show');
+});
 
 //Rewise Timer
 $(document).on('click', '.Rewise', function () {
   var procedOrderId = $(this).attr('id');
   $(this).parent().parent().parent().hide();
-    $.ajax({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-      url: webUrl + '/rewiseOrder',
-      type: "POST",
-      data: {procedOrdrId: procedOrderId},
-      dataType: 'json',
-      success: function (data) {
-        if (data.message == 'success') {
-          window.location.reload();
-        } else {
-          alert(data.error);
-        }
+  $.ajax({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    url: webUrl + '/rewiseOrder',
+    type: "POST",
+    data: {procedOrdrId: procedOrderId},
+    dataType: 'json',
+    success: function (data) {
+      if (data.message == 'success') {
+        window.location.reload();
+      } else {
+        alert(data.error);
       }
-    });
-
+    }
   });
+
+});
 // End REwise Timer
 //Customer create videos
 $(document).on('click', '.getImgPath', function () {
@@ -180,14 +180,10 @@ function _validateCreateVideo()
 			isImagevalidated = true;
 		}
 	});
-	if(isImagevalidated == false)
-	{
-		toastr["error"]("Please select image");
-		return false;	
-	}
+	
 	if($('.inputProductLink').val() == "")
 	{
-		toastr["error"]("Please enter product link.");
+		toastr["error"]("Please enter website link.");
 		return false;	
 	}
 	$('.selectedGender input[type=checkbox]').each(function(){
@@ -196,42 +192,39 @@ function _validateCreateVideo()
 			isGenderChecked = true;
 		}
 	});
-	if(isGenderChecked == false)
-	{
-		toastr["error"]("Please select gender.");
-		return false;	
-	}
+	// if(isGenderChecked == false)
+	// {
+	// 	toastr["error"]("Please select gender.");
+	// 	return false;	
+	// }
 	$('.selectedMusic input[type=checkbox]').each(function(){
 		if($(this).is(':checked') == true)
 		{
 			isMusicChecked = true;
 		}
 	});
-	if(isMusicChecked == false)
-	{
-		toastr["error"]("Please select music.");
-		return false;	
-	}
+	
 	return true;
 }
 //Next
 $(document).on('click', '.Next', function () {
+  $(document).find('input[name="product_link[]"]').each(function(){
 	if(_validateCreateVideo() == true)
 	{
-		var _imgId;
+	 //var _imgId;
    var _gendrId;
    var _musicId;
    var custId = $(this).parent().parent().parent().parent().parent().parent().find("#custId").val();
    var custOrderId = $(this).parent().parent().parent().parent().parent().parent().find("#custOrderId").val();
+   var order_video = $(this).parent().parent().parent().parent().parent().parent().find('#video_order').find('.DelivrDat').val();
+   var website_link = $(this).parent().parent().parent().parent().parent().parent().find('#websiteLink').find('.inputwebsiteLink').val();
    var product_link = $(this).parent().parent().parent().parent().parent().parent().find('#productLink').find('.inputProductLink').val();
+   
+      //alert($(this).val());
+   
+   //alert(product_link);
+   var logo = $(this).parent().parent().parent().parent().parent().parent().find('#image').find('.logo').val();
 
-	//    orderImg
- $(this).parent().parent().parent().parent().parent().parent().find(".toGetImgId").find('img').each(function () {
-   if ($(this).hasClass('selectedImage')) {
-     var image_id = $(this).attr('id').split('_');
-     _imgId = image_id[1];
-   }
- });
 	//    gender
  $(this).parent().parent().parent().parent().parent().parent().find('.selectedGender').find('input[type="checkbox"]').each(function () {
    if ($(this).prop('checked') == true) {
@@ -244,32 +237,41 @@ $(document).on('click', '.Next', function () {
    if ($(this).prop('checked') == true) {
      var musicId = $(this).parent().attr('id').split('_');
      _musicId = musicId[1];
+     //alert(musicId);
    }
  });
- var delivery = $(this).parent().parent().parent().parent().parent().parent().find('#deliversDays').find('.DelivrDat').val();
- if (custOrderId == '' && custOrderId == null) {
-   custOrderId = '';
- }
+ // var delivery = $(this).parent().parent().parent().parent().parent().parent().find('#deliversDays').find('.DelivrDat').val();
+ // if (custOrderId == '' && custOrderId == null) {
+ //   custOrderId = '';
+ // }
  $.ajax({
    headers: {
      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
    },
+   enctype: "multipart/form-data",
    url: webUrl + '/storeCustomerData',
    type: "post",
-   data: {imgId: _imgId, genderId: _gendrId, musicId: _musicId, delivery_day: delivery, productLink: product_link,
+   data: {genderId: _gendrId, musicId: _musicId, videos_orders :order_video, websiteLink:website_link, productLink: product_link, logo: logo,
      cust_id: custId, custOrderId: custOrderId},
      dataType: 'json',
      success: function (data) {
        if (data.message == 'success') {
-         window.location.href = webUrl + '/select-video/' + data.cusOrderId;
+         window.location.href = webUrl + '/video-variations/' + data.cusOrderId;
        } else {
          alert(data.error);
        }
      }
    });
 }
-
 });
+});
+
+// $(document).on('click', '.Next', function () {
+// $('input[type="text"]');
+
+//   });
+
+
 /*  Counter Start */
 $(document).ready(function(){
 	$('.counter').each(function(){
@@ -295,7 +297,7 @@ function clock(obje,countDownDate,uploadVideo)
 		  if(distance < 0)	 
 		  {
 		       // Take action if date overed
-          if (uploadVideo != '' && uploadVideo != null) {
+           if (uploadVideo != '' && uploadVideo != null) {
             var st = "<div class='tm'><label class='lbld' style='padding-left:8px'>D</label><b class='label-b'>:</b><label class='lblh' style='padding-left:8px'>O</label><b class='label-b'>:</b><label class='lblm' style='padding-left:8px'>N</label><b class='label-b'>:</b><label class='lbls' style='padding-left:8px'>E</label></div>";
             $(obje).html(st);
           } else {
@@ -304,9 +306,9 @@ function clock(obje,countDownDate,uploadVideo)
           }
           clearInterval(x);
 		  	 	// Take action if date overed
-        }
-        else
-        {
+         }
+         else
+         {
           var days = Math.floor(distance / (1000 * 60 * 60 * 24));
           var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
           var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -385,19 +387,6 @@ function _validateSelectVideo()
     toastr["error"]("Please select valid music");
     return false;
   }
-//   var thumbVedioValidate = false; 
-//   $('.selectdThumnVideo').each(function () {
-//   var goToIframe = $(this).find('a:first-child').find('iframe');
-//   if ($(goToIframe).hasClass('selectedFrame')) {
-//     thumbVedioValidate =  true;
-//   }
-// });
-//   if(thumbVedioValidate == false)
-//   {
-//     toastr["error"]("Please select thumvideo");
-//     return false; 
-//   }
-   return true;
 
 	/*$('.selectdThumnVideo').each(function () {
 	    var goToIframe = $(this).find('a:first-child').find('iframe');
@@ -406,7 +395,18 @@ function _validateSelectVideo()
         }
       });*/
 
-    //   return true;
+      // return true;
+      // var thumbVedioValidate = false; var thumbVedioValidate = true; 
+      // $('.getVideoId').each(function () {
+      //   if ($(this).hasClass('selectedVideo')) {
+      //     videoValidate =  true;
+      //   }
+      // });
+      // if(videoValidate == false)
+      // {
+      //   toastr["error"]("Please select thumvideo");
+      //   return false; 
+      // }
     }
 
 //save select video data
@@ -530,34 +530,6 @@ $(document).on('click', '.unsubscribePlanPrice', function () {
     }
   });
 });
-//end unsubscribePlanPrice
-$(document).on('click', '.unsubPlanPrice', function(){
-  var cusStatusId = $(this).attr('userId');
-  //alert(cusStatusId);return false;
-  $.ajax({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    },
-    url: webUrl + '/storesubscribestatus',
-    type: "post",
-    data: {customerids: cusStatusId},
-    datatype: 'json',
-    success: function (data)
-    {
-      if (data.message == 'success')
-      {
-        $('#frm_paypal_recurring').submit();
-      } else
-      {
-        console.log(data.error);
-      }
-    }
-  });
-});
-
-//customer select video end
-
-
 //customer dashboard start
 $(document).on('click', '.approveEdit', function()
 {
@@ -576,13 +548,9 @@ $(document).on('click','.openDisputeModal',function(){
 });
 
 $(document).on('click','#addCommentsForVideo',function(){
-  //var orderIdForComent = $(this).parents('form').find('input[type="hidden"]').val();
-  $(this).parent().parent().parent().parent().parent().parent().find('.scrollingStop').find('input[type="checkbox"]').each(function () {
-   if ($(this).prop('checked') == true) {
-     var change_scroll = $(this).parent().attr('id');
-     //alert(change_scroll);return false;
-   }
- });
+  var change_scroll = $(this).parents('form').find('#change_scroll').val();
+  var change_thumb = $(this).parents('form').find('#change_thumb').val();
+  var orderIdForComent = $(this).parents('form').find('input[type="hidden"]').val();
   $.ajax({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -599,7 +567,7 @@ $(document).on('click','#addCommentsForVideo',function(){
        $('#addComments').modal('hide');
        $('.approveEdit').show();
        $('#approveShow_'+ data.orderIdForComment).hide();
-       alert('Revise Succesfully Send');
+       alert('Rewise Succesfully Send');
 
      } else {               
       console.log(data.error);
@@ -669,3 +637,66 @@ $("#ErrPassMsg").click(function(){
 //             return false;
 //     }
 // });
+
+
+$(document).on('click','.comment',function(){
+    $('#commentPopUp').modal('show');
+  });
+
+//Rewise Timer
+$(document).on('click', '.Rewise', function () {
+  var procedOrderId = $(this).attr('id');
+  //alert(procedOrderId);
+  $(this).parent().parent().parent().hide();
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      url: webUrl + '/rewiseOrder',
+      type: "POST",
+      data: {procedOrdrId: procedOrderId},
+      dataType: 'json',
+      success: function (data) {
+        if (data.message == 'success') {
+          window.location.reload();
+        } else {
+          alert(data.error);
+        }
+      }
+    });
+
+  });
+
+function showDiv(select){
+  if($(select).val() > 0){
+    var hTML = "";
+    for(var i=0; i<$(select).val(); i++){
+     hTML +="<section>";
+      hTML +="<div class='container m-50'>";
+      hTML +="<div class='row'>";
+      hTML +="<div class='col-lg-12 col-md-1 mb-md-0 create-pro'>";
+      hTML +="<h4 class='text-left' style='display:-webkit-inline-box;'><b>Product Link :</b></h4>";       
+      hTML +="<input type='text' class='form-check-input filled-in inputProductLink' id='product_link_"+ i +"' name='product_link[]' style='position: relative;margin-left: 2rem;width:40%;'>";
+      hTML +="<label class='form-check-label'></label>";
+      hTML +="</div> ";
+      hTML +="</div>";
+      hTML +="</div>";  
+      hTML +="</section>";
+      hTML +="<section>";
+      hTML +="<div class='container m-50' id='websiteLink'>";
+      hTML +="<div class='row'>";
+      hTML +="<div class='col-lg-12 col-md-1 mb-md-0 create-pro'>";
+      hTML +="<h4 class='text-left' style='display:-webkit-inline-box;'><b>Website Link :</b></h4>";    
+      hTML +="<input type='text' class='form-check-input filled-in inputwebsiteLink' style='position: relative;margin-left: 2rem;width:40%;'>";
+      hTML +="<label class='form-check-label'></label>";
+      hTML +="</div>"; 
+      hTML +="</div>";
+      hTML +="</div>";
+      hTML +="</section><hr/>";
+    }
+    $(hTML).insertAfter('.termsandconditions');
+  }
+} 
+
+
+// End REwise Timer

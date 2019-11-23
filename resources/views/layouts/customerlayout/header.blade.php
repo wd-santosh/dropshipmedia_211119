@@ -1,13 +1,6 @@
- <style type="text/css">
-  span#userImg {
-    font-size: 12px;
-    margin-right: 0;
-    margin-left: 7px;
-}
-</style>
  <header class="main-header">
     <!-- Logo -->
-    <a href="#" class="logo">
+    <a href="index2.html" class="logo">
       <span class="logo-mini"><b>CUSTO</b>MER</span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg"><b>Customer</b>Dashboard</span>
@@ -21,7 +14,6 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 Welcome:  
-                <span id="userImg" class="glyphicon glyphicon-user"></span> 
               <span class="hidden-xs">&nbsp;&nbsp;{{ucfirst(Auth::user()->name)}}</span>
             </a>
             <ul class="dropdown-menu" style="width: 100%;">

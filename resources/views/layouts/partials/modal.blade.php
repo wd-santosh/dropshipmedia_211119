@@ -1,68 +1,5 @@
 <!-- start login/ signup model -->
-<style>
-.modal-header {
-    padding: 25px;
-    background: #397eff;
-}
-.modal-title {
-    margin-bottom: 0rem;
-    border-bottom: none;
-    padding-bottom: 0;
-}
-.modal-body {
-    position: relative;
-    padding: 25px;
-}
-.modal-footer {
-    padding: 25px;
-}
-.form-control {
-    border-color: #d2d6de;
-    border: 1px solid #dddddd;
-    border-radius: 3px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1) inset;
-}
-button#addEmployee {
-    width: 100%;
-    letter-spacing: 1px;
-    background-color: #08c;
-    color: #fff;
-    margin-bottom: 10px;
-    padding: 5px;
-    font-weight: bold;
-    font-size: 20px;
-}
-.close {
-    float: right;
-    font-size: 40px;
-    font-weight: 100;
-    line-height: 1;
-    color: #000;
-    text-shadow: 0 1px 0 #fff;
-    filter: alpha(opacity=20);
-    opacity: 17.2;
-    
-}
-.modal-logo{
-    margin-left: 200px;
-}
-.close2{
-      font-size: 40px;
- }  
- label {
-    font-weight: 600;
-}
-.2left{
-    float: left;
-    display: inline-block;
-    width: 49%;
-}
-.2right{
-    display: inline-block;
-    width: 49%;
-    float: right;
-}
-</style>
+
 <!--Add Employee Image modal-->
 <div class="modal fade" id="addEmployeeImageModalForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
 aria-hidden="true">
@@ -96,7 +33,8 @@ aria-hidden="true">
             </div>
         </div>
         <div class="modal-footer d-flex justify-content-center" style="text-align: center">
-            <button class="btn btn-deep-orange" id="addEmployee">Add</button>
+            <button class="btn btn-deep-orange" id="addEmployee"  
+            style="width:30%;letter-spacing: 1px;background-color:#08c;color: #fff;">Add</button>
         </div>
     </form>
 </div>
@@ -188,7 +126,7 @@ aria-hidden="true">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title w-100 font-weight-bold">Add Employee</h4>
+                <h4 class="modal-title w-100 font-weight-bold" style="margin-top: 10px;">Add Employee</h4>
             </div>
             <div class="modal-body mx-3">
                 <div class="md-form mb-5" style="margin-bottom: 10px;">
@@ -210,17 +148,6 @@ aria-hidden="true">
                     <input type="text" name="num" id="employeeContact" class="form-control" maxlength="12" style="margin-bottom: 10px;">
                     <span id="ErrMsgForContact"></span>
                 </div>  
-                <div class="md-form mb-2 2left" style="float: left; display: inline-block; width: 49%;">
-                    <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;"> Rate Per Thumbnail</label>
-                   <input type="text" name="thumbnail_rate" id="thumbprice" class="form-control hideMsgs" style="margin-bottom: 10px;">
-                    <div id="ErrMsgForthumbprice" style="margin-left: 150px;"></div>
-                </div>  
-                <div class="md-form mb-2 2right" style="float: right; display: inline-block; width: 49%;">
-                    <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Rate Per Video</label>
-                    
-                    <input type="text" name="video_rate" id="VidPrice" class="form-control VidPriceHideErrMsg" style="margin-bottom: 10px;">
-                    <div id="ErrMsgForVideoprice" style="margin-bottom: 10px; margin-left: 155px;"></div>
-                </div>  
                 <div class="md-form mb-4" style="margin-bottom: 10px;">
                     <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Status</label><br>
                     <label class="radio-inline"><input type="radio" name="optradio" id="chk_1" class="StatushideError">Active</label>
@@ -229,7 +156,8 @@ aria-hidden="true">
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center" style="text-align: center">
-                <button class="btn btn-deep-orange" id="addEmployee">Add</button>
+                <button class="btn btn-deep-orange" id="addEmployee"  
+                        style="width:30%;letter-spacing: 1px;background-color:#08c;color: #fff; margin-bottom: 10px;">Add</button>
             </div>
         </div>
     </div>
@@ -271,17 +199,7 @@ aria-hidden="true">
                     <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Contact Number</label>
                     <input type="text" name="contact" id="emp_contact" class="form-control ">
                     <span id="ErroMsgCont"></span>
-                </div> 
-                <div class="md-form mb-4">
-                    <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;"> Rate Per Thumbnail</label>
-                    <input type="text" name="thumbnail_rate" id="thumb_price" class="form-control" style="margin-bottom: 10px;">
-                    <span id="ErreditMsgForthumbprice"></span>
                 </div>  
-                <div class="md-form mb-4">
-                    <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Rate Per Video</label>
-                    <input type="text" name="video_rate" id="Vid_Price" class="form-control" style="margin-bottom: 10px;">
-                    <span id="ErreditMsgForVideoprice"></span>
-                </div>   
                 <div class="md-form mb-4" style="margin-bottom: 10px;">
                     <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Status</label><br>
                     <label class="radio-inline"><input type="radio" name="optradio" id="chek_1">Active</label>
@@ -359,8 +277,8 @@ aria-hidden="true">
                     <input type="hidden" name="id" class="form-control" id="img_id">                         
                 </div>
                 <div class="md-form mb-5" style="margin-bottom: 10px;">
-                    <label data-error="wrong" data-success="right" for="orangeForm-name" style="margin-bottom: 10px;">Thumbnail Video</label>
-                    <input type="file" name="video" id="thum_video" class="form-control">
+                    <label data-error="wrong" data-success="right" for="orangeForm-name" style="margin-bottom: 10px;">Video URL</label>
+                    <input type="text" name="video" id="thum_video" class="form-control">
                     <span id="thumsVid"></span>                         
                 </div>
                 
@@ -380,3 +298,33 @@ aria-hidden="true">
 
 
 
+
+
+
+
+
+
+
+
+
+
+<style>
+    
+.close {
+    float: right;
+    font-size: 40px;
+    font-weight: 100;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: 17.2;
+    
+}
+.modal-logo{
+    margin-left: 200px;
+}
+.close2{
+      font-size: 40px;
+ }   
+</style>

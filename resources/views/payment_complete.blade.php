@@ -11,7 +11,7 @@
       <p>This is to inform you that your Payment has been completed.</p> 
           
       <p>
-        Now you can open your <b>Dashboard</b>. <a class="button create-accountes btn-primary" href="/dropshipmedia/customer/dashboard">Dashboard</a>
+        Now you can open your <b>Dashboard</b>. <a class="button create-accountes btn-primary" href="/customer/dashboard">Dashboard</a>
       </p>
     </div>
     <div class="col-md-1"></div>

@@ -24,7 +24,7 @@ aria-hidden="true">
             </div>
 
             <div class="md-form mb-4" style="margin-bottom: 10px;">
-                <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Video Style</label>
+                <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Video URL</label>
                 <input type="file" name="video" class="form-control showvideo VidStyl" id="file" accept="video/*">
                 <div style="display: none;" class='video-prev' class="pull-right">
                    <video height="200" width="300" class="video-preview" controls="controls"/>
@@ -69,8 +69,8 @@ aria-hidden="true">
             </div>
 
             <div class="md-form mb-4" style="margin-bottom: 10px;">
-                <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Video Style</label>
-                <input type="file" name="links" class="form-control showvideo vdosss" id="displayVideo" accept="video/*">
+                <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Video URL</label>
+                <input type="text" name="links" class="form-control showvideo vdosss" id="displayVideo" accept="video/*">
                 <div style="display: none;" class='video-prev' class="pull-right">
                  <video height="200" width="300" class="video-preview" controls="controls"/>
              </div>

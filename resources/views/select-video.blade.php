@@ -6,13 +6,11 @@
     }
     .videoSelction{
         border: 1px solid #007bff;
-       
+        display: block;
         text-align: center;
         background: #007bff;
         color: #FFF;
-        padding: 4px;
-        display: inline-block !important;
-         width: 97.5%;
+        padding: 4px;   
     }
     .videoSelction:hover{
         color: #FFF;
@@ -54,11 +52,9 @@
                             <div class="carousel-item active orderVideoByEmp" id="video_{{ $video->id }}">
                                 <!--Mask color-->
                                 <div class="view">
-                                   
-                                
                                     <!--Video source-->
                                     <video class="video-fluid">
-                                        <source src="{{ asset($video->links)}}" name="selectedVdeo" class="getVideoId" type="video/mp4" id="link_{{ $video->id }}" />
+                                        <source src="{{ $video->links }}" name="selectedVdeo" class="getVideoId" type="video/mp4" id="link_{{ $video->id }}" />
                                     </video>
                                     <div class="mask rgba-indigo-light"></div>
                                 </div>
@@ -76,10 +72,9 @@
                             <div class="carousel-item orderVideoByEmp" id="video_{{ $video->id }}">
                                 <!--Mask color-->
                                 <div class="view">
-
                                     <!--Video source-->
-                                    <video class="video-fluid" width="100" height="50">
-                                        <source src="{{ asset($video->links)}}" name="selectedVdeo" class="getVideoId" type="video/mp4" id="link_{{ $video->id }}"/>
+                                    <video class="video-fluid">
+                                        <source src="{{ $video->links }}" name="selectedVdeo" class="getVideoId" type="video/mp4" id="link_{{ $video->id }}"/>
                                     </video>
                                     <div class="mask rgba-indigo-light"></div>
                                 </div>
@@ -168,10 +163,8 @@
                         <!-- Grid column -->
                         @foreach($thumbnails as $videos)
                         <div class="selectdThumnVideo mb-3 pics animation all 1" name='_thumbVideoId' id="thumb_{{ $videos->id }}">
-                            <a href="{{ $videos->thum_video }}">
-                                <video width="350" height="auto" controls>
-                                  <source src="{{ asset($videos->thum_video)}}"  type="video/mp4">
-                                </video> 
+                            <a href="{{ $videos->thum_video }}" target="_blank">
+                               
                             </a>
                             <a title="{{ $videos->thum_video }}" id="thumVideoId_{{ $videos->id }}" href="javascript:void(0);" class="videoSelction">Select</a>
                         </div>

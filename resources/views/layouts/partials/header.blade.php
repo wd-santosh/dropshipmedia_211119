@@ -8,6 +8,7 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
+  
   <!-- Font Awesome -->
   
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
@@ -16,7 +17,7 @@
   <!-- Material Design Bootstrap -->
  <link href="{{asset('public/css/compiled-4.8.2.min.css')}}" rel="stylesheet">
   <link href="{{asset('public/css/mdb.min.css')}}" rel="stylesheet">
-   <!--Your custom styles (optional) -->
+   Your custom styles (optional) 
   <!-- <link href="{{asset('public/css/style.css')}}" rel="stylesheet"> -->
  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
    <link href="{{asset('public/css/toastr.min.css')}}" rel="stylesheet">

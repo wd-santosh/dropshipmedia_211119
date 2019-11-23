@@ -153,9 +153,6 @@ figcaption.ratings p span {
                                          <h2>Nicole Pearson</h2>
                                             <p><strong>About: </strong> Web Designer / UI. </p>
                                             <p><strong>Hobbies: </strong> Read, out with friends, listen to music, draw and learn new things. </p>
-                                            @php //print_r($userData) @endphp
-                                            <p><strong>Name: </strong> {{$userData[0]->name}}</p>
-                                            <p><strong>Email: </strong>{{$userData[0]->email}}</p>
                                             <p><strong>Skills: </strong>
                                                 <span class="tags">html5</span> 
                                                 <span class="tags">css3</span>

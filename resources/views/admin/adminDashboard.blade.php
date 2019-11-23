@@ -33,8 +33,6 @@
                     <th>Name</th>
                     <th>E-mail</th>                              
                     <th>Conact Number</th>
-                    <th>Rate Per Thumbnail</th>
-                    <th>Rate Per Video</th>
                     <th>Last Login</th>
                     <th>Status</th>
                     <th>Action</th>                            
@@ -55,12 +53,6 @@
                     <td id="empContact">
                         {{ $empData->contact }}
                     </td>
-                    <td id="thumbprice">
-                        {{ $empData->thumbnail_rate }}
-                    </td>
-                    <td id="VidPrice">
-                        {{ $empData->video_rate }}
-                    </td>
                     <td>
                         {{ $empData->last_login }}
                     </td>
@@ -75,7 +67,7 @@
                         <a id="emp_{{ $empData->id }}" class="editEmp " style="margin-right: 1rem; background: #337ab7; padding: 2px 2rem; text-align: center; border-radius: 4px;cursor: pointer;">
                             <i class="fa fa-edit" style="font-size: 15px; color: #fff;"></i>
                         </a>
-                        <a id="emp_{{ $empData->id }}" class="removeEmp" style="background-color: #dd4b39; padding: 2px 2rem; text-align: center; border-radius: 4px;cursor: pointer;">
+                        <a id="emp_{{ $empData->id }}" class="removeEmp" style="    background-color: #dd4b39; padding: 2px 2rem; text-align: center; border-radius: 4px;cursor: pointer;">
                             <i class="fa fa-trash" style="font-size: 15px; color: #fff;"></i>
                         </a>
                     </td>

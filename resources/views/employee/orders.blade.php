@@ -63,6 +63,8 @@ label {
     }
 table thead{
     border-bottom: 1px solid #e2e1e1;
+    background: whitesmoke;
+    font-size: 16px;
     background: #3c8dbc5c;
     font-size: 14px;
     letter-spacing: 1px;
@@ -90,8 +92,10 @@ table thead{
     overflow: auto;
     height: 607px !important;
     }
+    table thead tr th{padding: 10px 10px;}  
+    table tbody tr td{padding: 10px;}
+    .box-body{padding:0px;}
 </style>
-@include('layouts.elements.sidebar')
 <input type="hidden" value="{{ Auth::id() }}" id="logdInEmpId">
 <div>
     @if(sizeof($customerOrders) <= 0)
@@ -106,6 +110,10 @@ table thead{
 <div class="box">
     <!-- /.box-header -->
     <div class="box-body">
+        <table class="table-bordered table-striped" id="employetable"  style="table-layout:fixed;word-break:break-all;width:100%">
+            <thead> 
+            <tr>               
+
         <table id="example1" class="table" style="table-layout:fixed;word-break:break-all;width:100%">
             <thead>                
                 <th style="text-align:center">OrderId</th>  
@@ -114,13 +122,14 @@ table thead{
                 <th>Delivery Date</th>
                 <th width="200px">Action</th>
                 <th style="text-align:center">Upload Video</th>
+            </tr>
             </thead>
-            <tbody class="">
+            <tbody>
                 @foreach($customerOrders as $order)
                 @if(!empty($order->id) && $order->status == 1)         
 
-                <tr id="orderId_{{ $order->id }}" class="">  
-                 <td style="display:none;"></td>
+                <tr id="orderId_{{ $order->id }}" class="">   
+                <td style="display:none;"></td>                
                     <td style="text-align:center">{{ $order->id }}</td>
                     <td class="orderrDesc">
                         <a href="{{ route ('employee/viewOrderDetails', $order->id) }}" id="orderId_{{ $order->id }}" class="viewDetails"
@@ -143,6 +152,7 @@ table thead{
                          @if($order->change_thumb == 1  && $order->change_stop_scroll == 1)
                                <div style="margin-top:1rem;display: block;">
                                     <button type="button" class="btn btn-primary comment scrollall" id="{{ $order->id }}"
+                                         style="font-size:16px ;width:100%;border-radius:5px;letter-spacing: 1px; overflow:auto;">Revise For Change Thumbnail And StopScroll
                                          style="font-size:16px ;width:100%;border-radius:5px;letter-spacing: 1px;overflow:auto;">Revise For Change Thumbnail And StopScroll
                                     </button>
                                 </div>
@@ -219,12 +229,10 @@ table thead{
             </tbody>
         </table>
     </div>
-    <div style="float: right;margin-right: 4rem">
-    
-    </div>
     <!-- /.box-body -->
 </div>
 <!-- /.box -->
+@endsection
 
 <!-- End Add Customer Video modal-->
 <div class="modal fade" id="AddCustomerVideo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -280,4 +288,3 @@ style="width:30%;letter-spacing: 1px;background-color:#08c;color: #fff;" >ok</bu
 </div>
 
 
-@endsection

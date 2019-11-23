@@ -1,4 +1,3 @@
-
 @extends('layouts.partials.home')
 @section('content')
  <link href="{{asset('public/css/homepage2.css')}}" rel="stylesheet"/>

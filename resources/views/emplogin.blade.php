@@ -69,7 +69,6 @@ padding-top: 2px;
 color: #33b5e5;
 margin-right: 48px;
 font-family:serif;
-text-decoration:none;
 
 
 }
@@ -123,7 +122,7 @@ width: 100%;
 
   
   
-    <span class="psw" style="color: #33b5e5;"><a href="{{ route('EmpUpdatePass') }}" style="text-decoration: none;">Forgot password?</a></span>
+    <span class="psw" style="color: #33b5e5;">Forgot  <a href="{{ route('EmpUpdatePass') }}">password?</a></span>
   </div>
 </form>
 </div>

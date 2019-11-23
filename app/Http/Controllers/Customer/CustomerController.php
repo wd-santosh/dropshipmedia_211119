@@ -34,24 +34,17 @@ class CustomerController extends Controller {
      public function viewCreateVideos(Request $request, $id = NULL) {
        if(Auth::user()->role_id == 1)
        {
-      $masters = masters_model::select('*')->get();
-      //print_r($masters);
-      //die;
+      //$masters = masters_model::select('*')->get();
       $gender = gender_model::select('*')->get();
-      //print_r($gender);
-      //die;
       $music = music_model::select('*')->get();
-      //print_r($music);
-      //die;
+      // $delivery_date = customer_orders_model::get('*');
       if (!empty($id) && $id != NULL) {
         $cusOrdrid = customer_orders_model::findorfail($id);
-        //print_r($cusOrdrid);
-        //die;
       } else {
         $cusOrdrid = '';
       }
 
-      return view('create-video')->with(['master' => $masters, 'gender' => $gender, 'music' => $music, 'selectdOrder' => $cusOrdrid]);
+      return view('create-video')->with(['gender' => $gender, 'music' => $music, 'selectdOrder' => $cusOrdrid]);
     }
     else{
        return view('errors/404');
@@ -68,8 +61,6 @@ class CustomerController extends Controller {
     {
       if(Auth::user()->role_id == 1){
         $customer=customer_orders_model::get();
-        //print_r($customer);
-        //die;
         return view('customer/customerdashboard')->with('customer',$customer);
       }
       else
@@ -77,51 +68,46 @@ class CustomerController extends Controller {
         return view('errors/404');
       }
     }
-    public function customerprofile ()
+    public function customerprofile()
     {
-      $user=Auth::user();
-      //print_r($user);
-      //die;
-      $userData=DB::table('users')->where('id',$user->id)->get();
-            return view('customer/customerprofile',['userData'=>$userData]);
-
+      return view('customer/customerprofile');
     }
     public function downloadvideo($videoId)
     {
       $book_cover = customer_orders_model::where('id', $videoId)->firstOrFail();
-      //print_r($book_cover);
-      //die;
       $path = public_path(). $book_cover->employe_video;
-      //print_r($path);
-      //die;
       return response()->download($path, $book_cover
        ->original_filename, ['Content-Type' => $book_cover->mime]);
 
     }
 
     public function storeFirstPageData(Request $request) {
+
       if (request()->ajax()) {
+  
         $posts = $request->post();
         if ($request->custOrderId == '' && $request->custOrderId == NULL) {
           $customerData = new customer_orders_model();
-          $customerData->image_id = $posts['imgId'];
-          /*print_r($customerData);
-          die;*/
+          
           $customerData->gender = $posts['genderId'];
           $customerData->music = $posts['musicId'];
-          $customerData->delivery_day = $posts['delivery_day'];
+          $customerData->videos_orders = $posts['videos_orders'];
+
+          $customerData->website_link = $posts['websiteLink'];
+          //print_r($customerData);die;
           $customerData->product_link = $posts['productLink'];
+          
           $customerData->customer_id = $posts['cust_id'];
-          //print_r($customerData);
-          //die;
           $customerData->save();
           $cust_orderId = $customerData->id;
-        } else {
+        }
+        
+         else {
           if (!empty($request->custOrderId) && $request->custOrderId != NULL) {
             $custOrdr = customer_orders_model::findorfail($request->custOrderId);
-            $custOrdr->image_id = $posts['imgId'];
             $custOrdr->gender = $posts['genderId'];
             $custOrdr->music = $posts['musicId'];
+            $custOrdr->website_link = $posts['websiteLink'];
             $custOrdr->product_link = $posts['productLink'];
             $custOrdr->customer_id = $posts['cust_id'];
             $custOrdr->save();
@@ -141,8 +127,6 @@ class CustomerController extends Controller {
     public function selectVideo(Request $request, $id = NULL) {
       $thumbnailsVideo = master_thumbnails_model::select('*')->get();        
       $videos = videos_model::select('*')->get();
-      //print_r($videos);
-      //die;
       $cusOrderId = $request->id;
       return view('select-video')->with(['videos' => $videos, 'CusId' => $cusOrderId, 'thumbnails' =>$thumbnailsVideo]);
     }
@@ -152,8 +136,6 @@ class CustomerController extends Controller {
       if (request()->ajax()) {
         $posts = $request->post();
         $customerId = $request->_orderIdForMusic;
-        //print_r($customerId);
-        //die;
         $selectdVideoByCust = $request->selectedVdeo;
         $customerOrder = customer_orders_model::findorfail($customerId);
         $customerOrder->video_id = $selectdVideoByCust ;
@@ -210,8 +192,6 @@ class CustomerController extends Controller {
 
             public function customerVideoVariation(Request $request, $id = NULL) {
              $customer_id = Auth::user()->id;
-             //print_r($customer_id);
-             //die;
              $subsMember = subscribe_member_model::select('*')->get();
              $nonSubsMember = non_subscribe_member_model::select('*')->get();
              $cust_Sta = customers::where('user_id',$customer_id)->first();
@@ -241,7 +221,6 @@ class CustomerController extends Controller {
               $cusOrderId = $posts['cus_orderId'];
               $cusOrder = customer_orders_model::findorfail($cusOrderId);
               $cusOrder->subscribe = $posts['sub_planPrice'];
-              $cusOrder->status='1';
               $cusOrder->save();
 
           #Services table
@@ -276,7 +255,7 @@ class CustomerController extends Controller {
         #customer order_table  
         $cusOrderId = $posts['cus_orderId'];            
         $cusOrder = customer_orders_model::findorfail($cusOrderId);
-        print_r($cusOrder);exit;
+        //print_r($cusOrder);exit;
         $cusOrder->Unsubscribe = $posts['unsub_planPrice'];
 
         $cusOrder->save();
@@ -324,13 +303,9 @@ class CustomerController extends Controller {
     
     public function ViewcustList()
     {
-
-       
-         $custDetail=User::where('role_id','1')->paginate(10);
-         //print_r($custDetail);
-         //die;
-       return view('admin/customerDetail')->with('custDetail',$custDetail);
-           }
+      $custDetail=User::where('role_id','1')->get();
+      return view('admin/customerDetail')->with('custDetail',$custDetail);
+    }
 
     public function ViewcustOrder()
     {

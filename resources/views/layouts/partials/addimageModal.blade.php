@@ -15,7 +15,7 @@ aria-hidden="true">
             @csrf
             <div class="md-form mb-5" style="margin-bottom: 10px;">
                 <label data-error="wrong" data-success="right" for="orangeForm-name" style="margin-bottom: 10px;">Image Size</label>
-                <input type="text" name="imagesize" class="form-control ImgSizs" id="addImageEmployee">
+                <input type="text" name="imagesize" class="form-control ImgSizs" id="addImageEmployee" maxlength="20">
                 <span id="ShowImageSizeErrorMsg"></span>                    
             </div>
             <div class="md-form mb-5" style="margin-bottom: 10px;">
@@ -26,13 +26,12 @@ aria-hidden="true">
 
             <div class="md-form mb-4" style="margin-bottom: 10px;">
                 <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Image Layout</label>
-                
-                <input type="file" name="image" id="showImg" class="form-control ImageShowErr" style="margin-bottom:10px;">
-                <span id="ImageErrorMessage"></span>
+
+                <input type="file" name="image" id="showImg" class="ImageShowErr" style="margin-bottom:10px;">
                 <img id="ImgId" width="21%" height="100px">
+                <span id="ImageErrorMessage"></span>
             </div>
         </div>
-         
         <div class="modal-footer d-flex justify-content-center" style="text-align: center">
             <button class="btn btn-deep-orange ErrorMessg" id="addEmployees"  
             style="width:30%;letter-spacing: 1px;background-color:#08c;color: #fff; margin-bottom: 10px;">Add</button>

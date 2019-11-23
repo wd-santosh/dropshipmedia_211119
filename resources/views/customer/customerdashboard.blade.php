@@ -1,7 +1,7 @@
 @extends('layouts.customerlayout.customer')
 <style type="text/css">
 table thead tr th {font-weight: 900; letter-spacing: 1px; text-align: left;}
-
+table thead {background: #3c8dbc5c;}
 table tbody tr td {text-align: left;}
 .Visitdrop{text-align: right; width: 94%;margin-top: -30px;}
 div#DataTables_Table_0_info {width: auto; display: -webkit-inline-box; margin-left: 25px;}
@@ -103,7 +103,7 @@ div#DataTables_Table_0_info {margin-left: 0px;}
 <th scope="col">S.No</th>
 <th scope="col">Image Uploaded</th>
 <th scope="col">Video</th>
-<th scope="col">Video Revise Status</th>
+<th scope="col">Video Rewise Status</th>
 <th scope="col">Action</th>
 </tr>
 </thead>
@@ -117,7 +117,7 @@ $customerId = Auth::user()->id;
 @if($customer_data->customer_id == $customerId)
 
 <tr>
-<td scope="row">{{$sn++}} </td>
+<td scope="row">{{$sn++}}</td>
 @if($customer_data->logo)
 <td><img src="{{ asset($customer_data->logo)}}" alt="Image" width="50px" height="50px"></td>
 @else
@@ -135,6 +135,7 @@ Your browser does not support the video tag.
 @endif
 <td>@if($customer_data->video_counter == 1)
         <p class="counter" title="{{(strtotime($customer_data->video_upload_time) * 1000)}}" style="margin-top: 1rem;"></p> 
+
         @else
         <p>Not Applicable</p>
         @endif</td>
@@ -142,17 +143,33 @@ Your browser does not support the video tag.
 <td class="videoEdit_{{ $customer_data->id }}">
 @if($customer_data->employe_video)
 @if($customer_data->video_upload_time <= date('Y-m-d H:i:s'))
+<div id="approveShow_{{ $customer_data->id }}"> 
+<a class="btn btn-primary" href="javascript:void(0);">Edit</a>
+</div>
+@elseif($customer_data->change_stop_scroll == 1)
+<div id="approveShow_{{ $customer_data->id }}" disabled>
+<a class="btn btn-primary" href="javascript:void(0);">Edit</a>
+<a class="btn btn-primary" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" disabled>Rewise</a>
 <div id="approveShow_{{ $customer_data->id }}" style="float: left;"> 
-<a class="btn btn-primary" href="{{url('/customizeVideo/'.$customer_data->id)}}" title="Edit"><i class="fa fa-edit" style="font-size: 15px; color: #fff;"></i></a>
+<a class="btn btn-primary" href="javascript:void(0);" title="Edit"><i class="fa fa-edit" style="font-size: 15px; color: #fff;"></i></a>
 </div>
 @elseif($customer_data->change_stop_scroll == 1)
 <div id="approveShow_{{ $customer_data->id }}" disabled style="float: left;">
 <a class="btn btn-primary" href="javascript:void(0);" title="Edit"><i class="fa fa-edit" style="font-size: 15px; color: #fff;"></i></a>
 <a class="btn btn-primary" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" title="Revise" disabled><i class="fa fa-file-video-o" style="font-size: 15px; color: #fff;"></i></a>
 </div>
+@elseif($customer_data->change_thumb == 1)
+<div id="approveShow_{{ $customer_data->id }}" disabled>
+<a class="btn btn-primary" href="javascript:void(0);">Edit</a>
+<a class="btn btn-primary" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" disabled>Rewise</a>
+</div>
+@elseif($customer_data->change_thumb == 1 && $customer_data->change_stop_scroll == 1)
+<div id="approveShow_{{ $customer_data->id }}" disabled>
+<a class="btn btn-primary" href="javascript:void(0);">Edit</a>
+<a class="btn btn-primary" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" disabled>Rewise</a>
 @else
 <div id="approveShow_{{ $customer_data->id }}" style="float: left;">
-<a class="btn btn-primary" href="{{url('/customizeVideo/'.$customer_data->id)}}" title="Edit"><i class="fa fa-edit" style="font-size: 15px; color: #fff;"></i></a>
+<a class="btn btn-primary" href="/editor" title="Edit"><i class="fa fa-edit" style="font-size: 15px; color: #fff;"></i></a>
 <a class="btn btn-primary openDisputeModal" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" title="Revise"><i class="fa fa-file-video-o" style="font-size: 15px; color: #fff;"></i></a>
 </div>
 @endif
@@ -193,11 +210,11 @@ aria-hidden="true">
 </div> 
 <form action="javascript:void(0);" class="customerVideo" method="post">
 <div class="modal-body mx-3">
-<div class="md-form mb-5 scrollingStop">
+<div class="md-form mb-5">
 
 <input type="checkbox" name="scroll" id="change_scroll"> Change Stop Scroll<br>
 <input type="checkbox" name="thumb" id="change_thumb"> Change Thumbnail<br>
-<input type="hidden" id="orderIdForCommentVideo" name="orderid"> 
+<input type="hidden" id="orderIdForCommentVideo" name="orderid" value=""> 
 </div>
 </div>
 <div class="modal-footer d-flex justify-content-center" style="text-align: center">
