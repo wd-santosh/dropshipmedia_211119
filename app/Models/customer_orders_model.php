@@ -24,7 +24,7 @@ class customer_orders_model extends Model
         return $this->hasOne(music_model::class, 'id' , 'music');
     }
     public function getDeliverDay(){
-        return $this->hasOne(music_model::class, 'id' , 'delivery_day');
+        return $this->hasOne(music_model::class, 'id' , 'videos_orders');
     }
     public function getImageData(){
         return $this->hasOne(masters_model::class, 'id' , 'image_id');
@@ -38,7 +38,7 @@ class customer_orders_model extends Model
         'image_size',
         'gender',
         'music',
-        'delivery_day',
+        'videos_orders',
         'music_type',
         'logo',
         'product_link',

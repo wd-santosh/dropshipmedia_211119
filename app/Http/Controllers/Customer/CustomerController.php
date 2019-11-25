@@ -35,116 +35,127 @@ class CustomerController extends Controller {
        if(Auth::user()->role_id == 1)
        {
       //$masters = masters_model::select('*')->get();
-      $gender = gender_model::select('*')->get();
-      $music = music_model::select('*')->get();
+        $gender = gender_model::select('*')->get();
+        $music = music_model::select('*')->get();
       // $delivery_date = customer_orders_model::get('*');
-      if (!empty($id) && $id != NULL) {
-        $cusOrdrid = customer_orders_model::findorfail($id);
-      } else {
-        $cusOrdrid = '';
-      }
+        if (!empty($id) && $id != NULL) {
+          $cusOrdrid = customer_orders_model::findorfail($id);
+        } else {
+          $cusOrdrid = '';
+        }
 
-      return view('create-video')->with(['gender' => $gender, 'music' => $music, 'selectdOrder' => $cusOrdrid]);
-    }
-    else{
+        return view('create-video')->with(['gender' => $gender, 'music' => $music, 'selectdOrder' => $cusOrdrid]);
+      }
+      else{
        return view('errors/404');
+     }
    }
+
+
+   public function faq()
+   {
+    return view('/faq');
   }
 
-    
-    public function faq()
-    {
-      return view('/faq');
+  public function customerlist()
+  {
+    if(Auth::user()->role_id == 1){
+      $customer=customer_orders_model::get();
+      return view('customer/customerdashboard')->with('customer',$customer);
     }
-    
-    public function customerlist()
+    else
     {
-      if(Auth::user()->role_id == 1){
-        $customer=customer_orders_model::get();
-        return view('customer/customerdashboard')->with('customer',$customer);
-      }
-      else
-      {
-        return view('errors/404');
-      }
+      return view('errors/404');
     }
-    public function customerprofile()
-    {
-      return view('customer/customerprofile');
-    }
-    public function downloadvideo($videoId)
-    {
-      $book_cover = customer_orders_model::where('id', $videoId)->firstOrFail();
-      $path = public_path(). $book_cover->employe_video;
-      return response()->download($path, $book_cover
-       ->original_filename, ['Content-Type' => $book_cover->mime]);
+  }
+  public function customerprofile()
+  {
+    return view('customer/customerprofile');
+  }
+  public function downloadvideo($videoId)
+  {
+    $book_cover = customer_orders_model::where('id', $videoId)->firstOrFail();
+    $path = public_path(). $book_cover->employe_video;
+    return response()->download($path, $book_cover
+     ->original_filename, ['Content-Type' => $book_cover->mime]);
 
-    }
+  }
 
-    public function storeFirstPageData(Request $request) {
+  public function storeFirstPageData(Request $request) {
 
-      if (request()->ajax()) {
-  
-        $posts = $request->post();
-        if ($request->custOrderId == '' && $request->custOrderId == NULL) {
-          $customerData = new customer_orders_model();
-          
-          $customerData->gender = $posts['genderId'];
-          $customerData->music = $posts['musicId'];
-          $customerData->videos_orders = $posts['videos_orders'];
+    if (request()->ajax()) {
 
-          $customerData->website_link = $posts['websiteLink'];
+      $posts = $request->post();
+      if ($request->custOrderId == '' && $request->custOrderId == NULL) {
+        $customerData = new customer_orders_model();
+        $customerData->terms_condition = $posts['genderId'];
+        $customerData->thumbnail = $posts['musicId'];
+        $customerData->videos_orders = $posts['videos_orders'];
+
+        $customerData->website_link = $posts['websiteLink'];
           //print_r($customerData);die;
-          $customerData->product_link = $posts['productLink'];
-          
-          $customerData->customer_id = $posts['cust_id'];
-          $customerData->save();
-          $cust_orderId = $customerData->id;
-        }
-        
-         else {
-          if (!empty($request->custOrderId) && $request->custOrderId != NULL) {
-            $custOrdr = customer_orders_model::findorfail($request->custOrderId);
-            $custOrdr->gender = $posts['genderId'];
-            $custOrdr->music = $posts['musicId'];
-            $custOrdr->website_link = $posts['websiteLink'];
-            $custOrdr->product_link = $posts['productLink'];
-            $custOrdr->customer_id = $posts['cust_id'];
-            $custOrdr->save();
-            $cust_orderId = $request->custOrderId;
+        $customerData->product_link = $posts['productLink'];
+
+        $customerData->customer_id = $posts['cust_id'];
+        $customerData->save();
+        $cust_orderId = $customerData->id;
+        for($i=0;$i<count($posts['link_data']['cust_id']);$i++)
+          {
+            DB::table('order_link')->insertGetId(
+              ['customer_id' => $posts['cust_id'], "website_link" => $posts['link_websit'][$i], "product_link" => $posts['link_data'][$i]]
+            );
+          }
+      }
+
+      else {
+        if (!empty($request->custOrderId) && $request->custOrderId != NULL) {
+          $custOrdr = customer_orders_model::findorfail($request->custOrderId);
+          $custOrdr->gender = $posts['genderId'];
+          $custOrdr->music = $posts['musicId'];
+          $custOrdr->website_link = $posts['websiteLink'];
+          $custOrdr->product_link = $posts['productLink'];
+          $custOrdr->customer_id = $posts['cust_id'];
+          $custOrdr->save();
+          $cust_orderId = $request->custOrderId;
+          for($i=0;$i<count($posts['link_websit']);$i++)
+          {
+            DB::table('order_link')->insertGetId(
+              ['customer_id' => $posts['cust_id'],'customer_order_id' => $request->custOrderId, "website_link" => $posts['link_websit'][$i], "product_link" => $posts['link_data'][$i]]
+            );
           }
         }
       }
-      if ($request->custOrderId == '' && $request->custOrderId == NULL && $customerData) {
-        return response()->json(array('message' => 'success', 'cusOrderId' => $cust_orderId));
-      } else if (!empty($request->custOrderId) && $request->custOrderId != NULL && $custOrdr) {
-        return response()->json(array('message' => 'success', 'cusOrderId' => $cust_orderId));
-      } else {
-        return response()->json(array('error' => 'Something went wrong !!'));
-      }
     }
-
-    public function selectVideo(Request $request, $id = NULL) {
-      $thumbnailsVideo = master_thumbnails_model::select('*')->get();        
-      $videos = videos_model::select('*')->get();
-      $cusOrderId = $request->id;
-      return view('select-video')->with(['videos' => $videos, 'CusId' => $cusOrderId, 'thumbnails' =>$thumbnailsVideo]);
+    if ($request->custOrderId == '' && $request->custOrderId == NULL && $customerData) {
+      return response()->json(array('message' => 'success', 'cusOrderId' => $cust_orderId));
+    } else if (!empty($request->custOrderId) && $request->custOrderId != NULL && $custOrdr) {
+      return response()->json(array('message' => 'success', 'cusOrderId' => $cust_orderId));
+    } else {
+      return response()->json(array('error' => 'Something went wrong !!'));
     }
-    
-    public function storeSelectVideoData(Request $request) {
+  }
 
-      if (request()->ajax()) {
-        $posts = $request->post();
-        $customerId = $request->_orderIdForMusic;
-        $selectdVideoByCust = $request->selectedVdeo;
-        $customerOrder = customer_orders_model::findorfail($customerId);
-        $customerOrder->video_id = $selectdVideoByCust ;
-        $customerOrder->thumbnail_video = $request->_thumbVideoId;
-        $customerOrder->save();
-        if ($file = $request->file('music')) {
-          $path = public_path() . "/img/order_music";
-          $priv = 0777;
-          if (!file_exists($path)) {
+  public function selectVideo(Request $request, $id = NULL) {
+    $thumbnailsVideo = master_thumbnails_model::select('*')->get();        
+    $videos = videos_model::select('*')->get();
+    $cusOrderId = $request->id;
+    return view('select-video')->with(['videos' => $videos, 'CusId' => $cusOrderId, 'thumbnails' =>$thumbnailsVideo]);
+  }
+
+  public function storeSelectVideoData(Request $request) {
+
+    if (request()->ajax()) {
+      $posts = $request->post();
+      $customerId = $request->_orderIdForMusic;
+      $selectdVideoByCust = $request->selectedVdeo;
+      $customerOrder = customer_orders_model::findorfail($customerId);
+      $customerOrder->video_id = $selectdVideoByCust ;
+      $customerOrder->thumbnail_video = $request->_thumbVideoId;
+      $customerOrder->save();
+      if ($file = $request->file('music')) {
+        $path = public_path() . "/img/order_music";
+        $priv = 0777;
+        if (!file_exists($path)) {
                     mkdir($path, $priv) ? true : false; //
                   }
                   $name = $file->getClientOriginalName();

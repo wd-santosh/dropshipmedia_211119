@@ -208,25 +208,28 @@ function _validateCreateVideo()
 }
 //Next
 $(document).on('click', '.Next', function () {
-  $(document).find('input[name="product_link[]"]').each(function(){
+  
 	if(_validateCreateVideo() == true)
 	{
-	 //var _imgId;
+    var pro_link = [];
+    $('input[name^="product_link"]').each(function(showDiv){
+      pro_link.push($(this).val());
+    });
+    var web_link = [];
+    $('input[name^="link_website"]').each(function(showDiv){
+      web_link.push($(this).val());
+    });
+    //alert(web_link);
+    
    var _gendrId;
    var _musicId;
-   var custId = $(this).parent().parent().parent().parent().parent().parent().find("#custId").val();
-   var custOrderId = $(this).parent().parent().parent().parent().parent().parent().find("#custOrderId").val();
-   var order_video = $(this).parent().parent().parent().parent().parent().parent().find('#video_order').find('.DelivrDat').val();
-   var website_link = $(this).parent().parent().parent().parent().parent().parent().find('#websiteLink').find('.inputwebsiteLink').val();
-   var product_link = $(this).parent().parent().parent().parent().parent().parent().find('#productLink').find('.inputProductLink').val();
-   
-      //alert($(this).val());
-   
-   //alert(product_link);
-   var logo = $(this).parent().parent().parent().parent().parent().parent().find('#image').find('.logo').val();
-
-	//    gender
- $(this).parent().parent().parent().parent().parent().parent().find('.selectedGender').find('input[type="checkbox"]').each(function () {
+   var custId = $("#custId").val();
+   var custOrderId = $("#custOrderId").val();
+   var order_video = $('.DelivrDat').val();
+   var website_link = $('.inputwebsiteLink').val();
+   var product_link = $('.inputProductLink').val();   
+   var logo = $('.logo').val();
+  $(this).parent().parent().parent().parent().parent().parent().find('.selectedGender').find('input[type="checkbox"]').each(function () {
    if ($(this).prop('checked') == true) {
      var gendrId = $(this).parent().attr('id').split('_');
      _gendrId = gendrId[1];
@@ -240,6 +243,13 @@ $(document).on('click', '.Next', function () {
      //alert(musicId);
    }
  });
+ //  $(this).parent().parent().parent().parent().parent().parent().find('.selectedDeliver').find('input[type="checkbox"]').each(function () {
+ //   if ($(this).prop('checked') == true) {
+ //     var deliverday = $(this).parent().attr('id').split('_');
+ //     _deliverday = deliverday[1];
+ //     //alert(musicId);
+ //   }
+ // });
  // var delivery = $(this).parent().parent().parent().parent().parent().parent().find('#deliversDays').find('.DelivrDat').val();
  // if (custOrderId == '' && custOrderId == null) {
  //   custOrderId = '';
@@ -251,7 +261,7 @@ $(document).on('click', '.Next', function () {
    enctype: "multipart/form-data",
    url: webUrl + '/storeCustomerData',
    type: "post",
-   data: {genderId: _gendrId, musicId: _musicId, videos_orders :order_video, websiteLink:website_link, productLink: product_link, logo: logo,
+   data: {link_data:pro_link, link_websit: web_link, genderId: _gendrId, musicId: _musicId, videos_orders :order_video, websiteLink:website_link, productLink: product_link, logo: logo,
      cust_id: custId, custOrderId: custOrderId},
      dataType: 'json',
      success: function (data) {
@@ -264,7 +274,7 @@ $(document).on('click', '.Next', function () {
    });
 }
 });
-});
+
 
 // $(document).on('click', '.Next', function () {
 // $('input[type="text"]');
@@ -676,7 +686,7 @@ function showDiv(select){
       hTML +="<div class='row'>";
       hTML +="<div class='col-lg-12 col-md-1 mb-md-0 create-pro'>";
       hTML +="<h4 class='text-left' style='display:-webkit-inline-box;'><b>Product Link :</b></h4>";       
-      hTML +="<input type='text' class='form-check-input filled-in inputProductLink' id='product_link_"+ i +"' name='product_link[]' style='position: relative;margin-left: 2rem;width:40%;'>";
+      hTML +="<input type='text'  class='form-check-input filled-in inputProductLink product_link"+ i +"' id='data_product' name='product_link[]' style='position: relative;margin-left: 2rem;width:40%;'>";
       hTML +="<label class='form-check-label'></label>";
       hTML +="</div> ";
       hTML +="</div>";
@@ -687,7 +697,7 @@ function showDiv(select){
       hTML +="<div class='row'>";
       hTML +="<div class='col-lg-12 col-md-1 mb-md-0 create-pro'>";
       hTML +="<h4 class='text-left' style='display:-webkit-inline-box;'><b>Website Link :</b></h4>";    
-      hTML +="<input type='text' class='form-check-input filled-in inputwebsiteLink' style='position: relative;margin-left: 2rem;width:40%;'>";
+      hTML +="<input type='text' name='link_website[]'  class='form-check-input filled-in inputwebsiteLink' id='data_website' style='position: relative;margin-left: 2rem;width:40%;'>";
       hTML +="<label class='form-check-label'></label>";
       hTML +="</div>"; 
       hTML +="</div>";
@@ -697,6 +707,7 @@ function showDiv(select){
     $(hTML).insertAfter('.termsandconditions');
   }
 } 
+
 
 
 // End REwise Timer

@@ -135,15 +135,15 @@
             <div class="mb-1 selectedGender" id="master_{{ $data->id }}">
                 @if(!empty($selectdOrder->gender))
                 @if( $selectdOrder->gender == $data->id )               
-                <input type="checkbox" class="form-check-input filled-in gdr_{{ $data->id }}" checked="checked" id="">
+                <input type="checkbox" class="form-check-input filled-in gdr_{{ $data->id }}" checked="checked" id="gdr_{{ $data->id }}">
                 <label class="form-check-label selectType" for="">{{ $data->gender }}</label> 
                 @else
-                <input type="checkbox" class="form-check-input filled-in gdr_{{ $data->id }}" id="">
+                <input type="checkbox" class="form-check-input filled-in gdr_{{ $data->id }}" id="gdr_{{ $data->id }}">
                 <label class="form-check-label selectType" for="">{{ $data->gender }}</label>
                 @endif 
                 @endif 
                 @if(empty($selectdOrder->gender))
-                <input type="checkbox" class="form-check-input filled-in gdr_{{ $data->id }}" id="">
+                <input type="checkbox" class="form-check-input filled-in gdr_{{ $data->id }}" id="gdr_{{ $data->id }}">
                 <label class="form-check-label selectType" for="">{{ $data->gender }}</label>
                 @endif 
             </div>
@@ -152,6 +152,22 @@
     </div>
 </div>
 </section>
+<!-- <section class="section-blue">
+    <div class="container m-50 mb-4">
+        <div class="row">
+            <div class="col-lg-12 col-md-1 mb-md-0 create-pro">
+                <h4 class="text-left text-color"><b>12-24hour Delivery ($35.00 will be deducted.)</b></h4>
+                <hr>
+                
+                <div class="mb-1 selectedMusic"> 
+                    <input type="checkbox" class="form-check-input filled-in" name="thumbnail_select[]" id="xyz1" checked="checked" id="">   
+                </div>
+                <label></label>
+                         
+            </div>
+        </div>
+    </div>
+</section> -->
 
 <section class="section-blue">
   <div class="container m-50 create-pro text-center">
