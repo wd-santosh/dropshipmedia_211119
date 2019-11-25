@@ -14,6 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/create-video', function () {
+    return view('create-video');
+});
 Auth::routes();
 #Auth controller
 Route::get('activate/{token}', 'Auth\RegisterController@activate')->name('activate');
@@ -71,8 +74,8 @@ Route::post('rewiseOrder', 'Employee\EmployeeController@rewiseOrderByEmp');
 //Customer Controller
 Route::get('/customer/dashboard',"Customer\CustomerController@customerlist")->name('customer.dashboard');
 Route::get('/customer/profile',"Customer\CustomerController@customerprofile")->name("customer.customer.profile");
-Route::get('create-video', 'Customer\CustomerController@viewCreateVideos')->name('create-video');
-Route::get('create-video/{id?}', 'Customer\CustomerController@viewCreateVideos')->name('create-video}');
+#Route::get('create-video', 'Customer\CustomerController@viewCreateVideos')->name('create-video');
+#Route::get('create-video/{id?}', 'Customer\CustomerController@viewCreateVideos')->name('create-video}');
 Route::post('storeCustomerData', 'Customer\CustomerController@storeFirstPageData');
 Route::get('select-video', 'Customer\CustomerController@selectVideo')->name('select-video');
 Route::get('select-video/{id?}', 'Customer\CustomerController@selectVideo')->name('select-video');

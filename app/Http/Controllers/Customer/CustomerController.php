@@ -82,59 +82,35 @@ class CustomerController extends Controller {
   }
 
   public function storeFirstPageData(Request $request) {
-
-    if (request()->ajax()) {
-
-      $posts = $request->post();
-      if ($request->custOrderId == '' && $request->custOrderId == NULL) {
+    try{
+		$posts = $request->post();      	
         $customerData = new customer_orders_model();
-        $customerData->terms_condition = $posts['genderId'];
-        $customerData->thumbnail = $posts['musicId'];
-        $customerData->videos_orders = $posts['videos_orders'];
-
-        $customerData->website_link = $posts['websiteLink'];
-          //print_r($customerData);die;
-        $customerData->product_link = $posts['productLink'];
-
-        $customerData->customer_id = $posts['cust_id'];
+        $customerData->terms_condition = $posts['terms'];
+        $customerData->thumbnail = $posts['isThumbnailSelected'];
+        $customerData->videos_orders = $posts['how_many_orders'];
+        $customerData->website_link = $posts['main_website_link'];          
+        $customerData->product_link = $posts['main_product_link'];
+        $customerData->customer_id = Auth::user()->id;
         $customerData->save();
         $cust_orderId = $customerData->id;
-        for($i=0;$i<count($posts['link_data']['cust_id']);$i++)
-          {
-            DB::table('order_link')->insertGetId(
-              ['customer_id' => $posts['cust_id'], "website_link" => $posts['link_websit'][$i], "product_link" => $posts['link_data'][$i]]
-            );
-          }
-      }
-
-      else {
-        if (!empty($request->custOrderId) && $request->custOrderId != NULL) {
-          $custOrdr = customer_orders_model::findorfail($request->custOrderId);
-          $custOrdr->gender = $posts['genderId'];
-          $custOrdr->music = $posts['musicId'];
-          $custOrdr->website_link = $posts['websiteLink'];
-          $custOrdr->product_link = $posts['productLink'];
-          $custOrdr->customer_id = $posts['cust_id'];
-          $custOrdr->save();
-          $cust_orderId = $request->custOrderId;
-          for($i=0;$i<count($posts['link_websit']);$i++)
-          {
-            DB::table('order_link')->insertGetId(
-              ['customer_id' => $posts['cust_id'],'customer_order_id' => $request->custOrderId, "website_link" => $posts['link_websit'][$i], "product_link" => $posts['link_data'][$i]]
-            );
-          }
+        for($i=0;$i<count($posts['pro_link']);$i++){
+            DB::table('order_link')->insertGetId(['customer_id' =>Auth::user()->id, "website_link" =>$posts['web_link'][$i], "product_link" => $posts['pro_link'][$i]]);
         }
-      }
-    }
-    if ($request->custOrderId == '' && $request->custOrderId == NULL && $customerData) {
-      return response()->json(array('message' => 'success', 'cusOrderId' => $cust_orderId));
-    } else if (!empty($request->custOrderId) && $request->custOrderId != NULL && $custOrdr) {
-      return response()->json(array('message' => 'success', 'cusOrderId' => $cust_orderId));
-    } else {
-      return response()->json(array('error' => 'Something went wrong !!'));
-    }
+        
+        // Create Order For Customer
+        $transacionId = rand(10000000,99999999);
+        $order = new Order;
+        $order->user_id = Auth::user()->id;
+        $order->transaction_id = $transacionId;
+        $order->service_id = 0;
+        $order->amount = $posts['price'];
+        $order->save(); 
+        return response()->json(array('status'=>TRUE,'message' =>'success','transaction_id' =>encrypt($transacionId)));   
+      	
+	}catch(\Exception $e){
+		return response()->json(array('status'=>FALSE,'error' => 'Something went wrong !!'));
+	}
   }
-
   public function selectVideo(Request $request, $id = NULL) {
     $thumbnailsVideo = master_thumbnails_model::select('*')->get();        
     $videos = videos_model::select('*')->get();
@@ -235,7 +211,7 @@ class CustomerController extends Controller {
               $cusOrder->save();
 
           #Services table
-              $services=new Service();
+              $services= new Service();
               $services->amount=$posts['sub_planPrice'];
               $services->created_at=date('Y-m-d h:i:s');
               $services->updated_at=date('Y-m-d h:i:s');

@@ -179,8 +179,7 @@ function _validateCreateVideo()
 		{
 			isImagevalidated = true;
 		}
-	});
-	
+	});	
 	if($('.inputProductLink').val() == "")
 	{
 		toastr["error"]("Please enter website link.");
@@ -191,97 +190,112 @@ function _validateCreateVideo()
 		{
 			isGenderChecked = true;
 		}
-	});
-	// if(isGenderChecked == false)
-	// {
-	// 	toastr["error"]("Please select gender.");
-	// 	return false;	
-	// }
+	});	
 	$('.selectedMusic input[type=checkbox]').each(function(){
 		if($(this).is(':checked') == true)
 		{
 			isMusicChecked = true;
 		}
-	});
-	
+	});	
 	return true;
 }
-//Next
-$(document).on('click', '.Next', function () {
-  
-	if(_validateCreateVideo() == true)
-	{
-    var pro_link = [];
-    $('input[name^="product_link"]').each(function(showDiv){
-      pro_link.push($(this).val());
-    });
-    var web_link = [];
-    $('input[name^="link_website"]').each(function(showDiv){
-      web_link.push($(this).val());
-    });
-    //alert(web_link);
-    
-   var _gendrId;
-   var _musicId;
-   var custId = $("#custId").val();
-   var custOrderId = $("#custOrderId").val();
-   var order_video = $('.DelivrDat').val();
-   var website_link = $('.inputwebsiteLink').val();
-   var product_link = $('.inputProductLink').val();   
-   var logo = $('.logo').val();
-  $(this).parent().parent().parent().parent().parent().parent().find('.selectedGender').find('input[type="checkbox"]').each(function () {
-   if ($(this).prop('checked') == true) {
-     var gendrId = $(this).parent().attr('id').split('_');
-     _gendrId = gendrId[1];
-   }
- });
-	//    music
- $(this).parent().parent().parent().parent().parent().parent().find('.selectedMusic').find('input[type="checkbox"]').each(function () {
-   if ($(this).prop('checked') == true) {
-     var musicId = $(this).parent().attr('id').split('_');
-     _musicId = musicId[1];
-     //alert(musicId);
-   }
- });
- //  $(this).parent().parent().parent().parent().parent().parent().find('.selectedDeliver').find('input[type="checkbox"]').each(function () {
- //   if ($(this).prop('checked') == true) {
- //     var deliverday = $(this).parent().attr('id').split('_');
- //     _deliverday = deliverday[1];
- //     //alert(musicId);
- //   }
- // });
- // var delivery = $(this).parent().parent().parent().parent().parent().parent().find('#deliversDays').find('.DelivrDat').val();
- // if (custOrderId == '' && custOrderId == null) {
- //   custOrderId = '';
- // }
- $.ajax({
-   headers: {
-     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-   },
-   enctype: "multipart/form-data",
-   url: webUrl + '/storeCustomerData',
-   type: "post",
-   data: {link_data:pro_link, link_websit: web_link, genderId: _gendrId, musicId: _musicId, videos_orders :order_video, websiteLink:website_link, productLink: product_link, logo: logo,
-     cust_id: custId, custOrderId: custOrderId},
-     dataType: 'json',
-     success: function (data) {
-       if (data.message == 'success') {
-         window.location.href = webUrl + '/video-variations/' + data.cusOrderId;
-       } else {
-         alert(data.error);
-       }
-     }
-   });
-}
+$('input[name=thumbnail_select]').on('change',function(){
+	if($(this).val() == "Yes" && isThumbname == false){
+		isThumbname = true;
+		$('.price').text(parseInt($('.price').text()) + 15);
+	}
+	else if($(this).val() == "No"){
+		if(isThumbname == true){
+			$('.price').text(parseInt($('.price').text()) - 15);	
+		}
+		isThumbname = false;
+	}
 });
-
-
-// $(document).on('click', '.Next', function () {
-// $('input[type="text"]');
-
-//   });
-
-
+//Next
+$(document).on('click', '.Next', function () { 
+	if(_validateCreateVideo() == true)
+	{	
+		var main_product_link = $('#how_many_orders').val();
+		var main_website_link = $('#main_website_link').val();
+		var how_many_orders = $('#how_many_orders').val();
+		var isThumbnailSelected = $('input[name=thumbnail_select]').val();
+		var terms = $('#terms').is(':checked');
+	    var pro_link = [];
+	    $('.product_link_dynamic').each(function(showDiv){
+	      pro_link.push($(this).val());
+	    });
+	    var web_link = [];
+	    $('.website_link_dynamic').each(function(showDiv){
+	      web_link.push($(this).val());
+	    });	     
+	    var _price = parseInt($('.price').text());
+	    var logo = $('.logo').val();	    
+		if(isLoggedInUser){
+			 $.ajax({
+			   headers: {
+			     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			   },
+			   enctype: "multipart/form-data",
+			   url: APP_URL + '/storeCustomerData',
+			   type: "post",
+			   data: {'main_product_link':main_product_link, 'main_website_link': main_website_link, 'how_many_orders': how_many_orders, 'isThumbnailSelected': isThumbnailSelected, 'terms' :terms, 'pro_link':pro_link, 'web_link': web_link, logo: logo,'price':_price},
+			   dataType: 'json',
+			   success: function (data) {
+			       if (data.message == 'success') {	 
+			         $('#frm_paypal').attr('action',APP_URL + "/checkout/payment/"+ data.transaction_id + "/paypal");    	
+			         $('#frm_paypal').submit();
+			       }else{
+			         toastr["error"](errorResponse);
+			       }
+			   },
+			   error:function(errorResponse){
+			   		toastr["error"](errorResponse);
+			   }
+	     });	
+		}else{
+			sessionStorage.setItem('pending_order',true);
+			sessionStorage.setItem('main_product_link',main_product_link);
+			sessionStorage.setItem('main_website_link', main_website_link);
+			sessionStorage.setItem('how_many_orders', how_many_orders);
+			sessionStorage.setItem('terms', terms);
+			sessionStorage.setItem('isThumbnailSelected', isThumbnailSelected);
+			sessionStorage.setItem('pro_link', JSON.stringify(pro_link));
+			sessionStorage.setItem('web_link', JSON.stringify(web_link));
+			sessionStorage.setItem('logo', logo);			
+			location.href = APP_URL + '/register';
+		}
+	}
+});
+// Check Pending Order
+$(document).ready(function(){
+	if(sessionStorage.getItem('pending_order') !== null){
+		$('#how_many_orders').val(sessionStorage.getItem('main_product_link'));
+		$('#main_website_link').val(sessionStorage.getItem('main_website_link'));
+		$('#how_many_orders').val(sessionStorage.getItem('how_many_orders'));
+		if(sessionStorage.getItem('isThumbnailSelected') == "Yes"){
+			$('#thumbnail_selectyes').prop('checked',true);
+		}
+		else if(sessionStorage.getItem('isThumbnailSelected') == "No"){
+			$('#thumbnail_selectno').prop('checked',true);
+		}
+		if(sessionStorage.getItem('terms') == true){
+			$('#terms').prop('checked',true);
+		}
+		showDiv($('#how_many_orders'));	
+		var _productLinks = JSON.parse(sessionStorage.getItem('pro_link'));	
+		var _webLinks = JSON.parse(sessionStorage.getItem('web_link'));	
+		var _counter = 0;
+		$('.dynamic_plink').each(function(){
+			$(this).find('input[type="text"]').val(_productLinks[_counter]);
+			_counter++;
+		});		
+		var _counter = 0;
+		$('.dynamic_wlink').each(function(){
+			$(this).find('input[type="text"]').val(_webLinks[_counter]);
+			_counter++;
+		});		
+	}
+});
 /*  Counter Start */
 $(document).ready(function(){
 	$('.counter').each(function(){
@@ -322,15 +336,13 @@ function clock(obje,countDownDate,uploadVideo)
           var days = Math.floor(distance / (1000 * 60 * 60 * 24));
           var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
           var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-          var seconds = Math.floor((distance % (1000 * 60)) / 1000);			
-			  // Display the result in the element with id="demo"
+          var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 			  var st = "<div class='tm'><label class='lbld'>"+ days +"</label><b class='label-b'>:</b><label class='lblh'>" + hours + "</label><b class='label-b'>:</b><label class='lblm'>"+ minutes + "</label><b class='label-b'>:</b><label class='lbls'>" + seconds + "</label></div>";
 			  $(obje).html(st);		
       }
     }, 1000);
 }
 /*  Counter End */
-
 //customer select video
 $(document).on('click','.selectdVideo',function(){
 	$('.orderVideoByEmp').removeAttr('style');
@@ -361,9 +373,7 @@ $(document).on('click','.videoSelction',function(){
 	_thumVideoIds = parentVideoId[1];
 
 });
-
 //validation for select video
-
 function _validateSelectVideo()
 {
   var videoValidate = false; var thumbVedioValidate = true; 
@@ -397,27 +407,7 @@ function _validateSelectVideo()
     toastr["error"]("Please select valid music");
     return false;
   }
-
-	/*$('.selectdThumnVideo').each(function () {
-	    var goToIframe = $(this).find('a:first-child').find('iframe');
-        if ($(goToIframe).hasClass('selectedVideo')) {
-            thumbVedioValidate =  true;
-        }
-      });*/
-
-      // return true;
-      // var thumbVedioValidate = false; var thumbVedioValidate = true; 
-      // $('.getVideoId').each(function () {
-      //   if ($(this).hasClass('selectedVideo')) {
-      //     videoValidate =  true;
-      //   }
-      // });
-      // if(videoValidate == false)
-      // {
-      //   toastr["error"]("Please select thumvideo");
-      //   return false; 
-      // }
-    }
+}
 
 //save select video data
 $(document).on('click', '.saveForm2Data', function () {
@@ -439,6 +429,7 @@ $(document).on('click', '.saveForm2Data', function () {
     form_data.append("_orderIdForMusic", custOrderIdForMusic);
     form_data.append("selectedVdeo", selectdVideo);
     form_data.append("_thumbVideoId", _thumVideoIds);
+  
     $.ajax({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -512,7 +503,6 @@ $(document).on('click', '.subscribePlanPrice', function () {
   });
 });
 //end subscribePlanPrice
-
 //unsubscribePlanPrice
 $(document).on('click', '.unsubscribePlanPrice', function () {
   var planPrice = $(this).text();
@@ -549,14 +539,12 @@ $(document).on('click', '.approveEdit', function()
 });
 
 //dispute Modal
-
 $(document).on('click','.openDisputeModal',function(){
  $('#addComments').modal('show');
  var order_id = $(this).attr('id').split('_');
  $('#orderIdForCommentVideo').val(order_id[1]);
 
 });
-
 $(document).on('click','#addCommentsForVideo',function(){
   var change_scroll = $(this).parents('form').find('#change_scroll').val();
   var change_thumb = $(this).parents('form').find('#change_thumb').val();
@@ -585,9 +573,6 @@ $(document).on('click','#addCommentsForVideo',function(){
   }
 });
 });
-
-
-
 $(function () {
   var selectedClass = "";
   $(".filter").click(function () {
@@ -600,11 +585,8 @@ $(function () {
     }, 300);
   }); 
 });
-
-
 // Validation Of Admin Add Image Layout 
-$(document).on('click', '.ErrorMessg', function(){
-    //alert("kjds");return false;
+$(document).on('click', '.ErrorMessg', function(){  
     var ImgSize = $(this).parent().siblings('.modal-body').find('.ImgSizs').val();
     var ImgDescription = $(this).parent().siblings('.modal-body').find('.ImgDescs').val();
     var ImageUploaded = $(this).parent().siblings('.modal-body').find('.ImageShowErr').val();
@@ -634,29 +616,12 @@ $("#ErrRegMsgs").click(function(){
 $("#ErrPassMsg").click(function(){
   $(".PassErrMsgs").hide();
 });
-// $('INPUT[type="file"]').change(function () {
-//     var ext = this.value.match(/\.(.+)$/)[2];
-//     switch (ext) {
-//         case 'mp3':
-
-//             $('#uploadedMusic').attr('disabled', true);
-//             break;
-//         default:
-//              toastr["error"]("Please select Music");
-//             this.value = '';
-//             return false;
-//     }
-// });
-
-
 $(document).on('click','.comment',function(){
     $('#commentPopUp').modal('show');
   });
-
 //Rewise Timer
 $(document).on('click', '.Rewise', function () {
   var procedOrderId = $(this).attr('id');
-  //alert(procedOrderId);
   $(this).parent().parent().parent().hide();
     $.ajax({
       headers: {
@@ -680,29 +645,46 @@ $(document).on('click', '.Rewise', function () {
 function showDiv(select){
   if($(select).val() > 0){
     var hTML = "";
+    var _additionalCharges = parseInt($(select).val()) * 15;
+    if(additionalCharges == 0){
+    	additionalCharges = _additionalCharges;
+		 $('.price').text(parseInt($('.price').text()) + _additionalCharges);
+	}
+	else{
+		$('.price').text(parseInt($('.price').text()) - additionalCharges);
+		additionalCharges = _additionalCharges;
+		$('.price').text(parseInt($('.price').text()) + _additionalCharges);
+	}
+   	if($('.dynamic_plink').length > 0){
+		$('.dynamic_plink').remove();	
+		$('.dynamic_hr').remove();			
+	}
+	if($('.dynamic_wlink').length > 0){
+		$('.dynamic_wlink').remove();	
+	}
     for(var i=0; i<$(select).val(); i++){
-     hTML +="<section>";
+      hTML +="<section class='dynamic_plink'>";
       hTML +="<div class='container m-50'>";
       hTML +="<div class='row'>";
       hTML +="<div class='col-lg-12 col-md-1 mb-md-0 create-pro'>";
       hTML +="<h4 class='text-left' style='display:-webkit-inline-box;'><b>Product Link :</b></h4>";       
-      hTML +="<input type='text'  class='form-check-input filled-in inputProductLink product_link"+ i +"' id='data_product' name='product_link[]' style='position: relative;margin-left: 2rem;width:40%;'>";
+      hTML +="<input type='text'  class='form-check-input filled-in inputProductLink product_link_dynamic' id='product_link"+ i +"' name='product_link"+ i +"' style='position: relative;margin-left: 0.5rem;width:40%;'>";
       hTML +="<label class='form-check-label'></label>";
       hTML +="</div> ";
       hTML +="</div>";
       hTML +="</div>";  
       hTML +="</section>";
-      hTML +="<section>";
+      hTML +="<section class='dynamic_wlink'>";
       hTML +="<div class='container m-50' id='websiteLink'>";
       hTML +="<div class='row'>";
       hTML +="<div class='col-lg-12 col-md-1 mb-md-0 create-pro'>";
       hTML +="<h4 class='text-left' style='display:-webkit-inline-box;'><b>Website Link :</b></h4>";    
-      hTML +="<input type='text' name='link_website[]'  class='form-check-input filled-in inputwebsiteLink' id='data_website' style='position: relative;margin-left: 2rem;width:40%;'>";
+      hTML +="<input type='text' name='"+ i +"'  class='form-check-input filled-in website_link_dynamic' id='website_link"+ i +"' style='position: relative;margin-left: 0.5rem;width:40%;'>";
       hTML +="<label class='form-check-label'></label>";
       hTML +="</div>"; 
       hTML +="</div>";
       hTML +="</div>";
-      hTML +="</section><hr/>";
+      hTML +="</section><hr class='dynamic_hr' style='width:83%;border:1px solid #cecece;'>";
     }
     $(hTML).insertAfter('.termsandconditions');
   }
