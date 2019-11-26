@@ -1,3 +1,22 @@
+
+.badge-cart:after {
+    content: attr(data-count);
+	position: absolute;
+	background: #ff6600;
+	height: 1rem;
+	top: 0rem;
+	right: 0rem;
+	width: 1rem;
+	text-align: center;
+	line-height: 1rem;
+	font-size: 12px;
+	border-radius: 50%;
+	color: white;
+	border: 1px solid #ff6600;
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
 #basicExampleNav{position: absolute;right: 20px;}
 a.nav-link.waves-effect.waves-light {
     display: flex;

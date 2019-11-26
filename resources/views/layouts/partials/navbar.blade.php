@@ -32,6 +32,11 @@
       <li class="nav-item">
         <a class="nav-link" href="{{url('/faq')}}">Faq</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url('/cart')}}" style="padding:0;margin-right:15px;">
+        <i data-count="0" class="fas fa-shopping-cart badge-cart" style="font-size:32px;color:#2196F3;"></i>
+        </a>
+      </li>
      @if (Auth::check())
               <li class="nav-item dropdown">
                          <a class="dropdown-item signinbtn blue mt-0" href="{{ route('logout') }}"

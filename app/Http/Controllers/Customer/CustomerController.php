@@ -89,19 +89,32 @@ class CustomerController extends Controller {
   }
 
   public function storeFirstPageData(Request $request) {
-    try{
-		$posts = $request->post();      	
+    try{		
+		  	
+		$file = $request->file('logo');
+		$logo_file_name = $file->getClientOriginalName();
+		$logoPath = public_path() . "/img/order_logo";
+	    $priv = 0777;
+	    if (!file_exists($logoPath)) {
+	       mkdir($logoPath, $priv) ? true : false;
+	    }
+        $file->move($logoPath, $logo_file_name);
+        
+        $posts = $request->post();  
         $customerData = new customer_orders_model();
         $customerData->terms_condition = $posts['terms'];
         $customerData->thumbnail = $posts['isThumbnailSelected'];
         $customerData->videos_orders = $posts['how_many_orders'];
         $customerData->website_link = $posts['main_website_link'];          
         $customerData->product_link = $posts['main_product_link'];
+        $customerData->logo = $logoPath . $logo_file_name;
         $customerData->customer_id = Auth::user()->id;
         $customerData->save();
         $cust_orderId = $customerData->id;
-        for($i=0;$i<count($posts['pro_link']);$i++){
-            DB::table('order_link')->insertGetId(['customer_id' =>Auth::user()->id, "website_link" =>$posts['web_link'][$i], "product_link" => $posts['pro_link'][$i]]);
+        $prod_links = explode(",",$posts['pro_link']);
+        $web_link = explode(",",$posts['web_link']);
+        for($i=0;$i<count($prod_links);$i++){
+            DB::table('order_link')->insertGetId(['customer_id' =>Auth::user()->id, "website_link" =>$web_link[$i], "product_link" => $prod_links[$i]]);
         }
         
         // Create Order For Customer

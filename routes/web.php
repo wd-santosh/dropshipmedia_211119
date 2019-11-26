@@ -17,6 +17,9 @@ Route::get('/', function () {
 Route::get('/create-video', function () {
     return view('create-video');
 });
+Route::get('/cart', function () {
+    return view('cart');
+});
 Auth::routes();
 #Auth controller
 Route::get('activate/{token}', 'Auth\RegisterController@activate')->name('activate');

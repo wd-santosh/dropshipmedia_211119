@@ -142,7 +142,7 @@
         <div class="col-lg-12 col-md-1 mb-md-0 create-pro">
             <a href="#"><button class="btn waves-effectss btn-blue waves-effect waves-light">BACK</button></a>
             <a href="javascript:void(0);">
-                <button class="btn waves-effectss btn-blue waves-effect waves-light Next">PAY ($<span class="price">50</span>) </button>
+                <button class="btn waves-effectss btn-blue waves-effect waves-light Next">CHECKOUT ($<span class="price">50</span>) </button>
             </a>
         </div>
     </div>
