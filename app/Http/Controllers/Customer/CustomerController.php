@@ -59,14 +59,21 @@ class CustomerController extends Controller {
 
   public function customerlist()
   {
-    if(Auth::user()->role_id == 1){
-      $customer=customer_orders_model::get();
-      return view('customer/customerdashboard')->with('customer',$customer);
-    }
-    else
-    {
-      return view('errors/404');
-    }
+      try
+      {
+        if(Auth::user()->role_id == 1)
+        {
+          $customer=customer_orders_model::get();
+          return view('customer/customerdashboard')->with('customer',$customer);
+        }
+        else{
+             return view('errors/404');
+            }
+        }
+        catch(\Exception $e){
+
+        return response()->json(array('status'=>FALSE,'error' => $e->getMessage()));
+      }
   }
   public function customerprofile()
   {
@@ -108,7 +115,8 @@ class CustomerController extends Controller {
         return response()->json(array('status'=>TRUE,'message' =>'success','transaction_id' =>encrypt($transacionId)));   
       	
 	}catch(\Exception $e){
-		return response()->json(array('status'=>FALSE,'error' => 'Something went wrong !!'));
+
+		return response()->json(array('status'=>FALSE,'error' => $e->getMessage()));
 	}
   }
   public function selectVideo(Request $request, $id = NULL) {

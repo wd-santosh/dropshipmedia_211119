@@ -148,6 +148,17 @@ aria-hidden="true">
                     <input type="text" name="num" id="employeeContact" class="form-control" maxlength="12" style="margin-bottom: 10px;">
                     <span id="ErrMsgForContact"></span>
                 </div>  
+                <div class="md-form mb-4">
+                    <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;"> Rate Per Thumbnail</label>
+                    <label style="margin-left: 20px;"><input type="text" name="thumbnail_rate" id="thumbprice" class="form-control hideMsgs" style="margin-bottom: 10px;"></label>
+                    <div id="ErrMsgForthumbprice" style="margin-bottom: 40px; margin-left: 150px;"></div>
+                </div>  
+                <div class="md-form mb-4">
+                    <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Rate Per Video</label>
+                    <label style="margin-left: 53px;">
+                    <input type="text" name="video_rate" id="VidPrice" class="form-control VidPriceHideErrMsg" style="margin-bottom: 10px;"></label>
+                    <div id="ErrMsgForVideoprice" style="margin-bottom: 40px; margin-left: 155px;"></div>
+                </div>  
                 <div class="md-form mb-4" style="margin-bottom: 10px;">
                     <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Status</label><br>
                     <label class="radio-inline"><input type="radio" name="optradio" id="chk_1" class="StatushideError">Active</label>
@@ -199,7 +210,17 @@ aria-hidden="true">
                     <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Contact Number</label>
                     <input type="text" name="contact" id="emp_contact" class="form-control ">
                     <span id="ErroMsgCont"></span>
+                </div> 
+                <div class="md-form mb-4">
+                    <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;"> Rate Per Thumbnail</label>
+                    <input type="text" name="thumbnail_rate" id="thumb_price" class="form-control" style="margin-bottom: 10px;">
+                    <span id="ErreditMsgForthumbprice"></span>
                 </div>  
+                <div class="md-form mb-4">
+                    <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Rate Per Video</label>
+                    <input type="text" name="video_rate" id="Vid_Price" class="form-control" style="margin-bottom: 10px;">
+                    <span id="ErreditMsgForVideoprice"></span>
+                </div>   
                 <div class="md-form mb-4" style="margin-bottom: 10px;">
                     <label data-error="wrong" data-success="right" for="orangeForm-pass" style="margin-bottom: 10px;">Status</label><br>
                     <label class="radio-inline"><input type="radio" name="optradio" id="chek_1">Active</label>
@@ -290,24 +311,6 @@ aria-hidden="true">
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
     
 .close {

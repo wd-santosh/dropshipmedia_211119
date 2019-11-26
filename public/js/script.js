@@ -162,165 +162,204 @@ $(document).on('click', '.selectMusicType', function () {
     $(this).attr('for', 'safeTheInfo_' + musicId[1])
   }
 });
+$(document).on('click', '.selectDeliverDay', function () {
+  var selectdType = [];
+  var musicId = $(this).parent().attr('id').split('_');
+  if (musicId[1] == 1) {
+    $(this).parent().find('.music_' + musicId[1]).attr('id', 'chekboxRules_' + musicId[1]);
+    $(this).attr('for', 'chekboxRules_' + musicId[1]);
+  } else if (musicId[1] == 2) {
+    $(this).parent().find('.music_' + musicId[1]).attr('id', 'safeTheInfo_' + musicId[1]);
+    $(this).attr('for', 'safeTheInfo_' + musicId[1])
+  }
+});
+
 // Validation Create Video Page
 $('.selectedGender input[type=checkbox]').on('change',function(){
-	$('.selectedGender input[type=checkbox]').prop('checked',false);
-	$(this).prop('checked',true);
+  $('.selectedGender input[type=checkbox]').prop('checked',false);
+  $(this).prop('checked',true);
 });
 $('.selectedMusic input[type=checkbox]').on('change',function(){
-	$('.selectedMusic input[type=checkbox]').prop('checked',false);
-	$(this).prop('checked',true);
+  $('.selectedMusic input[type=checkbox]').prop('checked',false);
+  $(this).prop('checked',true);
+});
+$('.selectedDeliver input[type=checkbox]').on('change',function(){
+  $('.selectedDeliver input[type=checkbox]').prop('checked',false);
+  $(this).prop('checked',true);
 });
 function _validateCreateVideo()
 {
-	var isImagevalidated = false; var isGenderChecked = false; var isMusicChecked = false;
-	$('.getImgPath').each(function(){
-		if($(this).hasClass('selectedImage'))
-		{
-			isImagevalidated = true;
-		}
-	});	
-	if($('.inputProductLink').val() == "")
-	{
-		toastr["error"]("Please enter website link.");
-		return false;	
-	}
-	$('.selectedGender input[type=checkbox]').each(function(){
-		if($(this).is(':checked') == true)
-		{
-			isGenderChecked = true;
-		}
-	});	
-	$('.selectedMusic input[type=checkbox]').each(function(){
-		if($(this).is(':checked') == true)
-		{
-			isMusicChecked = true;
-		}
-	});	
-	return true;
+  var isImagevalidated = false; var isGenderChecked = false; var isMusicChecked = false;
+  $('.getImgPath').each(function(){
+    if($(this).hasClass('selectedImage'))
+    {
+      isImagevalidated = true;
+    }
+  }); 
+  if($('.inputProductLink').val() == "")
+  {
+    toastr["error"]("Please enter website link.");
+    return false; 
+  }
+  $('.selectedGender input[type=checkbox]').each(function(){
+    if($(this).is(':checked') == true)
+    {
+      isGenderChecked = true;
+    }
+  }); 
+  $('.selectedMusic input[type=checkbox]').each(function(){
+    if($(this).is(':checked') == true)
+    {
+      isMusicChecked = true;
+    }
+  }); 
+  return true;
 }
+
 $('input[name=thumbnail_select]').on('change',function(){
-	if($(this).val() == "Yes" && isThumbname == false){
-		isThumbname = true;
-		$('.price').text(parseInt($('.price').text()) + 15);
-	}
-	else if($(this).val() == "No"){
-		if(isThumbname == true){
-			$('.price').text(parseInt($('.price').text()) - 15);	
-		}
-		isThumbname = false;
-	}
+  if($(this).val() == "Yes" && isThumbname == false){
+    isThumbname = true;
+    $('.price').text(parseInt($('.price').text()) + 15);
+  }
+  else if($(this).val() == "No"){
+    if(isThumbname == true){
+      $('.price').text(parseInt($('.price').text()) - 15);  
+    }
+    isThumbname = false;
+  }
 });
+$('input[name=delivery_select]').on('change',function(){
+  if($(this).val() == "Yes" && isDeliver == false){
+    isDeliver = true;
+    $('.price').text(parseInt($('.price').text()) + 35);
+  }
+  else if($(this).val() == "No"){
+    if(isDeliver == true){
+      $('.price').text(parseInt($('.price').text()) - 35);  
+    }
+    isDeliver = false;
+  }
+});
+
 //Next
 $(document).on('click', '.Next', function () { 
-	if(_validateCreateVideo() == true)
-	{	
-		var main_product_link = $('#how_many_orders').val();
-		var main_website_link = $('#main_website_link').val();
-		var how_many_orders = $('#how_many_orders').val();
-		var isThumbnailSelected = $('input[name=thumbnail_select]').val();
-		var terms = $('#terms').is(':checked');
-	    var pro_link = [];
-	    $('.product_link_dynamic').each(function(showDiv){
-	      pro_link.push($(this).val());
-	    });
-	    var web_link = [];
-	    $('.website_link_dynamic').each(function(showDiv){
-	      web_link.push($(this).val());
-	    });	     
-	    var _price = parseInt($('.price').text());
-	    var logo = $('.logo').val();	    
-		if(isLoggedInUser){
-			 $.ajax({
-			   headers: {
-			     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			   },
-			   enctype: "multipart/form-data",
-			   url: APP_URL + '/storeCustomerData',
-			   type: "post",
-			   data: {'main_product_link':main_product_link, 'main_website_link': main_website_link, 'how_many_orders': how_many_orders, 'isThumbnailSelected': isThumbnailSelected, 'terms' :terms, 'pro_link':pro_link, 'web_link': web_link, logo: logo,'price':_price},
-			   dataType: 'json',
-			   success: function (data) {
-			       if (data.message == 'success') {	 
-			         $('#frm_paypal').attr('action',APP_URL + "/checkout/payment/"+ data.transaction_id + "/paypal");    	
-			         $('#frm_paypal').submit();
-			       }else{
-			         toastr["error"](errorResponse);
-			       }
-			   },
-			   error:function(errorResponse){
-			   		toastr["error"](errorResponse);
-			   }
-	     });	
-		}else{
-			sessionStorage.setItem('pending_order',true);
-			sessionStorage.setItem('main_product_link',main_product_link);
-			sessionStorage.setItem('main_website_link', main_website_link);
-			sessionStorage.setItem('how_many_orders', how_many_orders);
-			sessionStorage.setItem('terms', terms);
-			sessionStorage.setItem('isThumbnailSelected', isThumbnailSelected);
-			sessionStorage.setItem('pro_link', JSON.stringify(pro_link));
-			sessionStorage.setItem('web_link', JSON.stringify(web_link));
-			sessionStorage.setItem('logo', logo);			
-			location.href = APP_URL + '/register';
-		}
-	}
+  if(_validateCreateVideo() == true)
+  { 
+    var main_product_link = $('#main_product_link').val();
+    var main_website_link = $('#main_website_link').val();
+    var how_many_orders = $('#how_many_orders').val();
+    var isThumbnailSelected = $('input[name=thumbnail_select]').val();
+    var isDeliverSelected = $('input[name=delivery_select]').val();
+    var terms = $('#terms').is(':checked');
+      var pro_link = [];
+      $('.product_link_dynamic').each(function(showDiv){
+        pro_link.push($(this).val());
+      });
+      var web_link = [];
+      $('.website_link_dynamic').each(function(showDiv){
+        web_link.push($(this).val());
+      });      
+      var _price = parseInt($('.price').text());
+      var logo = $('.logo').val();      
+    if(isLoggedInUser){
+       $.ajax({
+         headers: {
+           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+         },
+         enctype: "multipart/form-data",
+         url: APP_URL + '/storeCustomerData',
+         type: "post",
+         data: {'main_product_link':main_product_link, 'main_website_link': main_website_link, 'how_many_orders': how_many_orders, 'isThumbnailSelected': isThumbnailSelected, 'isDeliverSelected':isDeliverSelected,'terms' :terms, 'pro_link':pro_link, 'web_link': web_link, logo: logo,'price':_price},
+         dataType: 'json',
+         success: function (data) {
+          alert(data.transaction_id);
+             if (data.message == 'success') {  
+               $('#frm_paypal').attr('action',APP_URL + "/checkout/payment/"+ data.transaction_id + "/paypal");     
+               $('#frm_paypal').submit();
+             }else{
+               toastr["error"](errorResponse);
+             }
+         },
+         error:function(errorResponse){
+            toastr["error"](errorResponse);
+         }
+       });  
+    }else{
+      sessionStorage.setItem('pending_order',true);
+      sessionStorage.setItem('main_product_link',main_product_link);
+      sessionStorage.setItem('main_website_link', main_website_link);
+      sessionStorage.setItem('how_many_orders', how_many_orders);
+      sessionStorage.setItem('terms', terms);
+      sessionStorage.setItem('isThumbnailSelected', isThumbnailSelected);
+      sessionStorage.setItem('isDeliverSelected', isDeliverSelected);
+      sessionStorage.setItem('pro_link', JSON.stringify(pro_link));
+      sessionStorage.setItem('web_link', JSON.stringify(web_link));
+      sessionStorage.setItem('logo', logo);     
+      location.href = APP_URL + '/register';
+    }
+  }
 });
 // Check Pending Order
 $(document).ready(function(){
-	if(sessionStorage.getItem('pending_order') !== null){
-		$('#how_many_orders').val(sessionStorage.getItem('main_product_link'));
-		$('#main_website_link').val(sessionStorage.getItem('main_website_link'));
-		$('#how_many_orders').val(sessionStorage.getItem('how_many_orders'));
-		if(sessionStorage.getItem('isThumbnailSelected') == "Yes"){
-			$('#thumbnail_selectyes').prop('checked',true);
-		}
-		else if(sessionStorage.getItem('isThumbnailSelected') == "No"){
-			$('#thumbnail_selectno').prop('checked',true);
-		}
-		if(sessionStorage.getItem('terms') == true){
-			$('#terms').prop('checked',true);
-		}
-		showDiv($('#how_many_orders'));	
-		var _productLinks = JSON.parse(sessionStorage.getItem('pro_link'));	
-		var _webLinks = JSON.parse(sessionStorage.getItem('web_link'));	
-		var _counter = 0;
-		$('.dynamic_plink').each(function(){
-			$(this).find('input[type="text"]').val(_productLinks[_counter]);
-			_counter++;
-		});		
-		var _counter = 0;
-		$('.dynamic_wlink').each(function(){
-			$(this).find('input[type="text"]').val(_webLinks[_counter]);
-			_counter++;
-		});		
-	}
+  if(sessionStorage.getItem('pending_order') !== null){
+    $('#main_product_link').val(sessionStorage.getItem('main_product_link'));
+    $('#main_website_link').val(sessionStorage.getItem('main_website_link'));
+    $('#how_many_orders').val(sessionStorage.getItem('how_many_orders'));
+    if(sessionStorage.getItem('isThumbnailSelected') == "Yes"){
+      $('#thumbnail_selectyes').prop('checked',true);
+    }
+    else if(sessionStorage.getItem('isThumbnailSelected') == "No"){
+      $('#thumbnail_selectno').prop('checked',true);
+    }
+    if(sessionStorage.getItem('isDeliverSelected') == "Yes"){
+      $('#delivery_selectyes').prop('checked',true);
+    }
+    else if(sessionStorage.getItem('isDeliverSelected') == "No"){
+      $('#delivery_selectno').prop('checked',true);
+    }
+    if(sessionStorage.getItem('terms') == true){
+      $('#terms').prop('checked',true);
+    }
+    showDiv($('#how_many_orders')); 
+    var _productLinks = JSON.parse(sessionStorage.getItem('pro_link')); 
+    var _webLinks = JSON.parse(sessionStorage.getItem('web_link')); 
+    var _counter = 0;
+    $('.dynamic_plink').each(function(){
+      $(this).find('input[type="text"]').val(_productLinks[_counter]);
+      _counter++;
+    });   
+    var _counter = 0;
+    $('.dynamic_wlink').each(function(){
+      $(this).find('input[type="text"]').val(_webLinks[_counter]);
+      _counter++;
+    });   
+  }
 });
 /*  Counter Start */
 $(document).ready(function(){
-	$('.counter').each(function(){
-		var countDownDate = $(this).attr("title");
-		var uploadVideo = $(this).attr('uploadVideo');
-		
-		var obj = $(this);
-		// Update the count down every 1 second
-   clock(obj,countDownDate,uploadVideo);	
+  $('.counter').each(function(){
+    var countDownDate = $(this).attr("title");
+    var uploadVideo = $(this).attr('uploadVideo');
+    
+    var obj = $(this);
+    // Update the count down every 1 second
+   clock(obj,countDownDate,uploadVideo);  
 
- });	
+ });  
 });
 
 function clock(obje,countDownDate,uploadVideo)
 {
-	var x = setInterval(function() {
-		  // Get todays date and time
-		  var now = new Date().getTime();		
-		  // Find the distance between now an the count down date
-		  
-		  var distance = countDownDate - now;	 
+  var x = setInterval(function() {
+      // Get todays date and time
+      var now = new Date().getTime();   
+      // Find the distance between now an the count down date
+      
+      var distance = countDownDate - now;  
 
-		  if(distance < 0)	 
-		  {
-		       // Take action if date overed
+      if(distance < 0)   
+      {
+           // Take action if date overed
            if (uploadVideo != '' && uploadVideo != null) {
             var st = "<div class='tm'><label class='lbld' style='padding-left:8px'>D</label><b class='label-b'>:</b><label class='lblh' style='padding-left:8px'>O</label><b class='label-b'>:</b><label class='lblm' style='padding-left:8px'>N</label><b class='label-b'>:</b><label class='lbls' style='padding-left:8px'>E</label></div>";
             $(obje).html(st);
@@ -329,7 +368,7 @@ function clock(obje,countDownDate,uploadVideo)
             $(obje).html(st);
           }
           clearInterval(x);
-		  	 	// Take action if date overed
+          // Take action if date overed
          }
          else
          {
@@ -337,21 +376,21 @@ function clock(obje,countDownDate,uploadVideo)
           var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
           var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
           var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-			  var st = "<div class='tm'><label class='lbld'>"+ days +"</label><b class='label-b'>:</b><label class='lblh'>" + hours + "</label><b class='label-b'>:</b><label class='lblm'>"+ minutes + "</label><b class='label-b'>:</b><label class='lbls'>" + seconds + "</label></div>";
-			  $(obje).html(st);		
+        var st = "<div class='tm'><label class='lbld'>"+ days +"</label><b class='label-b'>:</b><label class='lblh'>" + hours + "</label><b class='label-b'>:</b><label class='lblm'>"+ minutes + "</label><b class='label-b'>:</b><label class='lbls'>" + seconds + "</label></div>";
+        $(obje).html(st);   
       }
     }, 1000);
 }
 /*  Counter End */
 //customer select video
 $(document).on('click','.selectdVideo',function(){
-	$('.orderVideoByEmp').removeAttr('style');
-	$('.orderVideoByEmp').each(function(){
-		if($(this).hasClass('active') == true)
-		{
-			$(this).css({'border': '6px solid #6DE3FF', 'backgroundColor': '#6DE3FF'});
-		}
-	});
+  $('.orderVideoByEmp').removeAttr('style');
+  $('.orderVideoByEmp').each(function(){
+    if($(this).hasClass('active') == true)
+    {
+      $(this).css({'border': '6px solid #6DE3FF', 'backgroundColor': '#6DE3FF'});
+    }
+  });
 });
 //next to video variation
 $(document).on('click', '.orderVideoByEmp', function () {
@@ -364,13 +403,13 @@ $(document).on('click', '.orderVideoByEmp', function () {
 var _thumVideoIds;
 //select thumbnail video
 $(document).on('click','.videoSelction',function(){
-	$('.gallery div iframe').removeClass('selectedFrame');
-	$('.gallery div .videoSelction').html('Select');	
-	$(this).parent('div').find('iframe').addClass('selectedFrame');
-	$(this).html('Selected')
-	_videoURL = $(this).attr('title');
-	var parentVideoId = $(this).parent().attr('id').split('_');
-	_thumVideoIds = parentVideoId[1];
+  $('.gallery div iframe').removeClass('selectedFrame');
+  $('.gallery div .videoSelction').html('Select');  
+  $(this).parent('div').find('iframe').addClass('selectedFrame');
+  $(this).html('Selected')
+  _videoURL = $(this).attr('title');
+  var parentVideoId = $(this).parent().attr('id').split('_');
+  _thumVideoIds = parentVideoId[1];
 
 });
 //validation for select video
@@ -385,7 +424,7 @@ function _validateSelectVideo()
   if(videoValidate == false)
   {
     toastr["error"]("Please select video");
-    return false;	
+    return false; 
   }
   if( $("#uploadedLogo").val() == "")
   {
@@ -400,7 +439,7 @@ function _validateSelectVideo()
   if( $("#uploadedMusic").val() == "")
   {
     toastr["error"]("Please select a music");
-    return false;	
+    return false; 
   }
   var file = document.querySelector("#uploadedMusic");
   if ( /\.(?:wav|mp3)$/i.test(file.files[0].name) === false ) {  
@@ -647,21 +686,21 @@ function showDiv(select){
     var hTML = "";
     var _additionalCharges = parseInt($(select).val()) * 15;
     if(additionalCharges == 0){
-    	additionalCharges = _additionalCharges;
-		 $('.price').text(parseInt($('.price').text()) + _additionalCharges);
-	}
-	else{
-		$('.price').text(parseInt($('.price').text()) - additionalCharges);
-		additionalCharges = _additionalCharges;
-		$('.price').text(parseInt($('.price').text()) + _additionalCharges);
-	}
-   	if($('.dynamic_plink').length > 0){
-		$('.dynamic_plink').remove();	
-		$('.dynamic_hr').remove();			
-	}
-	if($('.dynamic_wlink').length > 0){
-		$('.dynamic_wlink').remove();	
-	}
+      additionalCharges = _additionalCharges;
+     $('.price').text(parseInt($('.price').text()) + _additionalCharges);
+  }
+  else{
+    $('.price').text(parseInt($('.price').text()) - additionalCharges);
+    additionalCharges = _additionalCharges;
+    $('.price').text(parseInt($('.price').text()) + _additionalCharges);
+  }
+    if($('.dynamic_plink').length > 0){
+    $('.dynamic_plink').remove(); 
+    $('.dynamic_hr').remove();      
+  }
+  if($('.dynamic_wlink').length > 0){
+    $('.dynamic_wlink').remove(); 
+  }
     for(var i=0; i<$(select).val(); i++){
       hTML +="<section class='dynamic_plink'>";
       hTML +="<div class='container m-50'>";

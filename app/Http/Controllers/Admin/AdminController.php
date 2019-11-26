@@ -84,109 +84,121 @@ public function storeimageLayout(Request $request){
 
 
 
-public function adminDashboard() {
-  $emp_data = employees::select('*')->get();
-  //print_r($emp_data);
-  //die;
-  if(Auth::user()->role_id == 3){
-    return view('admin/adminDashboard', ['empData' => $emp_data]);
-  }
-  else {
-   return view('errors/404');
- }
-}
-
-public function addEmployee(Request $request) {
-  if (request()->ajax()) {
-    $posts = $request->post();
-    $keyspace = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-    $generatedPass = substr(str_shuffle($keyspace), 0, 8);
-
-    if( User::where('email', $posts['empEmail'])->exists()){
-      return response()->json(array('message' => 'user_exists'));
-    }  
-    
-//          add into user table
-    $users = new User();
-    $users->name = $posts['empValue'];
-    $users->email = $posts['empEmail'];
-    $users->password = bcrypt($generatedPass);         
-    $users->role_id = '2';
-    $users->token = str_random(40) . time();
- //print_r($users);
- //die;
-//          add into employee table           
-    $employee = new employees();
-    $employee->name = $posts['empValue'];
-    $employee->email = $posts['empEmail'];
-    $employee->password = bcrypt($generatedPass);
-    $employee->contact = $posts['empContact'];
-    $employee->thumbnail_rate = $posts['thumbnail_rate'];
-    $employee->video_rate = $posts['video_rate'];
-    $employee->last_login = date('Y-m-d h:i:s');
-    $employee->status = $posts['status'];
-  //print_r($employee);
-  //die;
-    if ($employee && $users) {
-      $users->save();
-      $employee->user_id = $users->id;
-      $employee->save();
-      if ($employee->status == 1) {
-        $users->notify(new UserActive($users,$generatedPass));
-        return response()->json(array('message' => 'success', 'employeeData' => $employee));
-      }
-      if ($employee->status == 0) {
-        return response()->json(array('message' => 'success', 'employeeData' => $employee));                
-      } else {
-        return response()->json(array('error' => 'something went wrong!!'));
-      }
-
+public function adminDashboard()
+ {
+    $emp_data = employees::select('*')->get();
+    if(Auth::user()->role_id == 3)
+    {
+      return view('admin/adminDashboard', ['empData' => $emp_data]);
     }
-  }
+    else {
+     return view('errors/404');
+   }
 }
+
+public function addEmployee(Request $request)
+  {
+    if (request()->ajax()) 
+   {
+     try
+     {
+            $posts = $request->post();
+            $keyspace = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+            $generatedPass = substr(str_shuffle($keyspace), 0, 8);
+
+            if( User::where('email', $posts['empEmail'])->exists()){
+              return response()->json(array('message' => 'user_exists'));
+            }  
+            $users = new User();
+            $users->name = $posts['empValue'];
+            $users->email = $posts['empEmail'];
+            $users->password = bcrypt($generatedPass);         
+            $users->role_id = '2';
+            $users->token = str_random(40) . time();           
+            $employee = new employees();
+            $employee->name = $posts['empValue'];
+            $employee->email = $posts['empEmail'];
+            $employee->password = bcrypt($generatedPass);
+            $employee->contact = $posts['empContact'];
+            $employee->thumbnail_rate = $posts['thumbnail_rate'];
+            $employee->video_rate = $posts['video_rate'];
+            $employee->last_login = date('Y-m-d h:i:s');
+            $employee->status = $posts['status'];
+            if ($employee && $users) {
+              $users->save();
+              $employee->user_id = $users->id;
+              $employee->save();
+              if ($employee->status == 1) {
+                $users->notify(new UserActive($users,$generatedPass));
+                return response()->json(array('message' => 'success', 'employeeData' => $employee));
+              }
+              if ($employee->status == 0) {
+                return response()->json(array('message' => 'success', 'employeeData' => $employee));                
+              } 
+            }
+      }
+          catch(\Exception $e)
+             {
+
+                return response()->json(array('status'=>FALSE,'error' => $e->getMessage()));
+              }
+   }
+  }
 
 public function editEmployee(Request $request) {
-  if ($request->ajax()) {
-    $id = $request->empIds;
-    $empData = employees::where('id', $id)->first();
-    //print_r($empData);
-    //die;
-    if ($empData) {
-      return response()->json(array('message' => 'success', 'emp_data' => $empData));
-    } else {
-      return response()->json(array('error' => 'Something went Wrong!!'));
-    }
+  if ($request->ajax()) 
+  {
+    try{
+        $id = $request->empIds;
+        $empData = employees::where('id', $id)->first();
+        if ($empData) 
+        {
+          return response()->json(array('message' => 'success', 'emp_data' => $empData));
+        } 
+      }
+      catch(\Exception $e)
+     {
+      return response()->json(array('status'=>FALSE,'error' => $e->getMessage()));
+      }
   }
 }
 
-public function updateEmp(Request $request) {
-  if ($request->isMethod('post') && $request->ajax()) {
-    $posts = $request->post();
-    $usrData = User::findorfail($posts['user_id']);
-    if ($usrData) {
-      $usrData->name = $posts['emp_name'];
-      $usrData->email = $posts['emp_email'];
-      $usrData->active= $posts['sts'];
-    }
-    $emp_data = employees::findOrFail($posts['id']);
-    if ($emp_data) {
-      
-     $emp_data->id = $posts['id'];
-     $emp_data->user_id = $posts['user_id'];
-     $emp_data->name = $posts['emp_name'];
-     $emp_data->email = $posts['emp_email'];
-     $emp_data->contact = $posts['emp_cnt'];
-     $emp_data->thumbnail_rate = $posts['thumb_price'];
-     $emp_data->video_rate = $posts['Vid_Price'];
-     $emp_data->status = $posts['sts'];  
-   }
-   if ($usrData && $emp_data) {
-    $usrData->save();
-    $emp_data->save();
-    return response()->json(array('messsage' => 'success', 'usr_data' => $usrData, 'emp_data' => $emp_data));
-  } else {
-    return response()->json(array('error' => 'Something went wrong'));
-  }
+public function updateEmp(Request $request) 
+{
+      if ($request->isMethod('post') && $request->ajax())
+       {
+        try
+        {
+        $posts = $request->post();
+        $usrData = User::findorfail($posts['user_id']);
+        if ($usrData) {
+          $usrData->name = $posts['emp_name'];
+          $usrData->email = $posts['emp_email'];
+          $usrData->active= $posts['sts'];
+        }
+        $emp_data = employees::findOrFail($posts['id']);
+        if ($emp_data) 
+        {
+         $emp_data->id = $posts['id'];
+         $emp_data->user_id = $posts['user_id'];
+         $emp_data->name = $posts['emp_name'];
+         $emp_data->email = $posts['emp_email'];
+         $emp_data->contact = $posts['emp_cnt'];
+         $emp_data->thumbnail_rate = $posts['thumb_price'];
+         $emp_data->video_rate = $posts['Vid_Price'];
+         $emp_data->status = $posts['sts'];  
+       }
+       if ($usrData && $emp_data)
+        {
+        $usrData->save();
+        $emp_data->save();
+        return response()->json(array('messsage' => 'success', 'usr_data' => $usrData, 'emp_data' => $emp_data));
+      } 
+}
+ catch(\Exception $e)
+     {
+      return response()->json(array('status'=>FALSE,'error' => $e->getMessage()));
+      }
 }
 }
 

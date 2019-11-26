@@ -102,6 +102,24 @@
         </div>
     </div>
 </section>
+<div class="col-lg-1 col-md-1 mb-md-0 mb-4 title"></div>
+<section class="section-blue">
+    <div class="container m-50 mb-4">
+        <div class="row">
+            <div class="col-lg-12 col-md-1 mb-md-0 create-pro">
+                <h4 class="text-left text-color"><b>Do you want Deliver video 12 to 24 hours? (Yes or No) **This will be additional $35.00 added on to their check out basket**</b></h4>
+                <hr>
+                <div class="mb-1 selectedDeliver" id="music"> 
+                    <input type="checkbox" class="form-check-input filled-in" name="delivery_select" id="delivery_selectyes" value="Yes">
+                    <label class="form-check-label selectDeliverDay" for="delivery_selectyes">Yes</label>
+                    <br/>
+                    <input type="checkbox" class="form-check-input filled-in" name="delivery_select" id="delivery_selectno" value="No">
+                    <label class="form-check-label selectDeliverDay" for="delivery_selectno">No</label>
+                </div>                      
+            </div>
+        </div>
+    </div>
+</section>
 
 <section class="hero-bg-section termsandconditions">
   <img class="hero-bg-bottom" src="img/right-blue_morph.svg" alt="blue icon" aria-hidden="true">
@@ -138,6 +156,7 @@
 	var APP_URL = {!! json_encode(url('/')) !!}
 	var _fixedAmount = 50;
 	var isThumbname = false;
-	var additionalCharges = 0;
+    var isDeliver = false;
+   var additionalCharges = 0;
 </script>
 @endsection

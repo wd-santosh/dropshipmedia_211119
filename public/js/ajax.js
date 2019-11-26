@@ -1,7 +1,6 @@
 //Add Employees
 var _active;
 $(document).on('click', '#addEmployee', function () {
-    //alert('slkajdksa');die;
     var empName = $(this).parent().siblings('.modal-body').find('#employeeName').val();
     var empEmail = $(this).parent().siblings('.modal-body').find('#employeeEmail').val(); 
     var atposition=empEmail.indexOf("@");  
@@ -122,7 +121,6 @@ $(document).on('click', '.removeEmp', function () {
         dataType: 'json',
         success: function (data) {
             if (data.message == 'success') {
-                //alert("Data Succesfully Deleted");
                 $(OBJ).parent().parent().remove();
             } else {
                 alert(data.error);

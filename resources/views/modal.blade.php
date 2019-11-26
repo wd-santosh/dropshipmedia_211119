@@ -311,24 +311,6 @@ aria-hidden="true">
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
     
 .close {
