@@ -19,6 +19,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AudioValidation;
+use App\Events\Customer_Order_Event;
 
 class CustomerController extends Controller {
 
@@ -102,6 +103,7 @@ class CustomerController extends Controller {
         
         $posts = $request->post();  
         $customerData = new customer_orders_model();
+        $customerid=Auth::user()->id;
         $customerData->terms_condition = $posts['terms'];
         $customerData->thumbnail = $posts['isThumbnailSelected'];
         $customerData->videos_orders = $posts['how_many_orders'];
@@ -110,6 +112,7 @@ class CustomerController extends Controller {
         $customerData->logo = $logoPath . $logo_file_name;
         $customerData->customer_id = Auth::user()->id;
         $customerData->save();
+        event(new Customer_Order_Event($customerid));
         $cust_orderId = $customerData->id;
         $prod_links = explode(",",$posts['pro_link']);
         $web_link = explode(",",$posts['web_link']);

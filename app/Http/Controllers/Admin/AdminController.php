@@ -271,8 +271,6 @@ public function deletevideo($id)
 
 public function AddthumVideo(Request $request){
   $video = new master_thumbnails_model();
-  print_r($vedio);
-  die;
   $videoSave=$request->file('video'); 
   $path = public_path() . "/img/thumvideo";
   $name = $videoSave->getClientOriginalName();

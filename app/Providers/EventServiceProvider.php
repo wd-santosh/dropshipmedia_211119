@@ -25,6 +25,12 @@ class EventServiceProvider extends ServiceProvider
              'App\Events\RegisterPasswordEvent' => [
             'App\Listeners\ResetPasswordListner',
             ],
+             'App\Events\Customer_Order_Event' => [
+            'App\Listeners\Customer_Order_Listener',
+            ],
+             'App\Events\EventForMultipleMail' => [
+            'App\Listeners\ListenerForMultipleMail',
+            ],
     ];
 
     /**

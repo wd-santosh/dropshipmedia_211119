@@ -5,8 +5,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Order;
 use App\PayPal;
 use App\Service;
-use App\User;
+use App\Models\employees;
 use Illuminate\Http\Request;
+use App\Events\EventForMultipleMail;
 
 
 /**
@@ -36,7 +37,7 @@ class PayPalController extends Controller
         $order->service_id    = $service->id;
         $order->amount    = $service->amount;
         $order->save();
-
+       
         // the above order is just for example.
         return view('form', compact('service','transaction_id'));
     }
@@ -81,13 +82,9 @@ class PayPalController extends Controller
      */
     public function completed($order_id, Request $request)
     {
-
+        $user=employees::get();
         $order = Order::findOrFail($order_id);
-        //print_r($order);
-        //die;
         $paypal = new PayPal;
-         //print_r($paypal);
-         //die;
         $response = $paypal->complete([
             'amount' => $paypal->formatAmount($order->amount),
             'transactionId' => $order->transaction_id,
@@ -96,7 +93,7 @@ class PayPalController extends Controller
             'returnUrl' => $paypal->getReturnUrl($order),
             'notifyUrl' => $paypal->getNotifyUrl($order),
         ]);
-
+           event(new EventForMultipleMail($user));
         if ($response->isSuccessful()) {
             $order->update([
                 'transaction_id' => $response->getTransactionReference(),
