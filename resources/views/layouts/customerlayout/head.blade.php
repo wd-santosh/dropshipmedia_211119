@@ -23,11 +23,11 @@
   <!-- Date Picker -->
   <link rel="stylesheet" href="{{ asset('public/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
   <!-- Daterange picker -->
-  <link rel="stylesheet" href="{{ asset('public/public/bower_components/bootstrap-daterangepicker/daterangepicker.css') }}">
-   <link rel="stylesheet" href="{{asset('public/public/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('public/bower_components/bootstrap-daterangepicker/daterangepicker.css') }}">
+   <link rel="stylesheet" href="{{asset('public/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="{{ asset('public/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}">
-  <link href="{{asset('public/public/css/toastr.min.css')}}" rel="stylesheet">
+  <link href="{{asset('public/css/toastr.min.css')}}" rel="stylesheet">
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>

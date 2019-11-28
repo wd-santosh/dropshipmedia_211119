@@ -101,6 +101,8 @@ div#DataTables_Table_0_info {margin-left: 0px;}
 <thead>
 <tr>
 <th scope="col">S.No</th>
+<th scope="col">Website Link</th>
+<th scope="col">Product Link</th>
 <th scope="col">Image Uploaded</th>
 <th scope="col">Video</th>
 <th scope="col">Video Rewise Status</th>
@@ -118,6 +120,8 @@ $customerId = Auth::user()->id;
 
 <tr>
 <td scope="row">{{$sn++}}</td>
+<td>{{$customer_data->website_link}}</td>
+<td>{{$customer_data->product_link}}</td>
 @if($customer_data->logo)
 <td><img src="{{ asset($customer_data->logo)}}" alt="Image" width="50px" height="50px"></td>
 @else
@@ -144,38 +148,31 @@ Your browser does not support the video tag.
 @if($customer_data->employe_video)
 @if($customer_data->video_upload_time <= date('Y-m-d H:i:s'))
 <div id="approveShow_{{ $customer_data->id }}"> 
-<a class="btn btn-primary" href="javascript:void(0);">Edit</a>
 </div>
 @elseif($customer_data->change_stop_scroll == 1)
 <div id="approveShow_{{ $customer_data->id }}" disabled>
-<a class="btn btn-primary" href="javascript:void(0);">Edit</a>
 <a class="btn btn-primary" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" disabled>Rewise</a>
 <div id="approveShow_{{ $customer_data->id }}" style="float: left;"> 
-<a class="btn btn-primary" href="javascript:void(0);" title="Edit"><i class="fa fa-edit" style="font-size: 15px; color: #fff;"></i></a>
 </div>
 @elseif($customer_data->change_stop_scroll == 1)
 <div id="approveShow_{{ $customer_data->id }}" disabled style="float: left;">
-<a class="btn btn-primary" href="javascript:void(0);" title="Edit"><i class="fa fa-edit" style="font-size: 15px; color: #fff;"></i></a>
 <a class="btn btn-primary" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" title="Revise" disabled><i class="fa fa-file-video-o" style="font-size: 15px; color: #fff;"></i></a>
 </div>
 @elseif($customer_data->change_thumb == 1)
 <div id="approveShow_{{ $customer_data->id }}" disabled>
-<a class="btn btn-primary" href="javascript:void(0);">Edit</a>
 <a class="btn btn-primary" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" disabled>Rewise</a>
 </div>
 @elseif($customer_data->change_thumb == 1 && $customer_data->change_stop_scroll == 1)
 <div id="approveShow_{{ $customer_data->id }}" disabled>
-<a class="btn btn-primary" href="javascript:void(0);">Edit</a>
 <a class="btn btn-primary" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" disabled>Rewise</a>
 @else
 <div id="approveShow_{{ $customer_data->id }}" style="float: left;">
-<a class="btn btn-primary" href="/editor" title="Edit"><i class="fa fa-edit" style="font-size: 15px; color: #fff;"></i></a>
 <a class="btn btn-primary openDisputeModal" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" title="Revise"><i class="fa fa-file-video-o" style="font-size: 15px; color: #fff;"></i></a>
 </div>
 @endif
 @else
 <div style="float: left;">
-<a class="btn btn-primary" href="javascript:void(0);" title="Edit" disabled><i class="fa fa-edit" style="font-size: 15px; color: #fff;"></i></a>
+
 <a class="btn btn-primary" href="javascript:void(0);" title="Revise" disabled><i class="fa fa-file-video-o" style="font-size: 15px; color: #fff;"></i></a>
 </div>
 @endif
@@ -186,10 +183,28 @@ Your browser does not support the video tag.
 @endif
     
 </tr>
+<tr>
+<table class="table table-bordered table-striped customedatatable" style="margin-top: 0px !important;">
+        <thead>
+            <th>Web Link</th>
+            <th>Prod Link</th>
+        </thead>
+        <tbody>
+        @foreach($order_link as $order)
+        @if($order->customer_order_id == $customer_data->id && $order->customer_id == $customerId) 
+        <tr>
+        <td >{{$order->website_link}}</td>
+        <td >{{$order->product_link}}</td>
+        </tr>
+        @endif
+        @endforeach            
+    </tbody>
+
+    </table>
+</tr>
 @endif
 @endforeach
 @endif
-
 </tbody>
 
 </table>

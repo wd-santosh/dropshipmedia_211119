@@ -628,6 +628,7 @@ $(document).on('click', '.approveEdit', function()
 
 //dispute Modal
 $(document).on('click','.openDisputeModal',function(){
+  //alert('ffffff');
  $('#addComments').modal('show');
  var order_id = $(this).attr('id').split('_');
  $('#orderIdForCommentVideo').val(order_id[1]);

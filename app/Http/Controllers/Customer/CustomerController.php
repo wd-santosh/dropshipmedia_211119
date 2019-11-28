@@ -8,6 +8,7 @@ use App\Models\gender_model;
 use App\Models\music_model;
 use App\Models\videos_model;
 use App\Service;
+use App\Models\order_link;
 use DB;
 use App\Models\non_subscribe_member_model;
 use App\Models\subscribe_member_model;
@@ -65,7 +66,8 @@ class CustomerController extends Controller {
         if(Auth::user()->role_id == 1)
         {
           $customer=customer_orders_model::get();
-          return view('customer/customerdashboard')->with('customer',$customer);
+          $order_link=order_link::get();
+          return view('customer.customerdashboard',["customer"=> $customer,"order_link"=>$order_link]);
         }
         else{
              return view('errors/404');

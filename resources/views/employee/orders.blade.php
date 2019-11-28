@@ -126,8 +126,8 @@ table thead{
             </thead>
             <tbody>
                 @foreach($customerOrders as $order)
-                @if(!empty($order->id) && $order->status == 1)         
-
+                @if(!empty($order->id))         
+               
                 <tr id="orderId_{{ $order->id }}" class="">   
                 <td style="display:none;"></td>                
                     <td style="text-align:center">{{ $order->id }}</td>
