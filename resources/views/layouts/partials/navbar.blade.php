@@ -17,6 +17,13 @@
 
     <!-- Links -->
     <ul class="navbar-nav">
+    	@if(Auth::user())
+    	<li class="nav-item active">
+        <a class="nav-link" href="{{url('customer/dashboard')}}">Dashboard
+        </a>
+      </li>	
+    	@endif
+     
       <li class="nav-item active">
         <a class="nav-link" href="{{url('/create-video')}}">Create Video
         </a>
