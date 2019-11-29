@@ -101,9 +101,6 @@ $(document).on('click', '.proceedOrder', function () {
     });
 
   });
-$(document).on('click','.comment',function(){
-  $('#commentPopUp').modal('show');
-});
 
 //Rewise Timer
 $(document).on('click', '.Rewise', function () {
@@ -248,8 +245,8 @@ $(document).on('click', '.Next', function () {
     var main_product_link = $('#main_product_link').val();
     var main_website_link = $('#main_website_link').val();
     var how_many_orders = $('#how_many_orders').val();
-    var isThumbnailSelected = $('input[name=thumbnail_select]').val();
-    var isDeliverSelected = $('input[name=delivery_select]').val();
+    var isDeliverSelected = $('input[name=delivery_select]:checked').val();
+    var isThumbnailSelected = $('input[name=thumbnail_select]:checked').val();
     var terms = $('#terms').is(':checked');
       var pro_link = [];
       $('.product_link_dynamic').each(function(showDiv){
@@ -270,8 +267,8 @@ $(document).on('click', '.Next', function () {
        formData.append("main_product_link", main_product_link);
        formData.append("main_website_link", main_website_link);
        formData.append("how_many_orders", how_many_orders);
-       formData.append("isThumbnailSelected", isThumbnailSelected);
        formData.append("isDeliverSelected", isDeliverSelected);
+       formData.append("isThumbnailSelected", isThumbnailSelected);
        formData.append("pro_link", pro_link);
        formData.append("web_link", web_link);
        formData.append("terms", terms);       
@@ -730,6 +727,36 @@ $(document).on('click', '.Rewise', function () {
     });
 
   });
+//brief description
+$(document).on('click', '.orderdetails', function () 
+{
+   var empId = $(this).attr('id');
+   $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: webUrl + '/employee/viewOrderDetails',
+        type: "post",
+        data: {empIds: empId},
+        dataType: 'json',
+        success: function (data)
+        {
+            if (data.message == 'success') 
+            {
+                $("#orderdetail").modal('show');
+                var other_link=data.ord_data.product_link;
+                var term=data.emp_data.terms_condition;
+                var prolink=data.emp_data.product_link;
+                var weblink=data.emp_data.website_link;
+                 document.getElementById("other").innerHTML = other_link;
+                 document.getElementById("prolink").innerHTML = prolink;
+                 document.getElementById("weblink").innerHTML = weblink;
+                  document.getElementById("term").innerHTML = term;
+  
+            }
+          }
+      });
+ });
 
 function showDiv(select){
   if($(select).val() > 0){

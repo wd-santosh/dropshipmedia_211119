@@ -126,14 +126,13 @@ table thead{
             </thead>
             <tbody>
                 @foreach($customerOrders as $order)
-                @if(!empty($order->id))         
-               
+                @if(!empty($order->id))      
                 <tr id="orderId_{{ $order->id }}" class="">   
                 <td style="display:none;"></td>                
                     <td style="text-align:center">{{ $order->id }}</td>
                     <td class="orderrDesc">
-                        <a href="{{ route ('employee/viewOrderDetails', $order->id) }}" id="orderId_{{ $order->id }}" class="viewDetails"
-                         style="text-decoration:underline;" disabled="">Brief Details
+                         <a href="javascript:void(0);" id="{{ $order->id }}" class="btn btn-primary orderdetails"
+                         style="text-decoration:underline;" >Brief Details
                          </a>
                     </td>
                     <td>
@@ -286,5 +285,32 @@ style="width:30%;letter-spacing: 1px;background-color:#08c;color: #fff;" >ok</bu
 </div>
 </div>
 </div>
-
-
+<div class="modal fade" id="orderdetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header text-center">
+<h4 class="modal-title w-100 font-weight-bold">Brief Details</h4>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div> 
+<form method="post" action="javascript:void(0);">
+<div class="modal-body mx-3">
+</div>
+<h5>Other</h5>
+<div id='other' name="other_link"></div>
+<h5>Term Condition</h5>
+<div id='term' name="term_condition"></div>
+<h5>Product Link</h5>
+<div id='prolink' name="pro"></div>
+<h5>Website link</h5>
+<div id='weblink' name="web"></div>
+<div class="modal-footer d-flex justify-content-center " style="text-align: center" >
+<button class="btn btn-deep-orange Rewise" id="{{ $order->id }}"
+style="width:30%;letter-spacing: 1px;background-color:#08c;color: #fff;" >ok</button>
+</div>
+</form>
+</div>
+</div>
+</div>

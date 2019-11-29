@@ -137,9 +137,8 @@ Your browser does not support the video tag.
 @else
 <td>Video Not Available</td>
 @endif
-<td>@if($customer_data->video_counter == 1)
-        <p class="counter" title="{{(strtotime($customer_data->video_upload_time) * 1000)}}" style="margin-top: 1rem;"></p> 
-
+<td>@if($customer_data->dilvery_day == 'Yes')
+        <p class="counter" title="{{(strtotime($customer_data->customer_order_time) * 1000)}}" style="margin-top: 1rem;"></p>
         @else
         <p>Not Applicable</p>
         @endif</td>
@@ -191,6 +190,7 @@ Your browser does not support the video tag.
         </thead>
         <tbody>
         @foreach($order_link as $order)
+        
         @if($order->customer_order_id == $customer_data->id && $order->customer_id == $customerId) 
         <tr>
         <td >{{$order->website_link}}</td>

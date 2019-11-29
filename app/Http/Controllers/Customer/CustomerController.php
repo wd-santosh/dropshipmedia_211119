@@ -107,6 +107,7 @@ class CustomerController extends Controller {
         $customerData = new customer_orders_model();
         $customerid=Auth::user()->id;
         $customerData->terms_condition = $posts['terms'];
+        $customerData->dilvery_day = $posts['isDeliverSelected'];
         $customerData->thumbnail = $posts['isThumbnailSelected'];
         $customerData->videos_orders = $posts['how_many_orders'];
         $customerData->website_link = $posts['main_website_link'];          
@@ -114,12 +115,17 @@ class CustomerController extends Controller {
         $customerData->logo = $logoPath . $logo_file_name;
         $customerData->customer_id = Auth::user()->id;
         $customerData->save();
+        if($customerData->dilvery_day == "Yes"){
+                $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P1D'));
+                $customerData->customer_order_time = $dayAfterTomorrow;
+                $customerData->save();
+            }
         event(new Customer_Order_Event($customerid));
         $cust_orderId = $customerData->id;
         $prod_links = explode(",",$posts['pro_link']);
         $web_link = explode(",",$posts['web_link']);
         for($i=0;$i<count($prod_links);$i++){
-            DB::table('order_link')->insertGetId(['customer_id' =>Auth::user()->id, "website_link" =>$web_link[$i], "product_link" => $prod_links[$i]]);
+            DB::table('order_link')->insertGetId(['customer_id' =>Auth::user()->id,'customer_order_id' =>$cust_orderId,"website_link" =>$web_link[$i], "product_link" => $prod_links[$i]]);
         }
         
         // Create Order For Customer
