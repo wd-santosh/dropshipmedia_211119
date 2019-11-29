@@ -23,7 +23,7 @@
             <div class="col-lg-12 col-md-1 mb-md-0 create-pro">
                 <h4 class="text-left"  style="display:-webkit-inline-box;"><b>Website Link :</b></h4>           
                 
-                <input type="text" class="form-check-input filled-in inputwebsiteLink" style="position: relative;margin-left: 0.5rem;width:40%;" id="main_website_link" name="main_website_link">
+                <input type="text" class="form-check-input filled-in inputwebsiteLink" placeholder='http://' style="position: relative;margin-left: 0.5rem;width:40%;" id="main_website_link" name="main_website_link">
                 <label class="form-check-label"></label>
                 
             </div> 
@@ -35,7 +35,7 @@
         <div class="row">
             <div class="col-lg-12 col-md-1 mb-md-0 create-pro">
                 <h4 class="text-left"  style="display:-webkit-inline-box;"><b>Product Link :</b></h4>           
-                <input type="text" class="form-check-input filled-in inputProductLink" id="main_product_link" name="main_product_link" style="position: relative;margin-left: 2rem;width:40%;">
+                <input type="text" class="form-check-input filled-in inputProductLink" placeholder='http://' id="main_product_link" name="main_product_link" style="position: relative;margin-left: 2rem;width:40%;">
                 <label class="form-check-label"></label>
             </div> 
         </div> 
@@ -86,7 +86,7 @@
 </section>
 
 <div class="col-lg-1 col-md-1 mb-md-0 mb-4 title"></div>
-<section class="section-blue">
+<!-- <section class="section-blue">
     <div class="container m-50 mb-4">
         <div class="row">
             <div class="col-lg-12 col-md-1 mb-md-0 create-pro">
@@ -102,7 +102,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 <div class="col-lg-1 col-md-1 mb-md-0 mb-4 title"></div>
 <section class="section-blue">
     <div class="container m-50 mb-4">

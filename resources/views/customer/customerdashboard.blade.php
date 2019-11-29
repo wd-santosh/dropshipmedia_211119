@@ -105,7 +105,8 @@ div#DataTables_Table_0_info {margin-left: 0px;}
 <th scope="col">Product Link</th>
 <th scope="col">Image Uploaded</th>
 <th scope="col">Video</th>
-<th scope="col">Video Rewise Status</th>
+<th scope="col">Order Date</th>
+<th scope="col">Delivery Days Status</th>
 <th scope="col">Action</th>
 </tr>
 </thead>
@@ -137,7 +138,10 @@ Your browser does not support the video tag.
 @else
 <td>Video Not Available</td>
 @endif
-<td>@if($customer_data->video_counter == 1)
+<td>
+   {{ $customer_data->created_at }}
+</td>
+<td>@if($customer_data->dilvery_day == 'Yes')
         <p class="counter" title="{{(strtotime($customer_data->video_upload_time) * 1000)}}" style="margin-top: 1rem;"></p> 
 
         @else
@@ -166,7 +170,7 @@ Your browser does not support the video tag.
 <div id="approveShow_{{ $customer_data->id }}" disabled>
 <a class="btn btn-primary" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" disabled>Rewise</a>
 @else
-<div id="approveShow_{{ $customer_data->id }}" style="float: left;">
+<div id="approveShow_{{ $customer_data->id }}" class="hideDispute" style="float: left;">
 <a class="btn btn-primary openDisputeModal" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" title="Revise"><i class="fa fa-file-video-o" style="font-size: 15px; color: #fff;"></i></a>
 </div>
 @endif
@@ -181,7 +185,10 @@ Your browser does not support the video tag.
 @else
 <a class="btn btn-sm btn-danger" href="javascript:void(0);" disabled style=" margin-left: 3px;" title="Download"> <i class="fa fa-download" style="font-size: 17px; color: #fff;"></i></a>
 @endif
-    
+    <div class="ApprovedBtns">
+        <button class="btn btn-sm btn-primary cancelrevise" id="{{ $customer_data->id }}" style=" margin-left: 3px;">Approved</button>
+        
+    </div>
 </tr>
 <tr>
 <table class="table table-bordered table-striped customedatatable" style="margin-top: 0px !important;">

@@ -50,6 +50,27 @@ $(document).on('click', '.assignOrder', function () {
             }
           });
 });
+//approved customer video
+$(document).on('click', '.cancelrevise', function () {
+  var orderId = $(this).attr('id');
+  $.ajax({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    url: webUrl + '/approvedVideo',
+    type: "POST",
+    data: {order_id: orderId},
+    dataType: 'json',
+    success: function (data)
+    {
+      if (data.message == 'success') {
+                $('.ApprovedBtns').find('#dispute_' + data.orderId).parent().hide();
+              } else {
+                alert('Approved Your Video');
+              }
+            }
+          });
+});
 
 //for reject order
 $(document).on('click', '.rejectOrder', function () {
@@ -248,8 +269,8 @@ $(document).on('click', '.Next', function () {
     var main_product_link = $('#main_product_link').val();
     var main_website_link = $('#main_website_link').val();
     var how_many_orders = $('#how_many_orders').val();
-    var isThumbnailSelected = $('input[name=thumbnail_select]').val();
-    var isDeliverSelected = $('input[name=delivery_select]').val();
+    var isThumbnailSelected = $('input[name=thumbnail_select]:checked').val();
+    var isDeliverSelected = $('input[name=delivery_select]:checked').val();
     var terms = $('#terms').is(':checked');
       var pro_link = [];
       $('.product_link_dynamic').each(function(showDiv){
@@ -757,7 +778,7 @@ function showDiv(select){
       hTML +="<div class='row'>";
       hTML +="<div class='col-lg-12 col-md-1 mb-md-0 create-pro'>";
       hTML +="<h4 class='text-left' style='display:-webkit-inline-box;'><b>Product Link :</b></h4>";       
-      hTML +="<input type='text'  class='form-check-input filled-in inputProductLink product_link_dynamic' id='product_link"+ i +"' name='product_link"+ i +"' style='position: relative;margin-left: 0.5rem;width:40%;'>";
+      hTML +="<input type='text' placeholder='http://' class='form-check-input filled-in inputProductLink product_link_dynamic' id='product_link"+ i +"' name='product_link"+ i +"' style='position: relative;margin-left: 0.5rem;width:40%;'>";
       hTML +="<label class='form-check-label'></label>";
       hTML +="</div> ";
       hTML +="</div>";
@@ -768,7 +789,7 @@ function showDiv(select){
       hTML +="<div class='row'>";
       hTML +="<div class='col-lg-12 col-md-1 mb-md-0 create-pro'>";
       hTML +="<h4 class='text-left' style='display:-webkit-inline-box;'><b>Website Link :</b></h4>";    
-      hTML +="<input type='text' name='"+ i +"'  class='form-check-input filled-in website_link_dynamic' id='website_link"+ i +"' style='position: relative;margin-left: 0.5rem;width:40%;'>";
+      hTML +="<input type='text' name='"+ i +"' placeholder='http://'  class='form-check-input filled-in website_link_dynamic' id='website_link"+ i +"' style='position: relative;margin-left: 0.5rem;width:40%;'>";
       hTML +="<label class='form-check-label'></label>";
       hTML +="</div>"; 
       hTML +="</div>";
