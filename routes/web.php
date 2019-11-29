@@ -67,7 +67,7 @@ Route::post('updateEmpData', 'Admin\AdminController@updateEmp');
 #Employee Controller
 #Route::get('employee/dashboard', 'Employee\EmployeeController@dashboard')->name('employee/dashboard');
 Route::any('employee/dashboard', 'Employee\EmployeeController@viewOrders')->name('employee/orders');
-Route::get('employee/viewOrderDetails/{id}', 'Employee\EmployeeController@viewOrderByEmp')->name('employee/viewOrderDetails');
+Route::post('employee/viewOrderDetails/', 'Employee\EmployeeController@viewOrderByEmp')->name('employee/viewOrderDetails');
 Route::post('assidnedOrder', 'Employee\EmployeeController@assignedOrderByEmp');
 Route::post('rejectOrder', 'Employee\EmployeeController@rejectOrderByEmp');
 Route::post('proceedOrder', 'Employee\EmployeeController@proceedOrderByEmp');

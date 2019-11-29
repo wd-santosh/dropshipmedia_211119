@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Employee;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Models\employees;
+use App\Models\order_link;
 use App\Models\master_thumbnails_model;
 use App\Models\customers;
 use App\Models\customer_orders_model;
@@ -64,14 +65,23 @@ class EmployeeController extends Controller
      }
  }
 
- public function viewOrderByEmp(Request $request ,$id){        
-    $viewOrderDetails = customer_orders_model::select('*')
-    ->with('getVideos')
-    ->with('getGender')
-    ->with('getMusic')
-    ->findorfail($id);     
-    $data=master_thumbnails_model::where('id',$viewOrderDetails->thumbnail_video)->first(); 
-    return view('employee/viewOrderDetails')->with(['orderDetails' => $viewOrderDetails,'data' =>$data]);
+ public function viewOrderByEmp(Request $request){        
+     if ($request->ajax()) 
+  {
+    try{
+        $id = $request->empIds;
+        $empData = customer_orders_model::where('id', $id)->first();
+        $order_data = order_link::where('customer_order_id', $empData->id)->first();
+        if ($empData) 
+        {
+          return response()->json(array('message' => 'success', 'emp_data' => $empData, 'ord_data' =>$order_data['customer_order_id']));
+        } 
+      }
+      catch(\Exception $e)
+     {
+      return response()->json(array('status'=>FALSE,'error' => $e->getMessage()));
+      }
+  }
 }
 
 public function assignedOrderByEmp(Request $request) {

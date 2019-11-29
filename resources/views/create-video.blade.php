@@ -110,7 +110,7 @@
             <div class="col-lg-12 col-md-1 mb-md-0 create-pro">
                 <h4 class="text-left text-color"><b>Do you want Deliver video 12 to 24 hours? (Yes or No) **This will be additional $35.00 added on to their check out basket**</b></h4>
                 <hr>
-                <div class="mb-1 selectedDeliver" id="music"> 
+                <div class="mb-1 selectedDeliver" id="musicType"> 
                     <input type="checkbox" class="form-check-input filled-in" name="delivery_select" id="delivery_selectyes" value="Yes">
                     <label class="form-check-label selectDeliverDay" for="delivery_selectyes">Yes</label>
                     <br/>

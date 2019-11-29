@@ -16,50 +16,9 @@ body.skin-blue.sidebar-mini {background: #ecf0f5;}
     <li class="list-group-item" style="word-break: break-all;height: auto!important"><b>Delivery Day :</b>                                                 
         {{ $orderDetails->delivery_day }}                 
     </li>
-    <li class="list-group-item"> <b>Layout :</b> 
+   </ul>  
 
-        <img src=" {{ asset('img/'.$orderDetails->getImageData->img) }}" width="50px" height="auto">
 
-    </li>                                        
-    <li class="list-group-item"  style="height: auto!important"><b>Description :</b>
-
-        {{ $orderDetails->getImageData->description }}
-
-    </li>
-    <li class="list-group-item"><b>Size :</b> 
-
-        {{ $orderDetails->getImageData->image_size }} 
-
-    </li>                    
-    <li class="list-group-item" id="selectdGndr"><b>Gender :</b>  {{ $orderDetails->getGender->gender }}                     
-    </li>
-    <li class="list-group-item" style="">                      
-        <span>Video Style :</span> 
-        @if(!empty($orderDetails->getVideos))
-        <video class="video-fluid increaseSizeOnHover" autoplay="" loop="" muted="" style="width:71%;">
-            <source src="{{ $orderDetails->getVideos->links }}" type="video/mp4" width="50px" height="auto">
-        </video>
-        @else
-        <img src="{{ asset('img/user_image/maxresdefault.jpg') }}"height="100px"> 
-        @endif
-    </li>
-    <li class="list-group-item" style=""> 
-    <span>Thumbnail Video :</span>
-    <a>{!!Embed::make($data->thum_video)->parseUrl()->getIframe() !!}</a>
-    <li class="list-group-item"><b>Music :</b> 
-        <source src=""  type="audio/mpeg"> 
-        </li> 
-    <li class="list-group-item"><b>Logo :</b> 
-        @if(!empty($orderDetails->logo))
-        <img src="{{  asset($orderDetails->logo) }}" height="100px">                        
-        @else
-        <source src="{{ asset('img/order_logo/not_available.jp') }}" height="100px"> 
-        @endif
-    </li>
-     <li class="list-group-item paddingss">
-         <a href="{{ route('employee/orders') }}" class="btn btn-primary" style="width: 100%;">Back To Orders</a>
-    </li>
-</ul>  
 
 
 @endsection
