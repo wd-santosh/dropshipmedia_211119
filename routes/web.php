@@ -77,6 +77,7 @@ Route::post('rewiseOrder', 'Employee\EmployeeController@rewiseOrderByEmp');
 //Customer Controller
 Route::get('/customer/dashboard',"Customer\CustomerController@customerlist")->name('customer.dashboard');
 Route::get('/customer/profile',"Customer\CustomerController@customerprofile")->name("customer.customer.profile");
+Route::post('approvedVideo', 'Customer\CustomerController@approvedVideoByCus');
 #Route::get('create-video', 'Customer\CustomerController@viewCreateVideos')->name('create-video');
 #Route::get('create-video/{id?}', 'Customer\CustomerController@viewCreateVideos')->name('create-video}');
 Route::post('storeCustomerData', 'Customer\CustomerController@storeFirstPageData');

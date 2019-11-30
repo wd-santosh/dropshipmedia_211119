@@ -61,109 +61,113 @@ class CustomerController extends Controller {
 
   public function customerlist()
   {
-      try
+    try
+    {
+      if(Auth::user()->role_id == 1)
       {
-        if(Auth::user()->role_id == 1)
-        {
-          $customer=customer_orders_model::get();
-          $order_link=order_link::get();
-          return view('customer.customerdashboard',["customer"=> $customer,"order_link"=>$order_link]);
-        }
-        else{
-             return view('errors/404');
-            }
-        }
-        catch(\Exception $e){
-
-        return response()->json(array('status'=>FALSE,'error' => $e->getMessage()));
+        $customer=customer_orders_model::get();
+        $order_link=order_link::get();
+        return view('customer.customerdashboard',["customer"=> $customer,"order_link"=>$order_link]);
       }
-  }
-  public function customerprofile()
-  {
-    return view('customer/customerprofile');
-  }
-  public function downloadvideo($videoId)
-  {
-    $book_cover = customer_orders_model::where('id', $videoId)->firstOrFail();
-    $path = public_path(). $book_cover->employe_video;
-    return response()->download($path, $book_cover
-     ->original_filename, ['Content-Type' => $book_cover->mime]);
+      else{
+       return view('errors/404');
+     }
+   }
+   catch(\Exception $e){
 
+    return response()->json(array('status'=>FALSE,'error' => $e->getMessage()));
   }
+}
+public function customerprofile()
+{
+  return view('customer/customerprofile');
+}
+public function downloadvideo($videoId)
+{
+  $book_cover = customer_orders_model::where('id', $videoId)->firstOrFail();
+  $path = public_path(). $book_cover->employe_video;
+  return response()->download($path, $book_cover
+   ->original_filename, ['Content-Type' => $book_cover->mime]);
 
-  public function storeFirstPageData(Request $request) {
-    try{		
-		  	
-		$file = $request->file('logo');
-		$logo_file_name = $file->getClientOriginalName();
-		$logoPath = public_path() . "/img/order_logo";
-	    $priv = 0777;
-	    if (!file_exists($logoPath)) {
-	       mkdir($logoPath, $priv) ? true : false;
-	    }
-        $file->move($logoPath, $logo_file_name);
-        
-        $posts = $request->post();  
-        $customerData = new customer_orders_model();
-        $customerid=Auth::user()->id;
-        $customerData->terms_condition = $posts['terms'];
-        $customerData->dilvery_day = $posts['isDeliverSelected'];
-        $customerData->thumbnail = $posts['isThumbnailSelected'];
-        $customerData->videos_orders = $posts['how_many_orders'];
-        $customerData->website_link = $posts['main_website_link'];          
-        $customerData->product_link = $posts['main_product_link'];
-        $customerData->logo = $logoPath . $logo_file_name;
-        $customerData->customer_id = Auth::user()->id;
-        $customerData->save();
-        if($customerData->dilvery_day == "Yes"){
-                $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P1D'));
-                $customerData->customer_order_time = $dayAfterTomorrow;
-                $customerData->save();
-            }
-        event(new Customer_Order_Event($customerid));
-        $cust_orderId = $customerData->id;
-        $prod_links = explode(",",$posts['pro_link']);
-        $web_link = explode(",",$posts['web_link']);
-        for($i=0;$i<count($prod_links);$i++){
-            DB::table('order_link')->insertGetId(['customer_id' =>Auth::user()->id,'customer_order_id' =>$cust_orderId,"website_link" =>$web_link[$i], "product_link" => $prod_links[$i]]);
-        }
-        
+}
+
+public function storeFirstPageData(Request $request) {
+  try{		
+
+    $file = $request->file('logo');
+    $logo_file_name = $file->getClientOriginalName();
+    $logoPath = public_path() . "/img/order_logo";
+    $priv = 0777;
+    if (!file_exists($logoPath)) {
+      mkdir($logoPath, $priv) ? true : false;
+    }
+    $file->move($logoPath, $logo_file_name);
+
+    $posts = $request->post();  
+    $customerData = new customer_orders_model();
+    $customerid=Auth::user()->id;
+    $customerData->terms_condition = $posts['terms'];
+    $customerData->dilvery_day = $posts['isDeliverSelected'];
+    $customerData->thumbnail = $posts['isThumbnailSelected'];
+    $customerData->videos_orders = $posts['how_many_orders'];
+    $customerData->website_link = $posts['main_website_link'];          
+    $customerData->product_link = $posts['main_product_link'];
+    $customerData->logo = 'public/img/order_logo/' . $logo_file_name;
+    $customerData->customer_id = Auth::user()->id;
+    $customerData->save();
+    if($customerData->dilvery_day == "Yes"){
+      $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P1D'));
+      $customerData->customer_order_time = $dayAfterTomorrow;
+      $customerData->save();
+    }elseif($customerData->dilvery_day == "No"){
+      $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P3D'));
+      $customerData->customer_order_time = $dayAfterTomorrow;
+      $customerData->save();
+    }
+    event(new Customer_Order_Event($customerid));
+    $cust_orderId = $customerData->id;
+    $prod_links = explode(",",$posts['pro_link']);
+    $web_link = explode(",",$posts['web_link']);
+    for($i=0;$i<count($prod_links);$i++){
+      DB::table('order_link')->insertGetId(['customer_id' =>Auth::user()->id,'customer_order_id' =>$cust_orderId,"website_link" =>$web_link[$i], "product_link" => $prod_links[$i]]);
+    }
+
         // Create Order For Customer
-        $transacionId = rand(10000000,99999999);
-        $order = new Order;
-        $order->user_id = Auth::user()->id;
-        $order->transaction_id = $transacionId;
-        $order->service_id = 0;
-        $order->amount = $posts['price'];
-        $order->save(); 
-        return response()->json(array('status'=>TRUE,'message' =>'success','transaction_id' =>encrypt($transacionId)));   
-      	
-	}catch(\Exception $e){
+    $transacionId = rand(10000000,99999999);
+    $order = new Order;
+    $order->user_id = Auth::user()->id;
+    $order->transaction_id = $transacionId;
+    $order->service_id = 0;
+    $order->amount = $posts['price'];
+    $order->save(); 
+    return response()->json(array('status'=>TRUE,'message' =>'success','transaction_id' =>encrypt($transacionId)));   
 
-		return response()->json(array('status'=>FALSE,'error' => $e->getMessage()));
-	}
+  }catch(\Exception $e){
+
+    return response()->json(array('status'=>FALSE,'error' => $e->getMessage()));
   }
-  public function selectVideo(Request $request, $id = NULL) {
-    $thumbnailsVideo = master_thumbnails_model::select('*')->get();        
-    $videos = videos_model::select('*')->get();
-    $cusOrderId = $request->id;
-    return view('select-video')->with(['videos' => $videos, 'CusId' => $cusOrderId, 'thumbnails' =>$thumbnailsVideo]);
-  }
+}
+public function selectVideo(Request $request, $id = NULL) {
+  $thumbnailsVideo = master_thumbnails_model::select('*')->get();        
+  $videos = videos_model::select('*')->get();
+  $cusOrderId = $request->id;
+  return view('select-video')->with(['videos' => $videos, 'CusId' => $cusOrderId, 'thumbnails' =>$thumbnailsVideo]);
+}
 
-  public function storeSelectVideoData(Request $request) {
+public function storeSelectVideoData(Request $request) {
 
-    if (request()->ajax()) {
-      $posts = $request->post();
-      $customerId = $request->_orderIdForMusic;
-      $selectdVideoByCust = $request->selectedVdeo;
-      $customerOrder = customer_orders_model::findorfail($customerId);
-      $customerOrder->video_id = $selectdVideoByCust ;
-      $customerOrder->thumbnail_video = $request->_thumbVideoId;
-      $customerOrder->save();
-      if ($file = $request->file('music')) {
-        $path = public_path() . "/img/order_music";
-        $priv = 0777;
-        if (!file_exists($path)) {
+  if (request()->ajax()) {
+    $posts = $request->post();
+    $customerId = $request->_orderIdForMusic;
+    $selectdVideoByCust = $request->selectedVdeo;
+    $customerOrder = customer_orders_model::findorfail($customerId);
+    $customerOrder->video_id = $selectdVideoByCust ;
+    $customerOrder->thumbnail_video = $request->_thumbVideoId;
+    $customerOrder->save();
+    if ($file = $request->file('music')) {
+      $path = public_path() . "/img/order_music";
+      $priv = 0777;
+      if (!file_exists($path)) {
                     mkdir($path, $priv) ? true : false; //
                   }
                   $name = $file->getClientOriginalName();
@@ -310,8 +314,10 @@ class CustomerController extends Controller {
         $orderIdForComment = $posts['orderIdCom'];
         $findOrderForComment = customer_orders_model::findorfail($orderIdForComment);
         $findOrderForComment->change_stop_scroll = $posts['change_scroll'];
-        $findOrderForComment->change_thumb = $posts['change_thumb'];
-        $findOrderForComment->save();
+         $findOrderForComment->CommentByCustomer=$posts['cust_comment'];
+         $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P1D'));
+         $findOrderForComment->customer_order_time = $dayAfterTomorrow;
+         $findOrderForComment->save();
       }
       if ($findOrderForComment) {
         return response()->json(array('message' => 'success', 'orderIdForComment' => $orderIdForComment));
@@ -331,36 +337,22 @@ class CustomerController extends Controller {
      $custOrder = customer_orders_model::with(['customerData', 'customerData.getPaymentStatus'])->get();
      return view('admin/customerOrder',['custOrder'=> $custOrder]);
    }
-//    public function StartCustVidTimers(Request $request) {
-//     if ($request->isMethod('post') && $request->ajax()) {
-//         $posts = $request->post();
-//         $CustUserid = $posts['user_id'];
-//         $CustoOrders = customers::findorfail($CustUserid);
-//         $tomorrow = date("l", strtotimer('tomorrow'));
-//         $dayAftrTom = date('l', strtotimer('+2 day'));        
-//         $dayAftrTom_1 = date('l', strtotimer('+3 day')); 
-//         if($tomorrow == 'Saturday'){
-//             $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P5D'));
-//             $CustoOrders->order_assign_timer = $dayAfterTomorrow;
-//         }elseif( $dayAftrTom == 'Saturday' ){
-//            $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P5D'));
-//            $CustoOrders->order_assign_timer = $dayAfterTomorrow;
-//        }elseif( $dayAftrTom_1 == 'Saturday'){
-//            $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P5D'));
-//            $CustoOrders->order_assign_timer = $dayAfterTomorrow;
-//        }else{
-//         $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P3D'));
-//         $CustoOrders->order_assign_timer = $dayAfterTomorrow;
-//     }
-//     $CustoOrders->video_counter = true;
-//     $CustoOrders->save();
-// }
-// if ($CustoOrders) {
-//     return response()->json(array('message' => 'success'));
-// } else {
-//     return response()->json(array('error' => 'Something went wrong!!'));
-// }
-// }
+   public function approvedVideoByCus(Request $request) {
+    if ($request->isMethod('post') && $request->ajax()) {
+      $posts = $request->post();
+      $custOrder = new customer_orders_model();
+      $orderId = $posts['order_id'];        
+      $custOrder = customer_orders_model::findorfail($orderId);
+      $custOrder->approved_status = 1;
+      $custOrder->save();   
+    }
+    if ($custOrder) {
+      return response()->json(array('message' => 'success'));
+    } else {
+      return response()->json(array('error' => 'Something went wrong!!'));
+    }
+  }
+
 
 
     /**

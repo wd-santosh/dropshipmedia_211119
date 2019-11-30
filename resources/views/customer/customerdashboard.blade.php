@@ -104,8 +104,9 @@ div#DataTables_Table_0_info {margin-left: 0px;}
 <th scope="col">Website Link</th>
 <th scope="col">Product Link</th>
 <th scope="col">Image Uploaded</th>
-<th scope="col">Video</th>
-<th scope="col">Video Rewise Status</th>
+<th scope="col">Video Status</th>
+<th scope="col">Order Date</th>
+<th scope="col">Delivery Days Status</th>
 <th scope="col">Action</th>
 </tr>
 </thead>
@@ -127,16 +128,24 @@ $customerId = Auth::user()->id;
 @else
 <td>Image Not Available</td>
 @endif
-@if($customer_data->employe_video)
+@if($customer_data->employe_video && $customer_data->change_stop_scroll == '1')
 <td>
-<video width="100" height="50" controls>
-<source src="{{ asset($customer_data->employe_video)}}" type="video/mp4">
-Your browser does not support the video tag.
-</video>
+
+    Video Uploaded By Staffmember
+</td>
+@elseif($customer_data->employe_video && $customer_data->change_stop_scroll == '2')
+<td>
+
+    Video in Progress
 </td>
 @else
-<td>Video Not Available</td>
+<td>Video in Progress</td>
 @endif
+
+<td>
+   {{ $customer_data->created_at }}
+</td>
+
 <td>@if($customer_data->dilvery_day == 'Yes')
         <p class="counter" title="{{(strtotime($customer_data->customer_order_time) * 1000)}}" style="margin-top: 1rem;"></p>
         @else
@@ -148,27 +157,19 @@ Your browser does not support the video tag.
 @if($customer_data->video_upload_time <= date('Y-m-d H:i:s'))
 <div id="approveShow_{{ $customer_data->id }}"> 
 </div>
-@elseif($customer_data->change_stop_scroll == 1)
+@elseif($customer_data->change_stop_scroll == 2)
+<div id="approveShow_{{ $customer_data->id }}" disabled>
+<a class="btn btn-primary" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" disabled>Rewise</a>
+@elseif($customer_data->change_stop_scroll == 0)
 <div id="approveShow_{{ $customer_data->id }}" disabled>
 <a class="btn btn-primary" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" disabled>Rewise</a>
 <div id="approveShow_{{ $customer_data->id }}" style="float: left;"> 
 </div>
-@elseif($customer_data->change_stop_scroll == 1)
-<div id="approveShow_{{ $customer_data->id }}" disabled style="float: left;">
-<a class="btn btn-primary" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" title="Revise" disabled><i class="fa fa-file-video-o" style="font-size: 15px; color: #fff;"></i></a>
-</div>
-@elseif($customer_data->change_thumb == 1)
-<div id="approveShow_{{ $customer_data->id }}" disabled>
-<a class="btn btn-primary" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" disabled>Rewise</a>
-</div>
-@elseif($customer_data->change_thumb == 1 && $customer_data->change_stop_scroll == 1)
-<div id="approveShow_{{ $customer_data->id }}" disabled>
-<a class="btn btn-primary" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" disabled>Rewise</a>
-@else
+ @else($customer_data->change_stop_scroll == 1)
 <div id="approveShow_{{ $customer_data->id }}" style="float: left;">
 <a class="btn btn-primary openDisputeModal" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" title="Revise"><i class="fa fa-file-video-o" style="font-size: 15px; color: #fff;"></i></a>
 </div>
-@endif
+ @endif
 @else
 <div style="float: left;">
 
@@ -177,10 +178,13 @@ Your browser does not support the video tag.
 @endif
 @if($customer_data->employe_video)
 <a class="btn btn-sm btn-danger" href="{{ url('video/download',$customer_data->id) }}" style=" margin-left:3px;" title="Download"> <i class="fa fa-download" style="font-size: 17px; color: #fff;"></i></a>
+<div class="ApprovedBtns">
+        <button class="btn btn-sm btn-primary cancelrevise" id="{{ $customer_data->id }}" style=" margin-left: 3px;">Approved</button>
+        
+    </div>
 @else
 <a class="btn btn-sm btn-danger" href="javascript:void(0);" disabled style=" margin-left: 3px;" title="Download"> <i class="fa fa-download" style="font-size: 17px; color: #fff;"></i></a>
 @endif
-    
 </tr>
 <tr>
 <table class="table table-bordered table-striped customedatatable" style="margin-top: 0px !important;">
@@ -218,7 +222,7 @@ aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
 <div class="modal-header text-center">
-<h4 class="modal-title w-100 font-weight-bold">Add Rewise</h4>
+<h4 class="modal-title w-100 font-weight-bold">Rewise</h4>
 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 <span aria-hidden="true">&times;</span>
 </button>
@@ -227,8 +231,9 @@ aria-hidden="true">
 <div class="modal-body mx-3">
 <div class="md-form mb-5">
 
-<input type="checkbox" name="scroll" id="change_scroll"> Change Stop Scroll<br>
-<input type="checkbox" name="thumb" id="change_thumb"> Change Thumbnail<br>
+<input type="checkbox" name="scroll" id="change_scroll" value="2"> Leave Revisions below: We will get back to you within 12-24hours or less, if you have purchased express delivery, we are doing our very best to attended to you<br><br><br>
+<h5>Add Rewise</h5>
+<input type="text" name="Customer_Comment" id="cust_comment">
 <input type="hidden" id="orderIdForCommentVideo" name="orderid" value=""> 
 </div>
 </div>

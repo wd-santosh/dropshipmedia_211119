@@ -50,6 +50,27 @@ $(document).on('click', '.assignOrder', function () {
             }
           });
 });
+//approved customer video
+$(document).on('click', '.cancelrevise', function () {
+  var orderId = $(this).attr('id');
+  $.ajax({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    url: webUrl + '/approvedVideo',
+    type: "POST",
+    data: {order_id: orderId},
+    dataType: 'json',
+    success: function (data)
+    {
+      if (data.message == 'success') {
+        $('.ApprovedBtns').find('#dispute_' + data.orderId).parent().hide();
+      } else {
+        alert('Approved Your Video');
+      }
+    }
+  });
+});
 
 //for reject order
 $(document).on('click', '.rejectOrder', function () {
@@ -186,6 +207,39 @@ $('.selectedDeliver input[type=checkbox]').on('change',function(){
 });
 function _validateCreateVideo()
 {
+  var dPLink = true;
+  var id = "";
+  $('.product_link_dynamic').each(function() {
+//alert($(this).val());
+if (isUrlValid($(this).val()) == false){
+
+  dPLink = false; 
+  id = id + $(this).attr('id') + ", ";
+}
+
+});
+  if(dPLink == false){
+    toastr["error"]("Please enter a valid product link");
+    return false;
+  }
+
+  var wbstLink = true;
+  var id = "";
+  $('.website_link_dynamic').each(function() {
+//alert($(this).val());
+if (isUrlValid($(this).val()) == false){
+
+  wbstLink = false; 
+  id = id + $(this).attr('id') + ", ";
+}
+
+});
+
+  if(wbstLink == false){
+    toastr["error"]("Please enter a valid website url");
+    return false;
+  }
+
   var isImagevalidated = false; var isGenderChecked = false; var isMusicChecked = false;
   $('.getImgPath').each(function(){
     if($(this).hasClass('selectedImage'))
@@ -193,17 +247,41 @@ function _validateCreateVideo()
       isImagevalidated = true;
     }
   }); 
-  if($('.inputProductLink').val() == "")
+
+  if($('.inputwebsiteLink').val() == "")
   {
     toastr["error"]("Please enter website link.");
     return false; 
   }
+
+  if (isUrlValid($('.inputwebsiteLink').val()) == false){
+    toastr["error"]("Please enter valid website url.");
+    return false; 
+  }
+
+  if($('.inputProductLink').val() == "")
+  {
+    toastr["error"]("Please enter product link.");
+    return false; 
+  }
+
+
+  if (isUrlValid($('.inputProductLink').val()) == false){
+    toastr["error"]("Please enter product url.");
+    return false; 
+  }
+
   $('.selectedGender input[type=checkbox]').each(function(){
     if($(this).is(':checked') == true)
     {
       isGenderChecked = true;
     }
   }); 
+  if(isGenderChecked == false)
+  {
+   toastr["error"]("Please select terms & conditions.");
+   return false; 
+  }
   $('.selectedMusic input[type=checkbox]').each(function(){
     if($(this).is(':checked') == true)
     {
@@ -248,26 +326,26 @@ $(document).on('click', '.Next', function () {
     var isDeliverSelected = $('input[name=delivery_select]:checked').val();
     var isThumbnailSelected = $('input[name=thumbnail_select]:checked').val();
     var terms = $('#terms').is(':checked');
-      var pro_link = [];
-      $('.product_link_dynamic').each(function(showDiv){
-        pro_link.push($(this).val());
-      });
-      var web_link = [];
-      $('.website_link_dynamic').each(function(showDiv){
-        web_link.push($(this).val());
-      });      
-      var _price = parseInt($('.price').text());
-      var logo = $('.logo').val();      
-      
+    var pro_link = [];
+    $('.product_link_dynamic').each(function(showDiv){
+      pro_link.push($(this).val());
+    });
+    var web_link = [];
+    $('.website_link_dynamic').each(function(showDiv){
+      web_link.push($(this).val());
+    });      
+    var _price = parseInt($('.price').text());
+    var logo = $('.logo').val();      
+
     if(isLoggedInUser){
-       var formData = new FormData();
-       var _logo = document.getElementById("uploadedLogo");
-       file = _logo.files[0];
-       formData.append("logo", file);
-       formData.append("main_product_link", main_product_link);
-       formData.append("main_website_link", main_website_link);
-       formData.append("how_many_orders", how_many_orders);
-       formData.append("isDeliverSelected", isDeliverSelected);
+     var formData = new FormData();
+     var _logo = document.getElementById("uploadedLogo");
+     file = _logo.files[0];
+     formData.append("logo", file);
+     formData.append("main_product_link", main_product_link);
+     formData.append("main_website_link", main_website_link);
+     formData.append("how_many_orders", how_many_orders);
+     formData.append("isDeliverSelected", isDeliverSelected);
        formData.append("isThumbnailSelected", isThumbnailSelected);
        formData.append("pro_link", pro_link);
        formData.append("web_link", web_link);
@@ -282,21 +360,21 @@ $(document).on('click', '.Next', function () {
          type: "post",
          data: formData ,
          processData: false,
-    	 contentType: false,
+         contentType: false,
          dataType: 'json',
          success: function (data) {
-             if (data.message == 'success') {  
-               $('#frm_paypal').attr('action',APP_URL + "/checkout/payment/"+ data.transaction_id + "/paypal");     
-               $('#frm_paypal').submit();
-             }else{
-               toastr["error"](errorResponse);
-             }
+           if (data.message == 'success') {  
+             $('#frm_paypal').attr('action',APP_URL + "/checkout/payment/"+ data.transaction_id + "/paypal");     
+             $('#frm_paypal').submit();
+           }else{
+             toastr["error"](errorResponse);
+           }
          },
          error:function(errorResponse){
-            toastr["error"](errorResponse);
-         }
-       });  
-    }else{
+          toastr["error"](errorResponse);
+        }
+      });  
+     }else{
       localStorage.setItem('pending_order',true);
       localStorage.setItem('main_product_link',main_product_link);
       localStorage.setItem('main_website_link', main_website_link);
@@ -318,31 +396,31 @@ $(document).ready(function(){
   	$('.badge-cart').attr('data-count',1);
   }
   if(window.location.pathname.includes('cart') == true){
-  	 if(localStorage.getItem('pending_order') !== null){
-  	 	var itemHTML = "";
-  	 	itemHTML += "<div class='buttons'>";
-		itemHTML += "<a href='javascript:void(0);' class='delete_cart'><i class='fa fa-trash '></i></a>";
-		itemHTML += "</div>";		
-		itemHTML += "<div class='description'>";
-		itemHTML += "<span>Product Link: "+localStorage.getItem('main_product_link')+"</span>";  
-		itemHTML += "<span>Website Link: "+localStorage.getItem('main_website_link')+"</span>";  
-		itemHTML += "</div>";
-		itemHTML += "<div class='quantity'> Qty <br/>";
-		itemHTML += localStorage.getItem('how_many_orders');
-		itemHTML += "</div>";
-		itemHTML += "<div class='total-price'>Price <br/>$"+localStorage.getItem('price')+"</div>";
-		itemHTML += "<div class='total-price'><a href='"+APP_URL + "/create-video" +"'>Process</div>";
-		if($('.item').find('.empty_cart').length>0){
-			$('.item').find('.empty_cart').remove();	
-		}
-		$('.item').html(itemHTML);
-  	}
-  }
-  else if(window.location.pathname.includes('create-video') == true){
-  	 if(localStorage.getItem('pending_order') !== null){
-	    $('#main_product_link').val(localStorage.getItem('main_product_link'));
-	    $('#main_website_link').val(localStorage.getItem('main_website_link'));
-	    $('#how_many_orders').val(localStorage.getItem('how_many_orders'));
+    if(localStorage.getItem('pending_order') !== null){
+     var itemHTML = "";
+     itemHTML += "<div class='buttons'>";
+     itemHTML += "<a href='javascript:void(0);' class='delete_cart'><i class='fa fa-trash '></i></a>";
+     itemHTML += "</div>";		
+     itemHTML += "<div class='description'>";
+     itemHTML += "<span>Product Link: "+localStorage.getItem('main_product_link')+"</span>";  
+     itemHTML += "<span>Website Link: "+localStorage.getItem('main_website_link')+"</span>";  
+     itemHTML += "</div>";
+     itemHTML += "<div class='quantity'> Qty <br/>";
+     itemHTML += localStorage.getItem('how_many_orders');
+     itemHTML += "</div>";
+     itemHTML += "<div class='total-price'>Price <br/>$"+localStorage.getItem('price')+"</div>";
+     itemHTML += "<div class='total-price'><a href='"+APP_URL + "/create-video" +"'>Process</div>";
+     if($('.item').find('.empty_cart').length>0){
+       $('.item').find('.empty_cart').remove();	
+     }
+     $('.item').html(itemHTML);
+   }
+ }
+ else if(window.location.pathname.includes('create-video') == true){
+  if(localStorage.getItem('pending_order') !== null){
+   $('#main_product_link').val(localStorage.getItem('main_product_link'));
+   $('#main_website_link').val(localStorage.getItem('main_website_link'));
+   $('#how_many_orders').val(localStorage.getItem('how_many_orders'));
 	    if(localStorage.getItem('isThumbnailSelected') == "Yes"){
 	      $('#thumbnail_selectyes').prop('checked',true);
 	      $('.price').text(parseInt($('.price').text()) + 15);
@@ -351,30 +429,30 @@ $(document).ready(function(){
 	      $('#thumbnail_selectno').prop('checked',true);
 	    }
 	    if(localStorage.getItem('isDeliverSelected') == "Yes"){
-	      $('#delivery_selectyes').prop('checked',true);
-	      $('.price').text(parseInt($('.price').text()) + 35);
-	    }
-	    else if(localStorage.getItem('isDeliverSelected') == "No"){
-	      $('#delivery_selectno').prop('checked',true);
-	    }
-	    if(localStorage.getItem('terms') == true){
-	      $('#terms').prop('checked',true);
-	    }
-	    showDiv($('#how_many_orders')); 
-	    var _productLinks = JSON.parse(localStorage.getItem('pro_link')); 
-	    var _webLinks = JSON.parse(localStorage.getItem('web_link')); 
-	    var _counter = 0;
-	    $('.dynamic_plink').each(function(){
-	      $(this).find('input[type="text"]').val(_productLinks[_counter]);
-	      _counter++;
-	    });   
-	    var _counter = 0;
-	    $('.dynamic_wlink').each(function(){
-	      $(this).find('input[type="text"]').val(_webLinks[_counter]);
-	      _counter++;
-	    });   
-	  }	
-  }
+       $('#delivery_selectyes').prop('checked',true);
+       $('.price').text(parseInt($('.price').text()) + 35);
+     }
+     else if(localStorage.getItem('isDeliverSelected') == "No"){
+       $('#delivery_selectno').prop('checked',true);
+     }
+     if(localStorage.getItem('terms') == true){
+       $('#terms').prop('checked',true);
+     }
+     showDiv($('#how_many_orders')); 
+     var _productLinks = JSON.parse(localStorage.getItem('pro_link')); 
+     var _webLinks = JSON.parse(localStorage.getItem('web_link')); 
+     var _counter = 0;
+     $('.dynamic_plink').each(function(){
+       $(this).find('input[type="text"]').val(_productLinks[_counter]);
+       _counter++;
+     });   
+     var _counter = 0;
+     $('.dynamic_wlink').each(function(){
+       $(this).find('input[type="text"]').val(_webLinks[_counter]);
+       _counter++;
+     });   
+   }	
+ }
 });
 $(document).on('click','.delete_cart',function(){
 	$('.shopping-cart .item').html("");
@@ -389,9 +467,9 @@ $(document).ready(function(){
     
     var obj = $(this);
     // Update the count down every 1 second
-   clock(obj,countDownDate,uploadVideo);  
+    clock(obj,countDownDate,uploadVideo);  
 
- });  
+  });  
 });
 
 function clock(obje,countDownDate,uploadVideo)
@@ -415,17 +493,17 @@ function clock(obje,countDownDate,uploadVideo)
           }
           clearInterval(x);
           // Take action if date overed
-         }
-         else
-         {
+        }
+        else
+        {
           var days = Math.floor(distance / (1000 * 60 * 60 * 24));
           var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
           var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
           var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        var st = "<div class='tm'><label class='lbld'>"+ days +"</label><b class='label-b'>:</b><label class='lblh'>" + hours + "</label><b class='label-b'>:</b><label class='lblm'>"+ minutes + "</label><b class='label-b'>:</b><label class='lbls'>" + seconds + "</label></div>";
-        $(obje).html(st);   
-      }
-    }, 1000);
+          var st = "<div class='tm'><label class='lbld'>"+ days +"</label><b class='label-b'>:</b><label class='lblh'>" + hours + "</label><b class='label-b'>:</b><label class='lblm'>"+ minutes + "</label><b class='label-b'>:</b><label class='lbls'>" + seconds + "</label></div>";
+          $(obje).html(st);   
+        }
+      }, 1000);
 }
 /*  Counter End */
 //customer select video
@@ -459,40 +537,40 @@ $(document).on('click','.videoSelction',function(){
 
 });
 //validation for select video
-function _validateSelectVideo()
-{
-  var videoValidate = false; var thumbVedioValidate = true; 
-  $('.getVideoId').each(function () {
-    if ($(this).hasClass('selectedVideo')) {
-      videoValidate =  true;
-    }
-  });
-  if(videoValidate == false)
-  {
-    toastr["error"]("Please select video");
-    return false; 
-  }
-  if( $("#uploadedLogo").val() == "")
-  {
-    toastr["error"]("Please select a logo");
-    return false;   
-  }
-  var file = document.querySelector("#uploadedLogo");
-  if ( /\.(jpe?g|png|gif)$/i.test(file.files[0].name) === false ) {  
-    toastr["error"]("Please select valid image");
-    return false;
-  }
-  if( $("#uploadedMusic").val() == "")
-  {
-    toastr["error"]("Please select a music");
-    return false; 
-  }
-  var file = document.querySelector("#uploadedMusic");
-  if ( /\.(?:wav|mp3)$/i.test(file.files[0].name) === false ) {  
-    toastr["error"]("Please select valid music");
-    return false;
-  }
-}
+// function _validateSelectVideo()
+// {
+//   var videoValidate = false; var thumbVedioValidate = true; 
+//   $('.getVideoId').each(function () {
+//     if ($(this).hasClass('selectedVideo')) {
+//       videoValidate =  true;
+//     }
+//   });
+//   if(videoValidate == false)
+//   {
+//     toastr["error"]("Please select video");
+//     return false; 
+//   }
+//   // if( $("#uploadedLogo").val() == "")
+//   // {
+//   //   toastr["error"]("Please select a logo");
+//   //   return false;   
+//   // }
+//   // var file = document.querySelector("#uploadedLogo");
+//   // if ( /\.(jpe?g|png|gif)$/i.test(file.files[0].name) === false ) {  
+//   //   toastr["error"]("Please select valid image");
+//   //   return false;
+//   // }
+//   if( $("#uploadedMusic").val() == "")
+//   {
+//     toastr["error"]("Please select a music");
+//     return false; 
+//   }
+//   var file = document.querySelector("#uploadedMusic");
+//   if ( /\.(?:wav|mp3)$/i.test(file.files[0].name) === false ) {  
+//     toastr["error"]("Please select valid music");
+//     return false;
+//   }
+// }
 
 //save select video data
 $(document).on('click', '.saveForm2Data', function () {
@@ -514,7 +592,7 @@ $(document).on('click', '.saveForm2Data', function () {
     form_data.append("_orderIdForMusic", custOrderIdForMusic);
     form_data.append("selectedVdeo", selectdVideo);
     form_data.append("_thumbVideoId", _thumVideoIds);
-  
+
     $.ajax({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -626,14 +704,15 @@ $(document).on('click', '.approveEdit', function()
 //dispute Modal
 $(document).on('click','.openDisputeModal',function(){
   //alert('ffffff');
- $('#addComments').modal('show');
- var order_id = $(this).attr('id').split('_');
- $('#orderIdForCommentVideo').val(order_id[1]);
+  $('#addComments').modal('show');
+  var order_id = $(this).attr('id').split('_');
+  $('#orderIdForCommentVideo').val(order_id[1]);
 
 });
 $(document).on('click','#addCommentsForVideo',function(){
-  var change_scroll = $(this).parents('form').find('#change_scroll').val();
+  var change_scroll = $('input[name=scroll]:checked').val();
   var change_thumb = $(this).parents('form').find('#change_thumb').val();
+  var cust_comment= $('#cust_comment').val();
   var orderIdForComent = $(this).parents('form').find('input[type="hidden"]').val();
   $.ajax({
     headers: {
@@ -641,7 +720,7 @@ $(document).on('click','#addCommentsForVideo',function(){
     },
     url: webUrl + '/addCusComm',
     type: "post",
-    data: { change_scroll : change_scroll , change_thumb : change_thumb, orderIdCom : orderIdForComent },
+    data: { change_scroll : change_scroll ,cust_comment:cust_comment, change_thumb : change_thumb, orderIdCom : orderIdForComent },
     datatype: 'json',
     success: function (data)
     {
@@ -652,6 +731,7 @@ $(document).on('click','#addCommentsForVideo',function(){
        $('.approveEdit').show();
        $('#approveShow_'+ data.orderIdForComment).hide();
        alert('Rewise Succesfully Send');
+       window.location.reload();
 
      } else {               
       console.log(data.error);
@@ -673,22 +753,22 @@ $(function () {
 });
 // Validation Of Admin Add Image Layout 
 $(document).on('click', '.ErrorMessg', function(){  
-    var ImgSize = $(this).parent().siblings('.modal-body').find('.ImgSizs').val();
-    var ImgDescription = $(this).parent().siblings('.modal-body').find('.ImgDescs').val();
-    var ImageUploaded = $(this).parent().siblings('.modal-body').find('.ImageShowErr').val();
-    if(ImgSize == ""){
-      $('#ShowImageSizeErrorMsg').css('color','red').html('Please Enter Image Size!');
-      return false;
-    }
-    if(ImgDescription == ""){
-      $('#DescriptionforErrorMsg').css('color','red').html('Please Enter Description!');
-      return false;
-    }
-    if(ImageUploaded == ""){
-      $('#ImageErrorMessage').css('color','red').html('Please Select Image!');
-      return false;
-    }
-  });
+  var ImgSize = $(this).parent().siblings('.modal-body').find('.ImgSizs').val();
+  var ImgDescription = $(this).parent().siblings('.modal-body').find('.ImgDescs').val();
+  var ImageUploaded = $(this).parent().siblings('.modal-body').find('.ImageShowErr').val();
+  if(ImgSize == ""){
+    $('#ShowImageSizeErrorMsg').css('color','red').html('Please Enter Image Size!');
+    return false;
+  }
+  if(ImgDescription == ""){
+    $('#DescriptionforErrorMsg').css('color','red').html('Please Enter Description!');
+    return false;
+  }
+  if(ImageUploaded == ""){
+    $('#ImageErrorMessage').css('color','red').html('Please Select Image!');
+    return false;
+  }
+});
 $(document).on('click', '.create-accountes', function(){
   var ErrwRegMsgs = document.getElementById("ErrRegMsgs").value;
   if(ErrwRegMsgs == null || ErrwRegMsgs == ""){
@@ -703,88 +783,88 @@ $("#ErrPassMsg").click(function(){
   $(".PassErrMsgs").hide();
 });
 $(document).on('click','.comment',function(){
-    $('#commentPopUp').modal('show');
-  });
+  $('#commentPopUp').modal('show');
+});
 //Rewise Timer
 $(document).on('click', '.Rewise', function () {
   var procedOrderId = $(this).attr('id');
   $(this).parent().parent().parent().hide();
-    $.ajax({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-      url: webUrl + '/rewiseOrder',
-      type: "POST",
-      data: {procedOrdrId: procedOrderId},
-      dataType: 'json',
-      success: function (data) {
-        if (data.message == 'success') {
-          window.location.reload();
-        } else {
-          alert(data.error);
-        }
+  $.ajax({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    url: webUrl + '/rewiseOrder',
+    type: "POST",
+    data: {procedOrdrId: procedOrderId},
+    dataType: 'json',
+    success: function (data) {
+      if (data.message == 'success') {
+        window.location.reload();
+      } else {
+        alert(data.error);
       }
-    });
-
+    }
   });
+
+});
 //brief description
 $(document).on('click', '.orderdetails', function () 
 {
-   var empId = $(this).attr('id');
-   $.ajax({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        url: webUrl + '/employee/viewOrderDetails',
-        type: "post",
-        data: {empIds: empId},
-        dataType: 'json',
-        success: function (data)
-        {
-            if (data.message == 'success') 
-            {
-                $("#orderdetail").modal('show');
-                var other_link=data.ord_data.product_link;
-                var term=data.emp_data.terms_condition;
-                var prolink=data.emp_data.product_link;
-                var weblink=data.emp_data.website_link;
-                 document.getElementById("other").innerHTML = other_link;
-                 document.getElementById("prolink").innerHTML = prolink;
-                 document.getElementById("weblink").innerHTML = weblink;
-                  document.getElementById("term").innerHTML = term;
-  
-            }
-          }
-      });
- });
+ var empId = $(this).attr('id');
+ $.ajax({
+  headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  },
+  url: webUrl + '/employee/viewOrderDetails',
+  type: "post",
+  data: {empIds: empId},
+  dataType: 'json',
+  success: function (data)
+  {
+    if (data.message == 'success') 
+    {
+      $("#orderdetail").modal('show');
+      var other_link=data.ord_data.product_link;
+      var term=data.emp_data.terms_condition;
+      var prolink=data.emp_data.product_link;
+      var weblink=data.emp_data.website_link;
+      document.getElementById("other").innerHTML = other_link;
+      document.getElementById("prolink").innerHTML = prolink;
+      document.getElementById("weblink").innerHTML = weblink;
+      document.getElementById("term").innerHTML = term;
+
+    }
+  }
+});
+});
 
 function showDiv(select){
   if($(select).val() > 0){
     var hTML = "";
-    var _additionalCharges = parseInt($(select).val()) * 15;
+    var _additionalCharges = parseInt($(select).val()) * 45;
     if(additionalCharges == 0){
       additionalCharges = _additionalCharges;
-     $('.price').text(parseInt($('.price').text()) + _additionalCharges);
-  }
-  else{
-    $('.price').text(parseInt($('.price').text()) - additionalCharges);
-    additionalCharges = _additionalCharges;
-    $('.price').text(parseInt($('.price').text()) + _additionalCharges);
-  }
+      $('.price').text(parseInt($('.price').text()) + _additionalCharges);
+    }
+    else{
+      $('.price').text(parseInt($('.price').text()) - additionalCharges);
+      additionalCharges = _additionalCharges;
+      $('.price').text(parseInt($('.price').text()) + _additionalCharges);
+    }
     if($('.dynamic_plink').length > 0){
-    $('.dynamic_plink').remove(); 
-    $('.dynamic_hr').remove();      
-  }
-  if($('.dynamic_wlink').length > 0){
-    $('.dynamic_wlink').remove(); 
-  }
+      $('.dynamic_plink').remove(); 
+      $('.dynamic_hr').remove();      
+    }
+    if($('.dynamic_wlink').length > 0){
+      $('.dynamic_wlink').remove(); 
+    }
     for(var i=0; i<$(select).val(); i++){
       hTML +="<section class='dynamic_plink'>";
       hTML +="<div class='container m-50'>";
       hTML +="<div class='row'>";
       hTML +="<div class='col-lg-12 col-md-1 mb-md-0 create-pro'>";
       hTML +="<h4 class='text-left' style='display:-webkit-inline-box;'><b>Product Link :</b></h4>";       
-      hTML +="<input type='text'  class='form-check-input filled-in inputProductLink product_link_dynamic' id='product_link"+ i +"' name='product_link"+ i +"' style='position: relative;margin-left: 0.5rem;width:40%;'>";
+      hTML +="<input type='text' placeholder='http://' class='form-check-input filled-in inputProductLink product_link_dynamic' id='product_link"+ i +"' name='product_link"+ i +"' style='position: relative;margin-left: 0.5rem;width:40%;'>";
       hTML +="<label class='form-check-label'></label>";
       hTML +="</div> ";
       hTML +="</div>";
@@ -795,7 +875,7 @@ function showDiv(select){
       hTML +="<div class='row'>";
       hTML +="<div class='col-lg-12 col-md-1 mb-md-0 create-pro'>";
       hTML +="<h4 class='text-left' style='display:-webkit-inline-box;'><b>Website Link :</b></h4>";    
-      hTML +="<input type='text' name='"+ i +"'  class='form-check-input filled-in website_link_dynamic' id='website_link"+ i +"' style='position: relative;margin-left: 0.5rem;width:40%;'>";
+      hTML +="<input type='text' name='"+ i +"' placeholder='http://'  class='form-check-input filled-in website_link_dynamic' id='website_link"+ i +"' style='position: relative;margin-left: 0.5rem;width:40%;'>";
       hTML +="<label class='form-check-label'></label>";
       hTML +="</div>"; 
       hTML +="</div>";
@@ -804,8 +884,24 @@ function showDiv(select){
     }
     $(hTML).insertAfter('.termsandconditions');
   }
+  else{
+  	if(additionalCharges != 0){
+      $('.price').text(parseInt($('.price').text()) - additionalCharges);
+      additionalCharges = 0;
+    }
+    if($('.dynamic_plink').length > 0){
+      $('.dynamic_plink').remove(); 
+      $('.dynamic_hr').remove();      
+    }
+    if($('.dynamic_wlink').length > 0){
+      $('.dynamic_wlink').remove(); 
+    }
+  }
 } 
 
+function isUrlValid(url) {
+return /^(http?|https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
+}
 
 
 // End REwise Timer

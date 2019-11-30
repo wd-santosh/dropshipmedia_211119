@@ -23,7 +23,7 @@
             <div class="col-lg-12 col-md-1 mb-md-0 create-pro">
                 <h4 class="text-left"  style="display:-webkit-inline-box;"><b>Website Link :</b></h4>           
                 
-                <input type="text" class="form-check-input filled-in inputwebsiteLink" style="position: relative;margin-left: 0.5rem;width:40%;" id="main_website_link" name="main_website_link">
+                <input type="text" class="form-check-input filled-in inputwebsiteLink" placeholder='http://' style="position: relative;margin-left: 0.5rem;width:40%;" id="main_website_link" name="main_website_link">
                 <label class="form-check-label"></label>
                 
             </div> 
@@ -35,7 +35,7 @@
         <div class="row">
             <div class="col-lg-12 col-md-1 mb-md-0 create-pro">
                 <h4 class="text-left"  style="display:-webkit-inline-box;"><b>Product Link :</b></h4>           
-                <input type="text" class="form-check-input filled-in inputProductLink" id="main_product_link" name="main_product_link" style="position: relative;margin-left: 2rem;width:40%;">
+                <input type="text" class="form-check-input filled-in inputProductLink" placeholder='http://' id="main_product_link" name="main_product_link" style="position: relative;margin-left: 2rem;width:40%;">
                 <label class="form-check-label"></label>
             </div> 
         </div> 
@@ -86,7 +86,7 @@
 </section>
 
 <div class="col-lg-1 col-md-1 mb-md-0 mb-4 title"></div>
-<section class="section-blue">
+<!-- <section class="section-blue">
     <div class="container m-50 mb-4">
         <div class="row">
             <div class="col-lg-12 col-md-1 mb-md-0 create-pro">
@@ -102,7 +102,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 <div class="col-lg-1 col-md-1 mb-md-0 mb-4 title"></div>
 <section class="section-blue">
     <div class="container m-50 mb-4">
@@ -130,7 +130,7 @@
             <h4 class="text-left text-color"><b>Terms & Conditions:</b></h4>
             <hr>
             <div class="mb-1 selectedGender" id="master">
-            	<input type="checkbox" class="form-check-input filled-in" id="terms" name="terms">
+            	<input type="checkbox" class="form-check-input filled-in Videoterms" id="terms" name="terms">
                 <label class="form-check-label selectType" for="terms"> We will also add a policy/ term box that needs to be checked before continuing order once the Shopify store is completed.</label>
             </div>
         </div>
@@ -143,7 +143,7 @@
         <div class="col-lg-12 col-md-1 mb-md-0 create-pro">
             <a href="#"><button class="btn waves-effectss btn-blue waves-effect waves-light">BACK</button></a>
             <a href="javascript:void(0);">
-                <button class="btn waves-effectss btn-blue waves-effect waves-light Next">CHECKOUT ($<span class="price">50</span>) </button>
+                <button class="btn waves-effectss btn-blue waves-effect waves-light Next">CHECKOUT ($<span class="price">45</span>) </button>
             </a>
         </div>
     </div>
@@ -155,8 +155,8 @@
 <script type="text/javascript">
 	var isLoggedInUser = '{{{ (Auth::user()) ? true : false }}}';
 	var APP_URL = {!! json_encode(url('/')) !!}
-	var _fixedAmount = 50;
-	var isThumbname = false;
+	var _fixedAmount = 45;
+	//var isThumbname = false;
     var isDeliver = false;
    var additionalCharges = 0;
 </script>

@@ -120,8 +120,9 @@ table thead{
                 <th>Title</th>   
                 <th>Status</th>
                 <th>Delivery Date</th>
+                <th>CommentByCustomer</th>
                 <th width="200px">Action</th>
-                <th style="text-align:center">Upload Video</th>
+                <th style="text-align:center">Video Status</th>
             </tr>
             </thead>
             <tbody>
@@ -147,8 +148,19 @@ table thead{
                                 @endif
 
                     </td>
+                       <td>
+                          @if($order->CommentByCustomer)
+                           <div>
+                               {{$order->CommentByCustomer}}
+                           </div>
+                           @else
+                           <div>
+                               Not Applicable
+                           </div>
+                           @endif
+                        </td>
                     <td class="assignBtn">
-                         @if($order->change_thumb == 1  && $order->change_stop_scroll == 1)
+                         @if($order->change_thumb == 2  && $order->change_stop_scroll == 2)
                                <div style="margin-top:1rem;display: block;">
                                     <button type="button" class="btn btn-primary comment scrollall" id="{{ $order->id }}"
                                          style="font-size:16px ;width:100%;border-radius:5px;letter-spacing: 1px; overflow:auto;">Revise For Change Thumbnail And StopScroll
@@ -156,13 +168,13 @@ table thead{
                                     </button>
                                 </div>
 
-                        @elseif($order->change_stop_scroll == 1)
+                        @elseif($order->change_stop_scroll == 2)
 
                          <div style="margin-top:1rem;display: block;">
                                     <button type="button" class="btn btn-primary comment scrollStop" id="{{ $order->id }}" style="font-size:16px ;width:100%;border-radius:5px;letter-spacing: 1px; overflow:auto;">Revise For Change StopScroll
                                     </button>
                                 </div>
-                                @elseif($order->change_thumb == 1)
+                                @elseif($order->change_stop_scroll == 2)
                                 <div style="margin-top:1rem;display: block;">
                                     <button type="button" class="btn btn-primary comment scrollthumbnail" id="{{ $order->id }}" style="font-size:16px ;width:100%;border-radius:5px;letter-spacing: 1px;overflow:auto;">Revise For Change Thumbnail
                                     </button>
@@ -211,13 +223,13 @@ table thead{
                     </td>
                     @if($order->is_assigned == Auth::id())
                     <td style="text-align:center">
-                        <button type="button" class="btn btn-primary openUploadVideoModal" id="order_{{ $order->id }}">UploadVideo</button>
-                         @if(!empty($order->employe_video))
-                            <div style="float:right">
-                                <video width="100" height="50" controls>
-                                    <source src="{{ asset($order->employe_video)}}" type="video/mp4">
-                                </video><br><p style="color:red">Uploaded video</p>
+
+                         @if($order->employe_video)
+                                <p style="color:blue">Video Uploaded</p>
                             </div>
+                            @else
+                             <button type="button" class="btn btn-primary openUploadVideoModal" id="order_{{ $order->id }}">UploadVideo</button>
+
                         @endif
                     </td>                       
                     @endif
