@@ -275,8 +275,6 @@
 </div>
 </div>
 </div>
-
-
 </div>
 <div class="photos-videos">
 <h3 class="subtitle">Photo & Video</h3>
