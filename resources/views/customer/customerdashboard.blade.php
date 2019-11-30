@@ -133,7 +133,7 @@ $customerId = Auth::user()->id;
 
     Video Uploaded By Staffmember
 </td>
-@elseif($customer_data->employe_video && $customer_data->change_stop_scroll == '2')
+@elseif($customer_data->change_stop_scroll == '2')
 <td>
 
     Video in Progress
@@ -149,11 +149,11 @@ $customerId = Auth::user()->id;
 <td>@if($customer_data->dilvery_day == 'Yes')
         <p class="counter" title="{{(strtotime($customer_data->customer_order_time) * 1000)}}" style="margin-top: 1rem;"></p>
         @else
-        <p>Not Applicable</p>
+        <p><p class="counter" title="{{(strtotime($customer_data->customer_order_time) * 1000)}}" style="margin-top: 1rem;"></p></p>
         @endif</td>
 
 <td class="videoEdit_{{ $customer_data->id }}">
-@if($customer_data->employe_video)
+
 @if($customer_data->video_upload_time <= date('Y-m-d H:i:s'))
 <div id="approveShow_{{ $customer_data->id }}"> 
 </div>
@@ -166,31 +166,23 @@ $customerId = Auth::user()->id;
 <div id="approveShow_{{ $customer_data->id }}" style="float: left;"> 
 </div>
  @else($customer_data->change_stop_scroll == 1)
-<div id="approveShow_{{ $customer_data->id }}" style="float: left;">
-<a class="btn btn-primary openDisputeModal" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" title="Revise"><i class="fa fa-file-video-o" style="font-size: 15px; color: #fff;"></i></a>
-</div>
- @endif
-@else
-<div style="float: left;">
-
-<a class="btn btn-primary" href="javascript:void(0);" title="Revise" disabled><i class="fa fa-file-video-o" style="font-size: 15px; color: #fff;"></i></a>
-</div>
-@endif
-@if($customer_data->employe_video)
-<a class="btn btn-sm btn-danger" href="{{ url('video/download',$customer_data->id) }}" style=" margin-left:3px;" title="Download"> <i class="fa fa-download" style="font-size: 17px; color: #fff;"></i></a>
+ <a class="btn btn-sm btn-danger" href="{{ url('video/download',$customer_data->id) }}" style=" margin-left:3px;" title="Download"> <i class="fa fa-download" style="font-size: 17px; color: #fff;"></i></a>
 <div class="ApprovedBtns">
         <button class="btn btn-sm btn-primary cancelrevise" id="{{ $customer_data->id }}" style=" margin-left: 3px;">Approved</button>
         
     </div>
-@else
-<a class="btn btn-sm btn-danger" href="javascript:void(0);" disabled style=" margin-left: 3px;" title="Download"> <i class="fa fa-download" style="font-size: 17px; color: #fff;"></i></a>
-@endif
+<div id="approveShow_{{ $customer_data->id }}" style="float: left;">
+<a class="btn btn-primary openDisputeModal" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" title="Revise">Rewise</a>
+</div>
+ @endif
 </tr>
 <tr>
 <table class="table table-bordered table-striped customedatatable" style="margin-top: 0px !important;">
         <thead>
-            <th>Web Link</th>
-            <th>Prod Link</th>
+            <th>Website Link</th>
+            <th>Product Link</th>
+             <th>Order Date</th>
+            <th>Action</th>
         </thead>
         <tbody>
         @foreach($order_link as $order)
@@ -199,6 +191,12 @@ $customerId = Auth::user()->id;
         <tr>
         <td >{{$order->website_link}}</td>
         <td >{{$order->product_link}}</td>
+        <td >{{$order->created_at}}</td>
+        <td><div id="approveShow_{{ $customer_data->id }}" style="float: left;">
+<a class="btn btn-primary openDisputeModal" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" title="Revise">Rewise</a>
+</div>
+<a class="btn btn-sm btn-danger" href="{{ url('video/download',$customer_data->id) }}" style=" margin-left:3px;" title="Download"> <i class="fa fa-download" style="font-size: 17px; color: #fff;"></i></a>
+</td>
         </tr>
         @endif
         @endforeach            

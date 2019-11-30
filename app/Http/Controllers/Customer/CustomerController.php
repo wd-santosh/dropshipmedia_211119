@@ -120,6 +120,13 @@ public function downloadvideo($videoId)
                 $customerData->customer_order_time = $dayAfterTomorrow;
                 $customerData->save();
             }
+            else
+            {
+               $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P3D'));
+                $customerData->customer_order_time = $dayAfterTomorrow;
+                $customerData->save();
+            }
+
         event(new Customer_Order_Event($customerid));
         $cust_orderId = $customerData->id;
         $prod_links = explode(",",$posts['pro_link']);
