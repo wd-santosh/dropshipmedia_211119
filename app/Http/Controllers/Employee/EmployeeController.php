@@ -21,10 +21,10 @@ class EmployeeController extends Controller
 {
     public function loginEmploye()
     {
-     return view('emplogin');
- }
- public function forgetPass()
- {
+       return view('emplogin');
+   }
+   public function forgetPass()
+   {
     return view('empForget');
 }
 
@@ -56,18 +56,18 @@ class EmployeeController extends Controller
 
         elseif($employee['status'] == 0 && Auth::user()->role_id == 2)
         {
-           Session::flash('status', "Your Account have been not Activated");
-           return redirect('emplogin');
-       }
-
-       else{
-         return view('errors/404');
+         Session::flash('status', "Your Account have been not Activated");
+         return redirect('emplogin');
      }
- }
 
- public function viewOrderByEmp(Request $request){        
-     if ($request->ajax()) 
-  {
+     else{
+       return view('errors/404');
+   }
+}
+
+public function viewOrderByEmp(Request $request){        
+   if ($request->ajax()) 
+   {
     try{
         $id = $request->empIds;
         $empData = customer_orders_model::where('id', $id)->first();
@@ -75,13 +75,13 @@ class EmployeeController extends Controller
         if ($empData) 
         {
           return response()->json(array('message' => 'success', 'emp_data' => $empData, 'ord_data' =>$order_data['customer_order_id']));
-        } 
-      }
-      catch(\Exception $e)
-     {
-      return response()->json(array('status'=>FALSE,'error' => $e->getMessage()));
-      }
+      } 
   }
+  catch(\Exception $e)
+  {
+      return response()->json(array('status'=>FALSE,'error' => $e->getMessage()));
+  }
+}
 }
 
 public function assignedOrderByEmp(Request $request) {
@@ -184,74 +184,83 @@ public function proceedOrderByEmp(Request $request) {
         $proOrdrid = $posts['procedOrdrId'];
         $proedOrders = customer_orders_model::findorfail($proOrdrid);
         $custOrd = DB::table('customers')->where('user_id', $proedOrders['customer_id'])->get();
-        if($custOrd[0]->subscribe_status == 1)
-        {
-            if($proedOrders['delivery_day'] == 1){
-                $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P1D'));
-                $proedOrders->order_assign_time = $dayAfterTomorrow;
-            }
-            elseif($proedOrders['delivery_day'] == 2)
-            {
-                $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P2D'));
-                $proedOrders->order_assign_time = $dayAfterTomorrow;
-            }
-            elseif($proedOrders['delivery_day'] == 3)
-            {
-                $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P3D'));
-                $proedOrders->order_assign_time = $dayAfterTomorrow;
-            }
-            elseif($proedOrders['delivery_day'] == 4)
-            {
-              $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P4D'));
-              $proedOrders->order_assign_time = $dayAfterTomorrow;
-          }
-          elseif($proedOrders['delivery_day'] == 5)
-          {
-            $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P5D'));
-            $proedOrders->order_assign_time = $dayAfterTomorrow;
-        }
-        elseif($proedOrders['delivery_day'] == 6)
-        {
-            $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P6D'));
-            $proedOrders->order_assign_time = $dayAfterTomorrow;
-        }
-        else{
-            $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P7D'));
-            $proedOrders->order_assign_time = $dayAfterTomorrow;
-        }
+        if($proedOrders->dilvery_day == "Yes"){
+          $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P1D'));
+          $proedOrders->order_assign_time = $dayAfterTomorrow;
+          $proedOrders->save();
+      }elseif($proedOrders->dilvery_day == "No"){
+          $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P3D'));
+          $proedOrders->order_assign_time = $dayAfterTomorrow;
+          $proedOrders->save();
+      }
+//         if($custOrd[0]->subscribe_status == 1)
+//         {
+//             if($proedOrders['delivery_day'] == 1){
+//                 $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P1D'));
+//                 $proedOrders->order_assign_time = $dayAfterTomorrow;
+//             }
+//             elseif($proedOrders['delivery_day'] == 2)
+//             {
+//                 $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P2D'));
+//                 $proedOrders->order_assign_time = $dayAfterTomorrow;
+//             }
+//             elseif($proedOrders['delivery_day'] == 3)
+//             {
+//                 $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P3D'));
+//                 $proedOrders->order_assign_time = $dayAfterTomorrow;
+//             }
+//             elseif($proedOrders['delivery_day'] == 4)
+//             {
+//               $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P4D'));
+//               $proedOrders->order_assign_time = $dayAfterTomorrow;
+//           }
+//           elseif($proedOrders['delivery_day'] == 5)
+//           {
+//             $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P5D'));
+//             $proedOrders->order_assign_time = $dayAfterTomorrow;
+//         }
+//         elseif($proedOrders['delivery_day'] == 6)
+//         {
+//             $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P6D'));
+//             $proedOrders->order_assign_time = $dayAfterTomorrow;
+//         }
+//         else{
+//             $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P7D'));
+//             $proedOrders->order_assign_time = $dayAfterTomorrow;
+//         }
+//     }
+//     else
+//     {
+//         $tomorrow = date("l", strtotime('tomorrow'));
+//         $dayAftrTom = date('l', strtotime('+2 day'));        
+//         $dayAftrTom_1 = date('l', strtotime('+3 day')); 
+//         if($tomorrow == 'Saturday'){
+//             $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P5D'));
+//             $proedOrders->order_assign_time = $dayAfterTomorrow;
+//         }elseif( $dayAftrTom == 'Saturday' ){
+//          $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P5D'));
+//          $proedOrders->order_assign_time = $dayAfterTomorrow;
+//      }elseif( $dayAftrTom_1 == 'Saturday'){
+//          $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P5D'));
+//          $proedOrders->order_assign_time = $dayAfterTomorrow;
+//      }else{
+//         $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P7D'));
+//         $proedOrders->order_assign_time = $dayAfterTomorrow;
+//     }
+// }
+      $proedOrders->order_counter = true;
+      $proedOrders->save();
+      if ($proedOrders) {
+        return response()->json(array('message' => 'success'));
+    } else {
+        return response()->json(array('error' => 'Something went wrong!!'));
     }
-    else
-    {
-        $tomorrow = date("l", strtotime('tomorrow'));
-        $dayAftrTom = date('l', strtotime('+2 day'));        
-        $dayAftrTom_1 = date('l', strtotime('+3 day')); 
-        if($tomorrow == 'Saturday'){
-            $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P5D'));
-            $proedOrders->order_assign_time = $dayAfterTomorrow;
-        }elseif( $dayAftrTom == 'Saturday' ){
-         $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P5D'));
-         $proedOrders->order_assign_time = $dayAfterTomorrow;
-     }elseif( $dayAftrTom_1 == 'Saturday'){
-         $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P5D'));
-         $proedOrders->order_assign_time = $dayAfterTomorrow;
-     }else{
-        $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P7D'));
-        $proedOrders->order_assign_time = $dayAfterTomorrow;
-    }
-}
-$proedOrders->order_counter = true;
-$proedOrders->save();
-if ($proedOrders) {
-    return response()->json(array('message' => 'success'));
-} else {
-    return response()->json(array('error' => 'Something went wrong!!'));
-}
 }
 }
 public function showPriority() 
 {
 
- return view('EmployeLayout/priority');
+   return view('EmployeLayout/priority');
 }
 public function showCompleted() 
 {
@@ -259,11 +268,11 @@ public function showCompleted()
 }
 public function showDeliver()
 {
- return view('EmployeLayout/delivered');
+   return view('EmployeLayout/delivered');
 }
 public function showLate()
 {
- return view('EmployeLayout/late');
+   return view('EmployeLayout/late');
 }
 public function showSolve()
 {

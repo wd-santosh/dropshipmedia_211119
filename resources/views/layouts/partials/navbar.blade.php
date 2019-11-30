@@ -1,4 +1,13 @@
 <div id="offeo-app">
+  <!-- alerte box start fade show-->
+  <div class="alert jumbotron alert-dismissible " role="alert">
+    <p>Unlimited video editing, free thumbnails &amp; express delivery! </p> 
+    <a href="#">From $26.50/mo</a>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <!-- alerte box start fade show-->
 <div id="main-header" class="  main-header--big no-bg      ">
 <nav class="navbar navbar-expand-sm navbar-light white-color fixed-top">
     <!-- Navbar brand -->
@@ -30,7 +39,7 @@
       </li>
      
       <li class="nav-item">
-        <a class="nav-link" href="about-us.html">About Us</a>
+        <a class="nav-link" href="about-us.html">About  Us</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="portfolio.html">Portfolio</a>
@@ -40,8 +49,8 @@
         <a class="nav-link" href="{{url('/faq')}}">Faq</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{url('/cart')}}" style="padding:0;margin-right:15px;">
-        <i data-count="0" class="fas fa-shopping-cart badge-cart" style="font-size:32px;color:#2196F3;"></i>
+        <a class="nav-link" href="{{url('/cart')}}" style="padding:0;margin-right:15px;width: 45px;">
+        <i data-count="0" class="fas fa-shopping-cart badge-cart" style="color:#40a6ff;"></i>
         </a>
       </li>
      @if (Auth::check())
@@ -61,7 +70,7 @@
                             </li>
              @else
             <li class="nav-item">
-                <a class="blue signinbtn" href="" data-toggle="modal" data-target="#orangeModalSubscription"><i class="fas fa-shopping-cart signicon"></i>Sign in</a>
+                <a class="signinbtn" href="" data-toggle="modal" data-target="#orangeModalSubscription"><i class="fas fa-shopping-cart signicon"></i>Sign in</a>
             </li>
             @endif
       </ul>
@@ -72,14 +81,6 @@
 </nav>  
 <!--/.Navbar-->
 
-<!-- alerte box start -->
-	<div class="alert jumbotron alert-dismissible fade show" role="alert">
-		<p>Unlimited video editing, free thumbnails &amp; express delivery! </p> 
-		<a href="#">From $26.50/mo</a>
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-		  <span aria-hidden="true">×</span>
-		</button>
-	</div>
 
 </div>
 

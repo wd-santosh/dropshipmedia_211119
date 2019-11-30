@@ -223,11 +223,13 @@ table thead{
                     </td>
                     @if($order->is_assigned == Auth::id())
                     <td style="text-align:center">
+
                          @if($order->employe_video)
                                 <p style="color:blue">Video Uploaded</p>
                             </div>
                             @else
                              <button type="button" class="btn btn-primary openUploadVideoModal" id="order_{{ $order->id }}">UploadVideo</button>
+
                         @endif
                     </td>                       
                     @endif
