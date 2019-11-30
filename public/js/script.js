@@ -885,6 +885,19 @@ function showDiv(select){
     }
     $(hTML).insertAfter('.termsandconditions');
   }
+  else{
+  	if(additionalCharges != 0){
+      $('.price').text(parseInt($('.price').text()) - additionalCharges);
+      additionalCharges = 0;
+    }
+    if($('.dynamic_plink').length > 0){
+      $('.dynamic_plink').remove(); 
+      $('.dynamic_hr').remove();      
+    }
+    if($('.dynamic_wlink').length > 0){
+      $('.dynamic_wlink').remove(); 
+    }
+  }
 } 
 
 function isUrlValid(url) {

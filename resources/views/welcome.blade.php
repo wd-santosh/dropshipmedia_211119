@@ -2,18 +2,17 @@
 @section('content')
  <link href="{{asset('public/css/homepage2.css')}}" rel="stylesheet"/>
  <link href="{{asset('public/css/style2.css')}}" rel="stylesheet"/>
+ <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
 <div id="main-content" class="">
-<section class="banner">
+<!-- <section class="banner">
 <div class="banner__carousel">
 <div class="banner__item" style="background-image:url(public/img/banner-01.jpg)"></div>
 <div class="banner__item" style="background-image:url(public/img/banner-02.jpg)"></div>
 <div class="banner__item" style="background-image:url(public/img/banner-03.jpg)"></div>
 </div>
 <div class="banner__videos">
-<!--<div class="banner__video">
-
-<div class="wistia_responsive_padding" style="padding:56.22% 0 0 0;position:relative;"><div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;"><div class="wistia_embed wistia_async_p1dlqo7t89 videoFoam=true muted=true" style="height:100%;position:relative;width:100%"><div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;"><img src="public/img/swatch.jpg" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" onload="this.parentNode.style.opacity=1;" /></div></div></div></div>
-</div>-->
 <div class="banner__video">
 
 <div class="wistia_responsive_padding" style="padding:56.22% 0 0 0;position:relative;"><div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;"><div class="wistia_embed wistia_async_oq2ltxtcus videoFoam=true muted=true" style="height:100%;position:relative;width:100%"><div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;"><img src="public/img/swatch1.jpg" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" onload="this.parentNode.style.opacity=1;" /></div></div></div></div>
@@ -28,16 +27,78 @@
 <a href="{{url('/create-video')}}" class="btn btn--pri-blue desktop-only">Get started for free</a>
 <p style="display:none;">Free to use. No credit card required.</p>
 </div>
+</section> -->
+
+<section class="top-slider">
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+    <li data-target="#myCarousel" data-slide-to="1"></li>
+    <li data-target="#myCarousel" data-slide-to="2"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner" role="listbox">
+    <div class="item active">
+      <img src="{{asset('public/img/SLIDE_s_01.jpg')}}" alt="Chania">
+      <div class="carousel-caption">
+        <h3 class="a">Let's start</h3>
+        <h3>creating</h3>
+        <h3>cool video</h3><br>
+        <p>Suspendisse tincidunt ornare sem, at venenatis lorem tempor vel. Sed feugiat sit amet nisi non dignissim. Duis egestas augue at nisi pharetra porta.</p>
+        <br>
+        <a href="#" class="btnmore">Read more</a>
+      </div>
+    </div>
+
+    <div class="item">
+      <img src="{{asset('public/img/SLIDE_s_02.jpg')}}" alt="Chania">
+      <div class="carousel-caption">
+        <h3 class="a">Let's start</h3>
+        <h3>creating</h3>
+        <h3>cool video</h3><br>
+        <p>Suspendisse tincidunt ornare sem, at venenatis lorem tempor vel. Sed feugiat sit amet nisi non dignissim. Duis egestas augue at nisi pharetra porta.</p>
+        <br>
+        <a href="#" class="btnmore">Read more</a>
+      </div>
+    </div>
+
+    <div class="item">
+      <img src="{{asset('public/img/SLIDE_s_03.jpg')}}" alt="Flower">
+      <div class="carousel-caption">
+        <h3 class="a">Let's start</h3>
+        <h3>creating</h3>
+        <h3>cool video</h3><br>
+        <p>Suspendisse tincidunt ornare sem, at venenatis lorem tempor vel. Sed feugiat sit amet nisi non dignissim. Duis egestas augue at nisi pharetra porta.</p>
+        <br>
+        <a href="#" class="btnmore">Read more</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Left and right controls -->
+  <!-- <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a> -->
+</div>
 </section>
-<div class="logos">
+
 <div class="container">
-<h2 class="title">Built by a team trusted by</h2>
+<div class="logos">
+<!-- <h2 class="title">Built by a team trusted by</h2> -->
 <div class="logos__list">
 <div class="logos__item">
-<img src="public/img/facebook-black.png">
+<img src="public/img/black1.png">
 </div>
 <div class="logos__item">
-<img src="public/img/instagram-black.png">
+<img src="public/img/black2.png">
 </div>
 <div class="logos__item">
 <img src="public/img/google-black.png">
@@ -54,8 +115,52 @@
 </div>
 </div>
 </div>
+
+<section class="betvideo">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="carousel-caption2">
+          <h3>Best graduates of our classes are</h3>
+        <h3 class="a">famous videographers</h3>
+        <h3>all over the world</h3>
+        <h3>cool video</h3>
+        <hr class="Welcome-dr">
+        <div class="tectbg"><p>Suspendisse tincidunt ornare sem, at venenatis lorem tempor vel. Sed feugiat sit amet nisi non dignissim. Duis egestas augue at nisi pharetra porta.</p></div>
+        <br>
+        <a href="#" class="btnmore">Read more</a>
+      </div>
+      </div>
+      <div class="col-md-8 bgvideo">
+        <div class="row">
+          <div class="col-md-5"></div>
+          <div class="col-md-7">
+            <div class="ltx-content-width col-align-center" style="max-width: 490px"><div class="heading  default color-black subcolor-main transform-default   vc_custom_1525186813624 heading-tag-h3" id="like_sc_header_2061933122"><h3 class="header">What will you learn in our photoschool?</h3></div>
+  <div class="wpb_text_column wpb_content_element ">
+    <div class="wpb_wrapper">
+      <ul class="vert">
+<li data-sr-id="9" style="visibility: visible; transform: translateY(0px) scale(1); opacity: 1; transition: all 0.3s ease 0s;"><strong>Camera Settings</strong></li>
+<li data-sr-id="10" style="visibility: visible; transform: translateY(0px) scale(1); opacity: 1; transition: all 0.3s ease 0s;"><strong>Exposure settings</strong></li>
+<li data-sr-id="11" style="visibility: visible; transform: translateY(0px) scale(1); opacity: 1; transition: all 0.3s ease 0s;"><strong>Depth of field</strong></li>
+<li data-sr-id="12" style="visibility: visible; transform: translateY(0px) scale(1); opacity: 1; transition: all 0.3s ease 0s;"><strong>Composition rules</strong></li>
+<li data-sr-id="13" style="visibility: visible; transform: translateY(0px) scale(1); opacity: 1; transition: all 0.3s ease 0s;"><strong>Lighting in photography</strong></li>
+<li data-sr-id="14" style="visibility: visible; transform: translateY(0px) scale(1); opacity: 1; transition: all 0.3s ease 0s;"><strong>Portrait photography</strong></li>
+<li data-sr-id="15" style="visibility: visible; transform: translateY(0px) scale(1); opacity: 1; transition: all 0.3s ease 0s;"><strong>Retouch</strong></li>
+</ul>
+
+    </div>
+  </div>
+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <div class="reviews-big-wrap bg-grey"> 
     <h2 class="rf-sec-heading bluetext text-center">Members Feedback</h2>
+    <hr class="Welcome-dr2">
     <div class="line skyBlue text-center slidetitles"></div>
     <div class="container-fluid">
       <div class="row">
@@ -149,7 +254,8 @@
 
 <div class="landing-format">
 <h3 class="subtitle">Multiple Video Dimensions</h3>
-<h2 class="title">Any Aspect Ratio</h2>
+<h2 class="title2">Any Aspect Ratio</h2>
+<hr class="Welcome-dr2">
 <p>Maximise your video performance by creating your videos in the perfect size for your social media platforms</p>
 <img src="public/img/Aspect-Ratio.jpg" class="landing-format__image">
 </div>
@@ -158,9 +264,10 @@
 <div class="container">
 <div class="examples__item" style="padding-top: 100px;">
 <div class="examples__content">
-<h2 class="title">Welcome To Dropshipmedia</h2>
-<p style="padding-top: 10px;">Editing Video is a cloud-based video maker for creating intro videos for YouTube, explainer animations, kinetic typography, product or service promotional videos, music visualizations, wedding or travel slideshows, mobile app promotions, event invitations, corporate presentations, infographics, and a lot more.</p>
-  <button class="try"><a href="{{url('/create-video')}}" class="btn btn--pri-blue" influence_scanned="true">Try for Free</a></button>   
+<h2 class="title" style="color: #fff;margin-top: 0;">Welcome To Dropshipmedia</h2>
+<hr class="Welcome-dr">
+<p style="padding-top: 10px;font-size: 16px;">Editing Video is a cloud-based video maker for creating intro videos for YouTube, explainer animations, kinetic typography, product or service promotional videos, music visualizations, wedding or travel slideshows, mobile app promotions, event invitations, corporate presentations, infographics, and a lot more.</p>
+  <button class="try"><a href="{{url('/create-video')}}" class="btnmore btn btn--pri-blue" influence_scanned="true">Try for Free</a></button>   
 </div>
 <div class="examples__video examples__video--short">
 <img src="public/img/Design.jpg" class="image">
@@ -168,8 +275,6 @@
 </div>
 </div>
 </div>
-
-
 </div>
 <div class="photos-videos">
 <h3 class="subtitle">Photo & Video</h3>
@@ -182,7 +287,9 @@
         <div class="container">
 
             <div class="heading black-heading">
-                What others are saying
+              <h4><b>Testimonials</b></h4>
+                <h1><b>What our clients say</b></h1>
+                <hr class="testimonialhr">
             </div>
             <div id="testimonial4" class="carousel slide testimonial4_indicators testimonial4_control_button thumb_scroll_x swipe_x" data-ride="carousel" data-pause="hover" data-interval="5000" data-duration="2000">
              

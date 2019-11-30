@@ -13,7 +13,9 @@
   
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
   <!-- Bootstrap core CSS -->
+ 
   <link href="{{asset('public/css/bootstrap.min.css')}}" rel="stylesheet">
+  
   <!-- Material Design Bootstrap -->
  <link href="{{asset('public/css/compiled-4.8.2.min.css')}}" rel="stylesheet">
   <link href="{{asset('public/css/mdb.min.css')}}" rel="stylesheet">
