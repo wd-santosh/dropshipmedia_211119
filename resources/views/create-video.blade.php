@@ -130,7 +130,7 @@
             <h4 class="text-left text-color"><b>Terms & Conditions:</b></h4>
             <hr>
             <div class="mb-1 selectedGender" id="master">
-            	<input type="checkbox" class="form-check-input filled-in" id="terms" name="terms">
+            	<input type="checkbox" class="form-check-input filled-in Videoterms" id="terms" name="terms">
                 <label class="form-check-label selectType" for="terms"> We will also add a policy/ term box that needs to be checked before continuing order once the Shopify store is completed.</label>
             </div>
         </div>
@@ -143,7 +143,7 @@
         <div class="col-lg-12 col-md-1 mb-md-0 create-pro">
             <a href="#"><button class="btn waves-effectss btn-blue waves-effect waves-light">BACK</button></a>
             <a href="javascript:void(0);">
-                <button class="btn waves-effectss btn-blue waves-effect waves-light Next">CHECKOUT ($<span class="price">50</span>) </button>
+                <button class="btn waves-effectss btn-blue waves-effect waves-light Next">CHECKOUT ($<span class="price">45</span>) </button>
             </a>
         </div>
     </div>
@@ -155,8 +155,8 @@
 <script type="text/javascript">
 	var isLoggedInUser = '{{{ (Auth::user()) ? true : false }}}';
 	var APP_URL = {!! json_encode(url('/')) !!}
-	var _fixedAmount = 50;
-	var isThumbname = false;
+	var _fixedAmount = 45;
+	//var isThumbname = false;
     var isDeliver = false;
    var additionalCharges = 0;
 </script>

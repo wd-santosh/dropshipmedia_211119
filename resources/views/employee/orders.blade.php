@@ -213,11 +213,11 @@ table thead{
                     <td style="text-align:center">
                         <button type="button" class="btn btn-primary openUploadVideoModal" id="order_{{ $order->id }}">UploadVideo</button>
                          @if(!empty($order->employe_video))
-                            <div style="float:right">
+                            <!-- <div style="float:right">
                                 <video width="100" height="50" controls>
                                     <source src="{{ asset($order->employe_video)}}" type="video/mp4">
                                 </video><br><p style="color:red">Uploaded video</p>
-                            </div>
+                            </div> -->
                         @endif
                     </td>                       
                     @endif
