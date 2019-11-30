@@ -112,7 +112,7 @@ public function storeFirstPageData(Request $request) {
     $customerData->videos_orders = $posts['how_many_orders'];
     $customerData->website_link = $posts['main_website_link'];          
     $customerData->product_link = $posts['main_product_link'];
-    $customerData->logo = $logoPath . $logo_file_name;
+    $customerData->logo = 'public/img/order_logo/' . $logo_file_name;
     $customerData->customer_id = Auth::user()->id;
     $customerData->save();
     if($customerData->dilvery_day == "Yes"){
@@ -314,8 +314,10 @@ public function storeSelectVideoData(Request $request) {
         $orderIdForComment = $posts['orderIdCom'];
         $findOrderForComment = customer_orders_model::findorfail($orderIdForComment);
         $findOrderForComment->change_stop_scroll = $posts['change_scroll'];
-        $findOrderForComment->change_thumb = $posts['change_thumb'];
-        $findOrderForComment->save();
+         $findOrderForComment->CommentByCustomer=$posts['cust_comment'];
+         $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P1D'));
+         $findOrderForComment->customer_order_time = $dayAfterTomorrow;
+         $findOrderForComment->save();
       }
       if ($findOrderForComment) {
         return response()->json(array('message' => 'success', 'orderIdForComment' => $orderIdForComment));

@@ -130,6 +130,7 @@ public function videoUploadByEmp(Request $request) {
         $userid  = User::findorfail($custId);                
         $findOrder->employe_video = trim("/img/video/" . $name);
         $findOrder->video_counter='1';
+        $findOrder->change_stop_scroll='1';
         $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P4D'));
         $findOrder->video_upload_time=$dayAfterTomorrow;
 
