@@ -74,6 +74,8 @@
       <script src="{{asset('public/js/ajax.js')}}"></script>
      <script type="text/javascript" src="{{asset('public/js/popper.min.js')}}"></script>
      <script type="text/javascript" src="{{asset('public/js/mdb.min.js')}}"></script>
+     <script  type="text/javascript" src="{{asset('public/js/jquery.min.js')}}"></script>
+ <script  type="text/javascript" src="{{asset('public/js/bootstrap2.min.js')}}"></script>
       <!--   <script type="text/javascript" src="{{asset('public/js/bootstrap.min.js')}}"></script>-->
        <script src="{{asset('public/js/E-v1.js')}}" async></script>
     
