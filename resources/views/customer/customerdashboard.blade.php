@@ -166,7 +166,7 @@ $customerId = Auth::user()->id;
 <div id="approveShow_{{ $customer_data->id }}" style="float: left;"> 
 </div>
  @else($customer_data->change_stop_scroll == 1)
-<div id="approveShow_{{ $customer_data->id }}" style="float: left;">
+<div id="approveShow_{{ $customer_data->id }}" style="float: left;" class="HideRewise">
 <a class="btn btn-primary openDisputeModal" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" title="Revise"><i class="fa fa-file-video-o" style="font-size: 15px; color: #fff;"></i></a>
 </div>
  @endif

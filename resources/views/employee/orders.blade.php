@@ -170,7 +170,7 @@ table thead{
 
                         @elseif($order->change_stop_scroll == 2)
 
-                         <div style="margin-top:1rem;display: block;">
+                         <div style="margin-top:1rem;display: block;" class="HideRevise" id="revise_{{ $order->id }}">
                                     <button type="button" class="btn btn-primary comment scrollStop" id="{{ $order->id }}" style="font-size:16px ;width:100%;border-radius:5px;letter-spacing: 1px; overflow:auto;">Revise For Change StopScroll
                                     </button>
                                 </div>

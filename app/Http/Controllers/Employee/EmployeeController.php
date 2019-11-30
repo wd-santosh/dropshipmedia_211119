@@ -151,23 +151,27 @@ public function rewiseOrderByEmp(Request $request)
     $posts = $request->post();
     $proOrdrid = $posts['procedOrdrId'];
     $proedOrders = customer_orders_model::where('id' ,$proOrdrid)->first();
-    if($proedOrders->change_thumb == 1 && $proedOrders->change_stop_scroll == 1){
-        $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P4D'));
-        $proedOrders->order_assign_time=$dayAfterTomorrow;
-        $proedOrders->change_thumb = 0;
-        $proedOrders->change_stop_scroll = 0;
-    }
+    $proedOrders->employe_video = NULL;
+    $proedOrders->order_counter = NULL;
+    $proedOrders->is_assigned = NULL;
 
-    elseif($proedOrders->change_stop_scroll == 1){
-        $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P4D'));
-        $proedOrders->order_assign_time=$dayAfterTomorrow;
-        $proedOrders->change_stop_scroll = 0;
-    }
-    elseif($proedOrders->change_thumb == 1){
-        $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P4D'));
-        $proedOrders->order_assign_time=$dayAfterTomorrow;
-        $proedOrders->change_thumb = 0;
-    }
+    // if($proedOrders->change_thumb == 1 && $proedOrders->change_stop_scroll == 1){
+    //     $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P4D'));
+    //     $proedOrders->order_assign_time=$dayAfterTomorrow;
+    //     $proedOrders->change_thumb = 0;
+    //     $proedOrders->change_stop_scroll = 0;
+    // }
+
+    // if($proedOrders->change_stop_scroll == 2){
+    //     $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P4D'));
+    //     $proedOrders->order_assign_time=$dayAfterTomorrow;
+    //     $proedOrders->change_stop_scroll = 0;
+    // }
+    // elseif($proedOrders->change_thumb == 1){
+    //     $dayAfterTomorrow = (new \DateTime())->add(new \DateInterval('P4D'));
+    //     $proedOrders->order_assign_time=$dayAfterTomorrow;
+    //     $proedOrders->change_thumb = 0;
+    // }
     $proedOrders->save();
      // return view('employee/dashboard');
 }

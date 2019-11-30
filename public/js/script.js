@@ -64,9 +64,9 @@ $(document).on('click', '.cancelrevise', function () {
     success: function (data)
     {
       if (data.message == 'success') {
-        $('.ApprovedBtns').find('#dispute_' + data.orderId).parent().hide();
+        $('.HideRewise').find('#approveShow_' + data.orderId).parent().hide();
       } else {
-        alert('Approved Your Video');
+        alert('Your video has been approved.');
       }
     }
   });
@@ -137,6 +137,7 @@ $(document).on('click', '.Rewise', function () {
     dataType: 'json',
     success: function (data) {
       if (data.message == 'success') {
+        $('.HideRevise').find('#revise_' + data.procedOrderId).parent().hide();
         window.location.reload();
       } else {
         alert(data.error);
