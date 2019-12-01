@@ -285,6 +285,16 @@ $(document).on('click', '.openUploadVideoModal', function () {
     $('#AddCustomerVideo').modal('show');
     var orderVideoId = $(this).attr('id').split('_');
     $('#orderIdForUploadVideo').val(orderVideoId[1]);
+    var ordersList = JSON.parse(orders);
+    var orderLinks = ordersList[orderVideoId[1]];
+    console.log(orderLinks);
+    var orderListHTML = "";
+    if(orderLinks.length >0){
+		for(var item=0; item<orderLinks.length; item++){
+			orderListHTML += "<option value='"+orderLinks[item].ordid+"'>"+orderLinks[item].prod_link+"</option>";
+		}
+	}
+	$('#orders').append(orderListHTML);
 });
 //upload video Modal
 $(document).on('submit', '.customerVideo', function () {

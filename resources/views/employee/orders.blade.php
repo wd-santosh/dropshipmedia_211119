@@ -96,7 +96,28 @@ table thead{
     table tbody tr td{padding: 10px;}
     .box-body{padding:0px;}
 </style>
-<input type="hidden" value="{{ Auth::id() }}" id="logdInEmpId">
+@php $orderItems = array(); @endphp
+@if(sizeof($customerOrders))
+	@foreach($customerOrders as $ord)
+		@if(!array_key_exists($ord->id,$orderItems))
+			@php $orderItems[$ord->id] = array(); @endphp
+		@endif
+		@php $orderItems[$ord->id][] = array('ordid'=>$ord->id,'web_link'=>$ord->website_link,'prod_link'=>$ord->product_link);  @endphp
+	@endforeach
+@endif
+@if(sizeof($items))
+	@foreach($items as $item)
+		@if(!array_key_exists($item->customer_order_id,$orderItems))
+			@php $orderItems[$item->customer_order_id] = array(); @endphp
+		@endif
+		@php $orderItems[$item->customer_order_id][] = array('ordid'=>$item->customer_order_id,'web_link'=>$item->website_link,'prod_link'=>$item->product_link);   @endphp
+	@endforeach
+@endif
+
+<script type='text/javascript'>
+	var orders = '<?php echo json_encode($orderItems);?>';
+</script>
+<input type="hidden" value="{{ Auth::id() }}" id="logdInEmpId"/>
 <div>
     @if(sizeof($customerOrders) <= 0)
         <h1 class="text-center">No Orders Available Now</h1>
@@ -200,7 +221,7 @@ table thead{
                                     <button type="button" class="btn btn-success proceedOrder" id="proceed_{{ $order->id }}" style="border-radius:5px;letter-spacing: 1px;">Proceed</button>
                                 </div>
                                 </div>  
-                            <div>
+                            </div>
                             @elseif(!empty($order->is_assigned) &&  $order->is_assigned != Auth::id() ) 
                             <div class="assignBtn"> 
                                 <div style="margin-top:1rem;display: block;" id="order-asign_{{ $order->id }}">
@@ -219,7 +240,7 @@ table thead{
                                     <button type="button" class="btn btn-success proceedOrder" id="proceed_{{ $order->id }}" style="border-radius:5px;letter-spacing: 1px;">Proceed</button>
                                 </div>
                             </div>  
-                        <div>
+                        	</div>
                     </td>
                     @if($order->is_assigned == Auth::id())
                     <td style="text-align:center">
@@ -257,6 +278,15 @@ table thead{
                 </button>
             </div>            
             <form action="javascript:void(0);" class="customerVideo" method="post" enctype="multipart/form-data">
+                <div class="modal-body mx-3">
+                    <div class="md-form mb-5">
+                        <label data-error="wrong" data-success="right" for="orangeForm-name">UploadVideo</label>                    			<select id="orders" name="orders">
+                        	<option value="0">Select</option>
+                        	
+                        </select>
+                                              
+                    </div>
+                </div>
                 <div class="modal-body mx-3">
                     <div class="md-form mb-5">
                         <label data-error="wrong" data-success="right" for="orangeForm-name">UploadVideo</label>                    

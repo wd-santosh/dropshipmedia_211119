@@ -50,8 +50,9 @@ class EmployeeController extends Controller
         //die;
         if($employee['status'] == 1 && Auth::user()->role_id == 2){
             $customerOrder = customer_orders_model::get();
+            $items = order_link::get();
             $customer=customers::get();
-            return view('employee/orders', ['customerOrders' => $customerOrder ,'customer' => $customer]);
+            return view('employee/orders', ['customerOrders' => $customerOrder ,'customer' => $customer,'items'=>$items]);
         }
 
         elseif($employee['status'] == 0 && Auth::user()->role_id == 2)

@@ -160,13 +160,13 @@ $customerId = Auth::user()->id;
 @elseif($customer_data->change_stop_scroll == 2)
 <div id="approveShow_{{ $customer_data->id }}" disabled>
 <a class="btn btn-primary" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" disabled>Rewise</a>
+</div>
 @elseif($customer_data->change_stop_scroll == 0)
 <div id="approveShow_{{ $customer_data->id }}" disabled>
 <a class="btn btn-primary" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" disabled>Rewise</a>
-<div id="approveShow_{{ $customer_data->id }}" style="float: left;"> 
 </div>
  @else($customer_data->change_stop_scroll == 1)
-<<<<<<< HEAD
+
 <div id="approveShow_{{ $customer_data->id }}" style="float: left;" class="HideRewise">
 <a class="btn btn-primary openDisputeModal" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" title="Revise"><i class="fa fa-file-video-o" style="font-size: 15px; color: #fff;"></i></a>
 </div>
@@ -179,9 +179,9 @@ $customerId = Auth::user()->id;
 @endif
 @if($customer_data->employe_video)
 <a class="btn btn-sm btn-danger" href="{{ url('video/download',$customer_data->id) }}" style=" margin-left:3px;" title="Download"> <i class="fa fa-download" style="font-size: 17px; color: #fff;"></i></a>
-=======
+
  <a class="btn btn-sm btn-danger" href="{{ url('video/download',$customer_data->id) }}" style=" margin-left:3px;" title="Download"> <i class="fa fa-download" style="font-size: 17px; color: #fff;"></i></a>
->>>>>>> 2580fbc78c847b27cef995a00340e2d0d9d57cfa
+
 <div class="ApprovedBtns">
         <button class="btn btn-sm btn-primary cancelrevise" id="{{ $customer_data->id }}" style=" margin-left: 3px;">Approved</button>
         
@@ -190,6 +190,8 @@ $customerId = Auth::user()->id;
 <a class="btn btn-primary openDisputeModal" href="javascript:void(0);" id="dispute_{{ $customer_data->id }}" title="Revise">Rewise</a>
 </div>
  @endif
+ 
+ </td>
 </tr>
 <tr>
 <table class="table table-bordered table-striped customedatatable" style="margin-top: 0px !important;">

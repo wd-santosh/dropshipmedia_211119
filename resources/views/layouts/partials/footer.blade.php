@@ -59,6 +59,7 @@
 
 </div>
         <script src="{{asset('public/js/jquery-3.4.0.min.js')}}"></script>
+        <script  type="text/javascript" src="{{asset('public/js/jquery.min.js')}}"></script>
         <script src="{{asset('public/js/bodymovin.js')}}"></script>
        <script src="{{asset('public/js/ofi.min.js')}}"></script>
        <script src="{{asset('public/js/plyr.js')}}"></script>
@@ -74,14 +75,14 @@
       <script src="{{asset('public/js/ajax.js')}}"></script>
      <script type="text/javascript" src="{{asset('public/js/popper.min.js')}}"></script>
      <script type="text/javascript" src="{{asset('public/js/mdb.min.js')}}"></script>
-     <script  type="text/javascript" src="{{asset('public/js/jquery.min.js')}}"></script>
+     
  <script  type="text/javascript" src="{{asset('public/js/bootstrap2.min.js')}}"></script>
       <!--   <script type="text/javascript" src="{{asset('public/js/bootstrap.min.js')}}"></script>-->
        <script src="{{asset('public/js/E-v1.js')}}" async></script>
     
        <!--  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>-->
     <!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
-          <script type="text/javascript" src="{{asset('public/js/bootstrap.min.js')}}"></script>
+        <!--  <script type="text/javascript" src="{{asset('public/js/bootstrap.min.js')}}"></script>-->
          
    <script type="text/javascript">
     $('.carousel.carousel-multi-item.v-2 .carousel-item').each(function(){
